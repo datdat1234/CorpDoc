@@ -124,6 +124,7 @@ export default function SearchFolderPage() {
             <Input
               type="select"
               text="Phòng ban"
+              placeholder={deptData.length !== 0 ? dept : ''}
               value={deptData}
               setData={setDept}
             />
@@ -132,6 +133,7 @@ export default function SearchFolderPage() {
             <Input
               type="select"
               text="Người tạo"
+              placeholder={authorData.length !== 0 ? author : ''}
               value={authorData}
               setData={setAuthor}
             />

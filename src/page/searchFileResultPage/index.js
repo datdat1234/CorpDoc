@@ -53,8 +53,9 @@ export default function SearchFileResultPage() {
     const fetchData = async () => {
       const deptRes = await getDept();
       const searchRes = await searchFile(DeptID, UserID, searchData);
+      console.log(searchRes);
       setDeptData(deptRes?.data?.data?.dept);
-      setResData(searchRes?.data?.data?.data);
+      setResData(searchRes?.data?.data?.data || []);
       setRecordCount(searchRes?.data?.data?.count);
     };
 

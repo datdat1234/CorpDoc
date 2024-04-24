@@ -54,7 +54,7 @@ export default function SearchFolderResultPage() {
       const deptRes = await getDept();
       const searchRes = await searchFolder(DeptID, UserID, searchData);
       setDeptData(deptRes?.data?.data?.dept);
-      setResData(searchRes?.data?.data?.data);
+      setResData(searchRes?.data?.data?.data || []);
       setRecordCount(searchRes?.data?.data?.count);
     };
 
