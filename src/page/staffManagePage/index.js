@@ -18,6 +18,7 @@ export default function StaffManagePage() {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.app.userInfo);
   const [isChecked, setIsChecked] = useState(false);
+  const [arrChecked, setArrChecked] = useState([]);
   const [isCheckAllInput, setIsCheckAllInput] = useState(true);
   const [usedStorage, setUsedStorage] = useState(0);
   const [deptData, setDeptData] = useState({Name: ''});

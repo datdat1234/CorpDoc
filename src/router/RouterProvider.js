@@ -29,6 +29,7 @@ import EditFilePage from 'page/EditFilePage';
 import EditFolderPage from 'page/EditFolderPage';
 import SharedFolderPage from 'page/sharedFolderPage';
 import DeletedFolderPage from 'page/deletedFolderPage';
+import PrivateFolderPage from 'page/privateFolderPage';
 
 export default function RouterProvider() {
   const [isLogin, setIsLogin] = useState(localStorage.getItem('token'));
@@ -78,6 +79,8 @@ export default function RouterProvider() {
         return <SharedFolderPage />;
       case '/deleted-folder':
         return <DeletedFolderPage />;
+      case '/private-folder':
+        return <PrivateFolderPage />;
       default:
         return <Navigate replace to="/login" />;
     }
@@ -123,6 +126,7 @@ export default function RouterProvider() {
       <Route path="/edit-folder" element={getElement('/edit-folder')} />
       <Route path="/shared-folder" element={getElement('/shared-folder')} />
       <Route path="/deleted-folder" element={getElement('/deleted-folder')} />
+      <Route path="/private-folder" element={getElement('/private-folder')} />
     </Routes>
   );
 

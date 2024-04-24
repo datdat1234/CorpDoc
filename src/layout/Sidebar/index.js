@@ -16,7 +16,7 @@ import {
   SIDEBAR_STRUCTURE,
 } from 'util/js/constant';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getChildByFolderId, getSupportStructure, getUsedStorage } from 'util/js/APIs';
+import { getChildByFolderId, getSupportStructure, getUsedStorage, getCrtDept } from 'util/js/APIs';
 
 export default function Sidebar({}) {
   // #region    VARIABLES //////////////////////////
@@ -30,6 +30,7 @@ export default function Sidebar({}) {
   const [adminDomain, setAdminDomain] = useState({name: 'Văn bản hành chính', childs: []});
   const [bookDomain, setBookDomain] = useState({name: 'Thư viện sách', childs: []});
   const [usedStorage, setUsedStorage] = useState(0);
+  const [crtDept, setCrtDept] = useState('');
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -52,6 +53,11 @@ export default function Sidebar({}) {
       //get used storage
       const usedStorageRes = await getUsedStorage (userInfo.DeptID);
       setUsedStorage(usedStorageRes?.data?.data > 1.5 ? 1.5 : usedStorageRes.data?.data); 
+
+      //get name dept
+      const crtDeptRes = await getCrtDept();
+      setCrtDept(crtDeptRes?.data?.data?.deptInfo?.Name);
+      
     };
 
     fetchData();
@@ -59,7 +65,8 @@ export default function Sidebar({}) {
 
   useEffect(()=>{
     if (location.pathname === '/home') {
-      setCurrentTab(0);
+      if (userInfo.Role === 'Admin') setCurrentTab(1);
+      else setCurrentTab(0);
     }
   },[location.pathname])
   //////////////////////////////////////////////////
@@ -83,7 +90,7 @@ export default function Sidebar({}) {
             className={`mBottom5 ${styles.tabCtn}`}
           >
             <Button
-              name={SIDEBAR_TABS_ADMIN[i]}
+              name={SIDEBAR_TABS_ADMIN[i] + (i===1 ? crtDept : '')}
               btnStyles={`textH6ExtraBold ${styles.buttonText}
               ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}`}
               ctnStyles={`br-TopRight-10 br-BottomRight-10 p10 border-bottom-1 border-header border-style-solid
@@ -99,28 +106,30 @@ export default function Sidebar({}) {
         );
       }
     }
-    for (let i = 0; i < SIDEBAR_TABS.length; i++) {
-      if (
-        userInfo.Role === 'Manager' ||
-        (userInfo.Role === 'Staff' && SIDEBAR_TABS[i] !== 'Thùng rác')
-      ) {
-        tabItems.push(
-          <div key={i} className={`mBottom5 ${styles.tabCtn}`}>
-            <Button
-              name={SIDEBAR_TABS[i]}
-              btnStyles={`textH6ExtraBold ${styles.buttonText}
-              ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}`}
-              ctnStyles={`br-TopRight-10 br-BottomRight-10 p10 border-bottom-1 border-header border-style-solid
-                ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}
-              `}
-              icon1={<FontAwesomeIcon icon={SIDEBAR_ICONS[i]} />}
-              onClick={() => {
-                setCurrentTab(i);
-                navigate(SIDEBAR_NAVIGATE[i]);
-              }}
-            />
-          </div>
-        );
+    else {
+      for (let i = 0; i < SIDEBAR_TABS.length; i++) {
+        if (
+          userInfo.Role === 'Manager' ||
+          (userInfo.Role === 'Staff' && SIDEBAR_TABS[i] !== 'Thùng rác')
+        ) {
+          tabItems.push(
+            <div key={i} className={`mBottom5 ${styles.tabCtn}`}>
+              <Button
+                name={SIDEBAR_TABS[i] + (i===0 ? crtDept : '')}
+                btnStyles={`textH6ExtraBold ${styles.buttonText}
+                ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}`}
+                ctnStyles={`br-TopRight-10 br-BottomRight-10 p10 border-bottom-1 border-header border-style-solid
+                  ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}
+                `}
+                icon1={<FontAwesomeIcon icon={SIDEBAR_ICONS[i]} />}
+                onClick={() => {
+                  setCurrentTab(i);
+                  navigate(SIDEBAR_NAVIGATE[i]);
+                }}
+              />
+            </div>
+          );
+        }
       }
     }
     return tabItems;

@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import UseOnClickOutside from 'util/hook/useOnClickOutside';
 import styles from './styles.module.css';
 import Button from 'common/Button';
 import { BREAD_CRUMB_TABS } from 'util/js/constant';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
+import { setOpenModal } from '../../redux/action/app';
 
 export default function BreadCrumbModal({
   ctnStyles = '',
@@ -21,6 +22,7 @@ export default function BreadCrumbModal({
   //////////////////////////////////////////////////
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.app.userInfo);
+  const dispatch = useDispatch();
   
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
@@ -98,7 +100,7 @@ export default function BreadCrumbModal({
                 <FontAwesomeIcon icon={BREAD_CRUMB_TABS[2].icon2} />
               )
             }
-            onClick={() => console.log(1)}
+            onClick={() => dispatch(setOpenModal({type:'shareModal', infoItm:{isFolder: isFolder, id: infoItm}}))}
           />
         </div>
       );

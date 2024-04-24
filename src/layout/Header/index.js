@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import logo1 from 'asset/images/logo1.png';
 import styles from './styles.module.css';
 import Button from 'common/Button';
@@ -21,7 +21,9 @@ import {
   PROFILE_TABS_ADMIN,
   PROFILE_NAVIGATE_ADMIN,
 } from 'util/js/constant';
-import { getDomainFolder, getNoti } from 'util/js/APIs';
+import { getDomainFolder, getNoti, getDept, getCrtDept, setCrtDeptAdmin } from 'util/js/APIs';
+import Select from 'react-select';
+import { setFolderPage, setUserInfo } from '../../redux/action/app';
 
 ////////API IMPORT //////////////////////////////////
 ////////////////////////////////////////////////////
@@ -31,6 +33,7 @@ export default function Header() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.app.userInfo);
   const switchFolder = useSelector((state) => state.app.folderPage);
   const [isHovered, setIsHovered] = useState(0);
@@ -38,6 +41,7 @@ export default function Header() {
   const [uploadTab, setUploadTab] = useState([]);
   const [uploadNavigate, setUploadNavigate] = useState([]);
   const [uploadIcon, setUploadIcon] = useState([]);
+  const [smallhoverIDs, setSmallhoverIDs] = useState([]);
   const [uploadSmallhover, setUploadSmallhover] = useState([]);
   const [noti, setNoti] = useState([]);
   const [notiAlert, setNotiAlert] = useState(false);
@@ -61,6 +65,30 @@ export default function Header() {
   });
   profileTabIcon.push({ left: null, right: icon.rightFromBracket });
 
+  // Dept for Admin
+  const [depts, setDepts] = useState([]);
+  const [crtDept, setCrtDept] = useState({DeptID: '', Name: ''});
+  const colourStyles = {
+    control: (styles) => ({
+      ...styles,
+      width: '100%',
+      borderRadius: '15px',
+      padding: '10px 10px',
+      border: 'none',
+      backgroundColor: '#dfe0df',
+      fontWeight: '900',
+    }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+      ...styles,
+      width: '100%',
+      height: '50px',
+      padding: '15px 15px',
+      fontWeight: '500',
+      backgroundColor: isFocused && '#402e32',
+      color: isFocused? '#fff' : '#000',
+    })
+  };
+  const selectRef = useRef();
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -69,31 +97,84 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       if (userInfo && userInfo.DeptID) {
+        // Get Dept for Admin
+        if (userInfo.Role === 'Admin') {
+          const deptsRes = await getDept();
+          setDepts(deptsRes?.data?.data?.dept);
+          const crtDeptAdminRes = await getCrtDept();
+          const crtDeptAdmin = crtDeptAdminRes?.data?.data?.deptInfo;
+          setCrtDept(crtDeptAdmin? crtDeptAdmin : deptsRes?.data?.data?.dept[0]);
+        }
+
         // get domainfolder
         const folderRes = await getDomainFolder(userInfo?.DeptID);
         const folders = folderRes?.data?.data?.domainIds;
-        let domainUpload = [
-          'Thư viện sách',
-          'Văn bản hành chính',
-        ];
-        let domainNavigate = [
-          () => {
-            handleMouseLeave();
-            navigate('/upload-file-support', {
-              state: { supportType: 'book' },
-            });
-          },
-          () => {
-            handleMouseLeave();
-            navigate('/upload-file-support', {
-              state: { supportType: 'admin-docs' },
-            });
-          },
-        ];
-        let domainIcon = [
-          { left: null, right: icon.caretRight },
-          { left: null, right: icon.caretRight },
-        ];
+        let domainUpload = [];
+        if (userInfo.Role === 'Admin') {
+          domainUpload = [
+            'Tài liệu mật',
+            'Thư viện sách',
+            'Văn bản hành chính',
+          ]; 
+        }
+        else {
+          domainUpload = [
+            'Thư viện sách',
+            'Văn bản hành chính',
+          ]; 
+        }
+        let domainNavigate = [];
+        if (userInfo.Role === 'Admin') {
+          domainNavigate = [
+            () => {
+              handleMouseLeave();
+              navigate('/upload-file-private');
+            },
+            () => {
+              handleMouseLeave();
+              navigate('/upload-file-support', {
+                state: { supportType: 'book' },
+              });
+            },
+            () => {
+              handleMouseLeave();
+              navigate('/upload-file-support', {
+                state: { supportType: 'admin-docs' },
+              });
+            },
+          ]; 
+        } 
+        else {
+          domainNavigate = [
+            () => {
+              handleMouseLeave();
+              navigate('/upload-file-support', {
+                state: { supportType: 'book' },
+              });
+            },
+            () => {
+              handleMouseLeave();
+              navigate('/upload-file-support', {
+                state: { supportType: 'admin-docs' },
+              });
+            },
+          ]; 
+        }
+        let domainIcon = [];
+        if (userInfo.Role === 'Admin') {
+          domainIcon = [
+            { left: null, right: icon.caretRight },
+            { left: null, right: icon.caretRight },
+            { left: null, right: icon.caretRight },
+          ]; 
+        }
+        else {
+          domainIcon = [
+            { left: null, right: icon.caretRight },
+            { left: null, right: icon.caretRight },
+          ];
+        }
+        let domainSmallhover = [];
         if (folders !== undefined) {
           for (let i = 0; i < folders.length; i++) {
             domainUpload.push(folders[i].Name);
@@ -102,6 +183,8 @@ export default function Header() {
               navigate('/upload-file', { state: { id: folders[i].FolderID } });
             })
             domainIcon.push({ left: null, right: icon.caretRight });
+            if (userInfo.Role === 'Admin') domainSmallhover.push(i+3);
+            else domainSmallhover.push(i+2);
             setUploadSmallhover(prevState => ([...prevState, folders[i].FolderID]))
           }
         }
@@ -120,6 +203,7 @@ export default function Header() {
         setUploadTab(domainUpload);
         setUploadNavigate(domainNavigate);
         setUploadIcon(domainIcon);
+        setSmallhoverIDs(domainSmallhover);
         // Get noti
 
         const notiRes = await getNoti(userInfo.UserID);
@@ -132,7 +216,7 @@ export default function Header() {
     };
 
     fetchData();
-  }, [userInfo]);
+  }, [userInfo || crtDept]);
 
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
@@ -173,6 +257,23 @@ export default function Header() {
   };
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
+  const handleOptions = () => {
+    const options = [];
+    if (depts !== undefined) {
+      for (let i = 0; i < depts.length; i++) {
+        options.push({ value: depts[i], label: depts[i].Name });
+      }
+    }
+    return options;
+  };
+
+  const handleChangeSelect = async (value) => {
+    setCrtDept(value);
+    await setCrtDeptAdmin(value.DeptID);
+    dispatch(setFolderPage(!switchFolder))
+    userInfo.DeptID = value.DeptID;
+    dispatch(setUserInfo(userInfo));
+  };
 
   // #region    VIEWS //////////////////////////////
   //////////////////////////////////////////////////
@@ -209,16 +310,15 @@ export default function Header() {
               onClick={() => ({})}
             />
           ) : (
-            <Button
-              name={'Phòng Nhân sự'}
-              ctnStyles="d-flex align-items-center justify-content-between pHorizontal15 br-15 bg-bgColor3"
-              icon1Styles="text"
-              icon2Styles="text mLeft10"
-              btnStyles="textH6Black bg-bgColor3 text mHorizontal5"
-              icon1={<FontAwesomeIcon icon={icon.userGroup} size={`lg`} />}
-              icon2={<FontAwesomeIcon icon={icon.chevronDown} />}
-              onClick={() => ({})}
+            <div className='d-flex align-items-center justify-content-between br-15 bg-bgColor3'>
+            <Select
+              ref={selectRef}
+              value={{ value: crtDept?.DeptID, label: crtDept?.Name }}
+              options={handleOptions()}
+              styles={colourStyles}
+              onChange={(item) => handleChangeSelect(item.value)}
             />
+            </div>
           )}
         </div>
       )}
@@ -259,7 +359,7 @@ export default function Header() {
             }
             isFolder={true}
             onClick={uploadNavigate}
-            smallHoverIDs={[2,3]}
+            smallHoverIDs={smallhoverIDs}
             onClickSmallHover={uploadSmallhover}
             setIsHovered1={setIsHovered}
           />

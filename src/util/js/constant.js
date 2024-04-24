@@ -27,7 +27,7 @@ export const REGISTER_URL_FE = '/register';
 export const NO_LAYOUT_LINKS = ['/', LOGIN_URL_FE, REGISTER_URL_FE];
 
 export const SIDEBAR_TABS = [
-  'Phòng ban của bạn - Nhân sự',
+  'Phòng ban: ',
   'Chia sẻ với phòng ban',
   'Đã lưu',
   'Thùng rác',
@@ -49,16 +49,16 @@ export const SIDEBAR_ICONS = [
 
 export const SIDEBAR_TABS_ADMIN = [
   'Khu vực tài liệu mật',
-  'Các phòng ban - ',
+  'Phòng ban: ',
   'Đã lưu',
   'Thùng rác',
 ];
 
 export const SIDEBAR_NAVIGATE_ADMIN = [
-  '',
-  '',
+  'private-folder',
+  'home',
   'saved-folder',
-  '',
+  'deleted-folder',
 ];
 
 export const SIDEBAR_ICONS_ADMIN = [
