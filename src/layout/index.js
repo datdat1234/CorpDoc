@@ -17,12 +17,14 @@ import styles from './styles.module.css';
 import PDFRenderer from 'common/PDFRenderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
+import ShareModal from 'common/ShareModal';
 
 export default function Layout({ children }) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const fileInfo = useSelector((state) => state.app.fileInfo);
   const noti = useSelector((state) => state.app.noti);
+  const openModal = useSelector((state) => state.app.openModal);
   const resizableRef = useRef(null);
   const resizableSidebarRef = useRef(null);
   const location = useLocation();
@@ -144,6 +146,7 @@ export default function Layout({ children }) {
               </div>
             </div>
             {noti.type && <Notification noti={noti}/>}
+            {openModal?.type !== '' && <ShareModal infoItm={openModal.infoItm}/>}
           </div>
           <div
             className={`d-flex flex-column justify-content-center align-items-center ${styles.resizer}`}

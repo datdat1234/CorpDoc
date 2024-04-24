@@ -318,7 +318,7 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
   const renderGrid = () => {
     return grid.map((val, index) => {
       return (
-        <div key={index} className={`${val}`}>
+        <div key={index} className={`${val} ${value[index].type.includes('save') || value[index].type.includes('edit')? '' : 'pe-2'}`}>
           {renderItems(value[index], index)}
         </div>
       );

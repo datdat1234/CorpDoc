@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './styles.module.css';
 import Button from 'common/Button';
 import SmallHoverModal from 'common/SmallHoverModal';
@@ -22,6 +23,7 @@ export default function HoverModal({
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const navigate = useNavigate();
+  const userInfo = useSelector((state) => state.app.userInfo);
   const [isHovered, setIsHovered] = useState(-1);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
@@ -98,32 +100,29 @@ export default function HoverModal({
   };
 
   const renderBorder = (i) => {
-    if (i === 0 || (i < name.length - 1 && i > 1)) {
-      if (lastBtnStyles !== '' && i === name.length - 2) return <></>;
-      return (
-        <div className={`${styles.spacerCtn}`}>
-          <div className={`${styles.border1} ${spacerColor}`} />
-        </div>
-      );
-    }
+    if ((lastBtnStyles !== '' && i === name.length - 2) || i === name.length - 1) return <></>;
     if (i === 1) {
-      if (isFolder) {
+      if (isFolder && userInfo.Role !== 'Admin') {
         return (
           <div className={`${styles.spacerCtn}`}>
             <div className={`${styles.border2}`} />
           </div>
         );
-      } else {
-        if (i < name.length - 1) {
-          return (
-            <div className={`${styles.spacerCtn}`}>
-              <div className={`${styles.border1} ${spacerColor}`} />
-            </div>
-          );
-        }
       }
-      return <></>;
     }
+    if (isFolder && userInfo.Role === 'Admin') {
+      if (i === 0 || i === 2)
+        return (
+          <div className={`${styles.spacerCtn}`}>
+            <div className={`${styles.border2}`} />
+          </div>
+        );
+    }
+    return (
+      <div className={`${styles.spacerCtn}`}>
+        <div className={`${styles.border1} ${spacerColor}`} />
+      </div>
+    );
   };
 
   const renderSmallHover = (i) => {

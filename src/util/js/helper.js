@@ -75,7 +75,7 @@ export const formatItemFolder = (data) => {
       }
       formattedData.push([
         {
-          text: data[i].IsSave,
+          text: data[i].IsSave? true : false,
           type: 'save',
         },
         {
@@ -150,7 +150,7 @@ export const formatItemFile = (data) => {
       }
       formattedData.push([
         {
-          text: data[i].IsSave,
+          text: data[i].IsSave? true: false,
           type: 'save',
         },
         {

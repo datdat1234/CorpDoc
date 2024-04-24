@@ -4,6 +4,7 @@ import {
   SET_FILE_INFO,
   SET_NOTI,
   SET_FOLDER_PAGE,
+  SET_OPEN_MODAL,
 } from '../action/app';
 // import { deepClone } from "../../util/js/helper";
 
@@ -14,6 +15,7 @@ export default function appReducer(
     fileInfo: {},
     noti: {type:'', message: ''},
     folderPage: false,
+    openModal: {type: '', infoItm: {}},
   },
   action
 ) {
@@ -42,6 +44,11 @@ export default function appReducer(
       return {
         ...state,
         folderPage: action.payload,
+      };
+    case SET_OPEN_MODAL:
+      return {
+        ...state,
+        openModal: action.payload,
       };
     default:
       return state;

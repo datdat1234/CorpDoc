@@ -16,6 +16,7 @@ export default function Input({
   canChange = true,
   onEnter = (e) => {},
   defaultValue='',
+  isSelect = false,
 }) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
@@ -63,8 +64,15 @@ export default function Input({
   const handleOptions = () => {
     const options = [];
     if (value !== undefined) {
-      for (let i = 0; i < value.length; i++) {
-        options.push({ value: value[i], label: value[i] });
+      if (isSelect) {
+        for (let i = 0; i < value.length; i++) {
+          options.push({ value: value[i], label: value[i].Name });
+        }
+      }
+      else {
+        for (let i = 0; i < value.length; i++) {
+          options.push({ value: value[i], label: value[i] });
+        }
       }
     }
     return options;

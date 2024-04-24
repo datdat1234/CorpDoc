@@ -47,6 +47,13 @@ export const changeStatusUser = (staffId, crtStatus) => {
   });
 };
 
+export const setCrtDeptAdmin = (deptId) => {
+  return post(`${API_URL}/user/set-current-dept`, {
+    companyId: getCompanyId(),
+    deptId: deptId,
+  });
+};
+
 //#endregion
 
 //#region Profile
@@ -146,6 +153,33 @@ export const getDeptName = () => {
 export const getDept = () => {
   return get(`${API_URL}/dept/get-dept`, {
     companyId: getCompanyId(),
+  });
+};
+
+export const getCrtDept = () => {
+  return get(`${API_URL}/dept/get-current-dept`, {
+    companyId: getCompanyId(),
+  });
+};
+
+export const getAllOtherDept = () => {
+  return get(`${API_URL}/dept/get-all-other-dept`, {
+    companyId: getCompanyId(),
+  });
+};
+
+export const getDeptShared = (infoItm) => {
+  return post(`${API_URL}/dept/get-dept-shared`, {
+    companyId: getCompanyId(),
+    infoItm: infoItm,
+  });
+};
+
+export const setSharedDeptIds = (infoItm, deptIds) => {
+  return post(`${API_URL}/${infoItm.isFolder? 'folder':'file'}/set-shared-depts`, {
+    companyId: getCompanyId(),
+    id: infoItm.id,
+    deptIds: deptIds,
   });
 };
 
@@ -280,6 +314,15 @@ export const setChangeFolderDelete = (folderId, isDeleted) => {
       companyId: getCompanyId(),
       folderId: folderId,
       isDeleted: isDeleted,
+    },
+  );
+};
+
+export const getPrivateFolder = () => {
+  return get(
+    `${API_URL}/folder/get-private-folder`,
+    {
+      companyId: getCompanyId(),
     },
   );
 };

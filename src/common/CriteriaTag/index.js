@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
 
 export default function CriteriaTag({
-  text = '',
+  text,
   style = '',
   handleClick,
   isShowIcon = true,
@@ -34,7 +34,7 @@ export default function CriteriaTag({
   // #endregion VIEWS //////////////////////////////
   return (
     <div className={`${styles.root} ${style}`}>
-      <p className="text14Bold">{text}</p>
+      <p className="text14Bold">{typeof(text) === 'object' ? text.Name : text}</p>
       {isShowIcon && (
         <button className="mLeft10" onClick={() => handleClick(text)}>
           <FontAwesomeIcon icon={icon.xmark} />

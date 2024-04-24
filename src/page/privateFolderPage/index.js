@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import BreadCrumb from 'common/BreadCrumb';
 import SrcItem from 'common/SrcItem';
 import styles from './styles.module.css';
 import { HOMEPAGE_ITEM_GRIDS } from 'util/js/constant';
 import Pagination from 'common/Pagination';
-import { getChildByFolderId } from 'util/js/APIs';
-import { formatItemFolder } from 'util/js/helper';
+import { getPrivateFolder } from 'util/js/APIs';
+import { formatItemFolder, formatItemFile } from 'util/js/helper';
 
-export default function HomePage() {
+export default function PrivateFolderPage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   var header = [
@@ -33,7 +33,6 @@ export default function HomePage() {
     },
   ];
   const [items, setItems] = useState([]);
-  var switchFolder = useSelector((state) => state.app.folderPage);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -41,14 +40,14 @@ export default function HomePage() {
   //////////////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
-      const rootId = await localStorage.getItem('root');
-      const childRes = await getChildByFolderId(rootId);
-      const folders = childRes?.data?.data?.child;
-      setItems(formatItemFolder(folders));
+      const childRes = await getPrivateFolder();
+      const folders = childRes?.data?.data?.folders;
+      const files = childRes?.data?.data?.files;
+      setItems(formatItemFolder(folders).concat(formatItemFile(files)));
     };
 
     fetchData();
-  }, [switchFolder]);
+  }, []);
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 
