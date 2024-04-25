@@ -16,6 +16,7 @@ export default function StaffManagePage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const navigate = useNavigate();
+  const itemPerPage = 10;
   const userInfo = useSelector((state) => state.app.userInfo);
   const [isChecked, setIsChecked] = useState(false);
   const [arrChecked, setArrChecked] = useState([]);
@@ -24,6 +25,8 @@ export default function StaffManagePage() {
   const [deptData, setDeptData] = useState({Name: ''});
   const [usersData, setUsersData] = useState([]);
   const [change, setChange] = useState(true);
+  const [page, setPage] = useState(1);
+  const [crtPage, setCrtPage] = useState(1);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
   
@@ -187,44 +190,46 @@ export default function StaffManagePage() {
             Tổng cộng: {usersData.length}
           </div>
         </div>
-        <div className={`${styles.resultCtn} ps-1`}>
-          <div className="w-100">
+        <div className={`${styles.resultCtn} ps-1 w-100`}>
+          {/* <div className="w-100"> */}
             <SrcItem grid={STAFF_MANAGE_GRIDS} value={value} />
             {usersData.map((user, index)=> {
-              let userInfo = [
-                {
-                  text: '',
-                  type: 'checkbox',
-                  isChecked: isChecked,
-                  setCheckAll: setIsChecked,
-                  setIsCheckAllInput: setIsCheckAllInput,
-                },
-                {
-                  text: user.Name,
-                  type: 'text',
-                  id: user.UserID,
-                },
-                {
-                  text: user.Username,
-                  type: 'text',
-                },
-                {
-                  text: getNameRole(user.Role),
-                  type: 'text',
-                },
-                {
-                  text: user.Status,
-                  type: 'manage',
-                },
-              ];
-              return(
-                <SrcItem grid={STAFF_MANAGE_GRIDS} value={userInfo} setUpdate={setChange} update={change}/>
-              )
+              if (index > (crtPage-1)*itemPerPage && index <= (crtPage)*itemPerPage) {
+                let userInfo = [
+                  {
+                    text: '',
+                    type: 'checkbox',
+                    isChecked: isChecked,
+                    setCheckAll: setIsChecked,
+                    setIsCheckAllInput: setIsCheckAllInput,
+                  },
+                  {
+                    text: user.Name,
+                    type: 'text',
+                    id: user.UserID,
+                  },
+                  {
+                    text: user.Username,
+                    type: 'text',
+                  },
+                  {
+                    text: getNameRole(user.Role),
+                    type: 'text',
+                  },
+                  {
+                    text: user.Status,
+                    type: 'manage',
+                  },
+                ];
+                return(
+                  <SrcItem grid={STAFF_MANAGE_GRIDS} value={userInfo} setUpdate={setChange} update={change}/>
+                )
+              }
             })}
-          </div>
-          <div className={`${styles.pagination}`}>
-            <Pagination />
-          </div>
+          {/* </div> */}
+        </div>
+        <div className={`${styles.pagination}`}>
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={usersData.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>
