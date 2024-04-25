@@ -3,11 +3,11 @@ import styles from './styles.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
 
-export default function Pagination({}) {
+export default function Pagination({selectedPage, setSelectedPage, itemLength, itemPerPage}) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const [page, setPage] = useState(1);
-  const [selectedPage, setSelectedPage] = useState(1);
+  const maxPage = Math.ceil(itemLength/itemPerPage);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -19,14 +19,25 @@ export default function Pagination({}) {
 
   // #region    FUNCTIONS //////////////////////////
   //////////////////////////////////////////////////
+  const handleSetPage = (select) => {
+    if (maxPage < 3) return 1;
+    if (select <= 1) return 1;
+    if (select >= maxPage) return maxPage-2;
+    return select-1;
+  }
   const handleDecreasePage = () => {
-    setPage(page - 1 < 1 ? 1 : page - 1);
-    setSelectedPage(page - 1 < 1 ? 1 : page - 1);
+    setPage(handleSetPage(selectedPage-1));
+    setSelectedPage(selectedPage - 1 < 1 ? 1 : selectedPage - 1);
   };
 
   const handleIncreasePage = () => {
-    setPage(page + 1);
-    setSelectedPage(page + 1);
+    setPage(handleSetPage(selectedPage+1));
+    setSelectedPage(selectedPage + 1 > maxPage ? maxPage : selectedPage + 1);
+  };
+
+  const handleSelectPage = (i) => {
+    setPage(handleSetPage(i));
+    setSelectedPage(i);
   };
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
@@ -34,7 +45,7 @@ export default function Pagination({}) {
   // #region    VIEWS //////////////////////////////
   //////////////////////////////////////////////////
   const renderPagination = () => {
-    const items = [];
+    const items = []; 
     for (let i = page; i <= page + 2; i++) {
       items.push(
         <div
@@ -43,7 +54,7 @@ export default function Pagination({}) {
             selectedPage === i ? 'bg-main' : 'bg-bgColor4'
           } ${styles.page}`}
           style={{ border: selectedPage !== i && '1px solid #231811' }}
-          onClick={() => setSelectedPage(i)}
+          onClick={() => handleSelectPage(i)}
         >
           {i}
         </div>
