@@ -5,37 +5,44 @@ export default function CheckBoxForm({
   text = '',
   textStyles = '',
   checked = false,
-  setCheck = (value) => {},
+  arrChecked = [],
+  setArrChecked = (value) => {},
   setCheckAll = (value) => {},
   isCheckAllInput = false,
   setIsCheckAllInput = (value) => {},
+  index = -1
 }) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
-  const [isChecked, setIsChecked] = useState(checked);
+  const [change, setChange] = useState(true);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
-  useEffect(() => {
-    setIsChecked(checked);
-  }, [checked]);
+
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 
   // #region    FUNCTIONS //////////////////////////
   //////////////////////////////////////////////////
   const handleCheck = () => {
-    // Set input check data
-    setCheck(!isChecked);
-
-    // Handle check input UI
-    setIsChecked(!isChecked);
-    if (isCheckAllInput) {
-      setCheckAll(!isChecked);
-      setIsCheckAllInput(true);
-    } else setIsCheckAllInput(false);
+    let items = arrChecked;
+    
+    if (index > -1) {
+      items[index] = !items[index];
+      setArrChecked(items);
+    }
+    else {
+      if (isCheckAllInput) {
+        for (let i=0; i<items.length; i++) items[i] = !isCheckAllInput;
+      }
+      else {
+        for (let i=0; i<items.length; i++) items[i] = !isCheckAllInput;
+      }
+      setIsCheckAllInput(!isCheckAllInput);
+    }
+    setChange(!change);
   };
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
@@ -53,7 +60,7 @@ export default function CheckBoxForm({
         <input
           className={`form-check-input ${styles.checkBox}`}
           type="checkbox"
-          checked={isChecked}
+          checked={index === -1? isCheckAllInput: arrChecked[index]}
           onChange={handleCheck}
         />
         <label className={`form-check-label ${textStyles} ${styles.text}`}>

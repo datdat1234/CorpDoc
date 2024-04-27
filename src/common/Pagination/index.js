@@ -46,11 +46,13 @@ export default function Pagination({selectedPage, setSelectedPage, itemLength, i
   //////////////////////////////////////////////////
   const renderPagination = () => {
     const items = []; 
-    for (let i = page; i <= page + 2; i++) {
+    let rightPage = page + 2;
+    if (rightPage > maxPage) rightPage = maxPage
+    for (let i = page; i <= rightPage; i++) {
       items.push(
         <div
           key={i}
-          className={`pHorizontal10 pVertical5 br-5 text14 ${
+          className={`pHorizontal10 pVertical5 br-5 text14 me-2 ${
             selectedPage === i ? 'bg-main' : 'bg-bgColor4'
           } ${styles.page}`}
           style={{ border: selectedPage !== i && '1px solid #231811' }}
@@ -66,13 +68,17 @@ export default function Pagination({selectedPage, setSelectedPage, itemLength, i
   // #endregion VIEWS //////////////////////////////
   return (
     <div className={`${styles.root}`}>
-      <button onClick={handleDecreasePage}>
-        <FontAwesomeIcon icon={icon.angleLeft} />
-      </button>
-      <div className={`${styles.pageCtn}`}> {renderPagination()}</div>
-      <button onClick={handleIncreasePage}>
-        <FontAwesomeIcon icon={icon.angleRight} />
-      </button>
+      {maxPage > 0 &&
+      <>
+        <button onClick={handleDecreasePage} className='me-2'>
+          <FontAwesomeIcon icon={icon.angleLeft} />
+        </button>
+        <div className={`${styles.pageCtn}`}> {renderPagination()}</div>
+        <button onClick={handleIncreasePage} className='me-2'>
+          <FontAwesomeIcon icon={icon.angleRight} />
+        </button>
+      </>
+      }
     </div>
   );
 }

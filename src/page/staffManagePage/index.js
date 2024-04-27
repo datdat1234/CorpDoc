@@ -18,14 +18,12 @@ export default function StaffManagePage() {
   const navigate = useNavigate();
   const itemPerPage = 10;
   const userInfo = useSelector((state) => state.app.userInfo);
-  const [isChecked, setIsChecked] = useState(false);
   const [arrChecked, setArrChecked] = useState([]);
-  const [isCheckAllInput, setIsCheckAllInput] = useState(true);
+  const [isCheckAllInput, setIsCheckAllInput] = useState(false);
   const [usedStorage, setUsedStorage] = useState(0);
   const [deptData, setDeptData] = useState({Name: ''});
   const [usersData, setUsersData] = useState([]);
   const [change, setChange] = useState(true);
-  const [page, setPage] = useState(1);
   const [crtPage, setCrtPage] = useState(1);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
@@ -40,6 +38,7 @@ export default function StaffManagePage() {
       const deptInfoRes = await getAllUsersDept();
       setDeptData(deptInfoRes?.data?.data?.deptInfo);
       setUsersData(deptInfoRes?.data?.data?.usersInDept);
+      setArrChecked(Array(deptInfoRes?.data?.data?.usersInDept.length).fill(false))
     }
 
     fetchData();
@@ -54,10 +53,11 @@ export default function StaffManagePage() {
     {
       text: '',
       type: 'checkbox',
-      isChecked: isChecked && isCheckAllInput,
-      setCheckAll: setIsChecked,
-      isCheckAllInput: true,
+      arrChecked: arrChecked,
+      setArrChecked: setArrChecked,
+      isCheckAllInput: isCheckAllInput, 
       setIsCheckAllInput: setIsCheckAllInput,
+      index: -1,
     },
     {
       text: 'Họ và tên',
@@ -78,42 +78,45 @@ export default function StaffManagePage() {
   ];
 
   const handleResetPassword = async () => {
-    if (isCheckAllInput) {
-      let ids= [];
-      for (let i = 0; i < usersData.length; i++) {
+    let ids= [];
+    let n = 0;
+    for (let i = 0; i < usersData.length; i++) {
+      if (arrChecked[i]) {
         ids.push(usersData[i].UserID);
+        n++;
       }
-      await resetPasswordUser(ids).then((res) => {
-        if (res?.data?.data) {
-          setNotification(
-            'success',
-            'Đã cài đặt lại mật khẩu cho toàn bộ người dùng.'
-          );
-        } else {
-          setNotification('error', res?.data?.resultMessage?.vi);
-        }
-      });
     }
+    await resetPasswordUser(ids).then((res) => {
+      if (res?.data?.resultCode === "00001") {
+        let mess = 'Đã cài đặt lại mật khẩu cho người dùng đã chọn ('+ n +').';
+        if (isCheckAllInput) mess = 'Đã cài đặt lại mật khẩu cho toàn bộ người dùng('+ n +').'
+        setNotification('success', mess);
+      } else {
+        setNotification('error', res?.data?.resultMessage?.vi);
+      }
+    });
+    setChange(!change)
   }
 
   const handleBlockUser = async () => {
-    if (isCheckAllInput) {
-      let ids= [];
-      for (let i = 0; i < usersData.length; i++) {
+    let ids= [];
+    let n = 0;
+    for (let i = 0; i < usersData.length; i++) {
+      if (arrChecked[i] && usersData[i].UserID !== userInfo.UserID) {
         ids.push(usersData[i].UserID);
+        n++;
       }
-      await changeStatusUser(ids, 'Active').then((res) => {
-        if (res?.data?.resultCode === "00001") {
-          setNotification(
-            'success',
-            'Đã chặn toàn bộ người dùng.'
-          );
-          setChange(!change)
-        } else {
-          setNotification('error', res?.data?.resultMessage?.vi);
-        }
-      });
     }
+    await changeStatusUser(ids, 'Active').then((res) => {
+      if (res?.data?.resultCode === "00001") {
+        let mess = 'Đã chặn người dùng đã chọn ('+ n +').';
+        if (isCheckAllInput) mess = 'Đã chặn toàn bộ người dùng('+ n +').'
+        setNotification('success', mess);
+      } else {
+        setNotification('error', res?.data?.resultMessage?.vi);
+      }
+    });
+    setChange(!change)
   }
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
@@ -191,42 +194,42 @@ export default function StaffManagePage() {
           </div>
         </div>
         <div className={`${styles.resultCtn} ps-1 w-100`}>
-          {/* <div className="w-100"> */}
-            <SrcItem grid={STAFF_MANAGE_GRIDS} value={value} />
-            {usersData.map((user, index)=> {
-              if (index > (crtPage-1)*itemPerPage && index <= (crtPage)*itemPerPage) {
-                let userInfo = [
-                  {
-                    text: '',
-                    type: 'checkbox',
-                    isChecked: isChecked,
-                    setCheckAll: setIsChecked,
-                    setIsCheckAllInput: setIsCheckAllInput,
-                  },
-                  {
-                    text: user.Name,
-                    type: 'text',
-                    id: user.UserID,
-                  },
-                  {
-                    text: user.Username,
-                    type: 'text',
-                  },
-                  {
-                    text: getNameRole(user.Role),
-                    type: 'text',
-                  },
-                  {
-                    text: user.Status,
-                    type: 'manage',
-                  },
-                ];
-                return(
-                  <SrcItem grid={STAFF_MANAGE_GRIDS} value={userInfo} setUpdate={setChange} update={change}/>
-                )
-              }
-            })}
-          {/* </div> */}
+          <SrcItem grid={STAFF_MANAGE_GRIDS} value={value} />
+          {usersData.map((user, index)=> {
+            if (index > (crtPage-1)*itemPerPage && index <= (crtPage)*itemPerPage) {
+              let userInfo = [
+                {
+                  text: '',
+                  type: 'checkbox',
+                  arrChecked: arrChecked,
+                  setArrChecked: setArrChecked,
+                  isCheckAllInput: isCheckAllInput, 
+                  setIsCheckAllInput: setIsCheckAllInput,
+                  index: index,
+                },
+                {
+                  text: user.Name,
+                  type: 'text',
+                  id: user.UserID,
+                },
+                {
+                  text: user.Username,
+                  type: 'text',
+                },
+                {
+                  text: getNameRole(user.Role),
+                  type: 'text',
+                },
+                {
+                  text: user.Status,
+                  type: 'manage',
+                },
+              ];
+              return(
+                <SrcItem grid={STAFF_MANAGE_GRIDS} value={userInfo} setUpdate={setChange} update={change}/>
+              )
+            }
+          })}
         </div>
         <div className={`${styles.pagination}`}>
           <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={usersData.length} itemPerPage={itemPerPage}/>

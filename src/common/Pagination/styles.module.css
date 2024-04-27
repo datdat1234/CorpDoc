@@ -1,6 +1,5 @@
 .root {
   position: relative;
-  width: 170px;
   height: 38px;
   display: flex;
   align-items: center;
@@ -9,7 +8,6 @@
 }
 
 .pageCtn {
-  width: 104px;
   display: flex;
   justify-content: space-between;
   align-items: center;

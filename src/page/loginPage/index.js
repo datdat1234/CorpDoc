@@ -157,7 +157,7 @@ export default function LoginPage({ setIsLogin }) {
           <div
             className={`d-flex justify-content-between align-items-center ${styles.forgotPass}`}
           >
-            <CheckBoxForm text="Ghi nhớ mật khẩu" textStyles="text14" checked={rememberMe} setCheck={setRememberMe}/>
+            <CheckBoxForm text="Ghi nhớ mật khẩu" textStyles="text14" isCheckAllInput={rememberMe} setIsCheckAllInput={setRememberMe}/>
             <p
               className={`text14 ${styles.hoverPass}`}
               onClick={handleResetPass}

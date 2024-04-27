@@ -19,6 +19,7 @@ export default function SupportFolderPage() {
   //////////////////////////////////////////////////
   var userInfo = useSelector((state) => state.app.userInfo);
   var switchFolder = useSelector((state) => state.app.folderPage);
+  const itemPerPage = 20;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   var header = [
@@ -47,6 +48,7 @@ export default function SupportFolderPage() {
   const [allItems, setAllItems] = useState({childs:[], type: '', name: ''});
   const [items, setItems] = useState([]);
   const [path, setPath] = useState('');
+  const [crtPage, setCrtPage] = useState(1);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -141,48 +143,50 @@ export default function SupportFolderPage() {
     )
     if (items !== undefined) {
       for (let i = 0; i < items.length; i++) {
-        tabItems.push(
-          <div key={i}>
-            <div className={`${styles.item}`}>
-              <IconButton
-                icon={<FontAwesomeIcon icon={icon.unBookmark} />}
-                ctnStyles="col-1 mRight10"
-                onClick={() => {console.log('click')}}
-              />
-              <div
-                className={`w-100 ${styles.textCtn}`}
-                onClick={() => handleOnclick(i)}
-              >
-                <div className={`${styles.icon} ${items[i][1].type === "file" ? 'text' : 'main'}`}>{<FontAwesomeIcon icon={items[i][1].type === "file" ? icon.file : icon.folder} size={'lg'} />}</div>
-                <p className={`w-100 mLeft10 ${styles.btn} ${items[i][1].type === "file" ? 'text14Bold' : 'text14Medium'}`}>{items[i][1].text}</p>
-              </div>
-              <div
-                className={`col-6 ${styles.textCtn}`}
-              >
-                {items[i][1].type === "file" &&
-                  <p className={`text14Medium ellipsis`}>
-                    {items[i][2].text}
-                  </p>
-                }
-              </div>
-              <div
-                className={`col-6 ${styles.textCtn}`}
-              >
-                {items[i][1].type === "file" &&
-                  <p className={`text14Medium ellipsis ta-right mRight10'`}>
-                    {items[i][3].text}
-                  </p>
-                }
-              </div>
-              <div className={`col-1`}>
+        if (i >= (crtPage-1)*itemPerPage && i < (crtPage)*itemPerPage) {
+          tabItems.push(
+            <div key={i}>
+              <div className={`${styles.item}`}>
                 <IconButton
-                  icon={<FontAwesomeIcon icon={icon.ellipsisVertical} />}
+                  icon={<FontAwesomeIcon icon={icon.unBookmark} />}
+                  ctnStyles="col-1 mRight10"
                   onClick={() => {console.log('click')}}
                 />
+                <div
+                  className={`w-100 ${styles.textCtn}`}
+                  onClick={() => handleOnclick(i)}
+                >
+                  <div className={`${styles.icon} ${items[i][1].type === "file" ? 'text' : 'main'}`}>{<FontAwesomeIcon icon={items[i][1].type === "file" ? icon.file : icon.folder} size={'lg'} />}</div>
+                  <p className={`w-100 mLeft10 ${styles.btn} ${items[i][1].type === "file" ? 'text14Bold' : 'text14Medium'}`}>{items[i][1].text}</p>
+                </div>
+                <div
+                  className={`col-6 ${styles.textCtn}`}
+                >
+                  {items[i][1].type === "file" &&
+                    <p className={`text14Medium ellipsis`}>
+                      {items[i][2].text}
+                    </p>
+                  }
+                </div>
+                <div
+                  className={`col-6 ${styles.textCtn}`}
+                >
+                  {items[i][1].type === "file" &&
+                    <p className={`text14Medium ellipsis ta-right mRight10'`}>
+                      {items[i][3].text}
+                    </p>
+                  }
+                </div>
+                <div className={`col-1`}>
+                  <IconButton
+                    icon={<FontAwesomeIcon icon={icon.ellipsisVertical} />}
+                    onClick={() => {console.log('click')}}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        );
+          );
+        }
       }
     }
     return tabItems;
@@ -195,7 +199,7 @@ export default function SupportFolderPage() {
         <BreadCrumbSupport path={path}/>
         <div className="w-100">{renderItem()}</div>
         <div className={`${styles.pagination}`}>
-          <Pagination />
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>

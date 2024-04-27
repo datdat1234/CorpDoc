@@ -131,8 +131,8 @@ export default function Input({
           <CheckBoxForm
             text={text}
             textStyles={textStyles}
-            checked={placeholder}
-            setCheck={setData}
+            isCheckAllInput={value}
+            setIsCheckAllInput={setData}
           />
         </div>
       );

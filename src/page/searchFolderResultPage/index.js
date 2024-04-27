@@ -44,6 +44,8 @@ export default function SearchFolderResultPage() {
       type: '',
     },
   ];
+  const [crtPage, setCrtPage] = useState(1);
+  const itemPerPage = 20;
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -76,34 +78,36 @@ export default function SearchFolderResultPage() {
   //////////////////////////////////////////////////
   const renderSearchResult = () => {
     return resData.map((folder, index) => {
-      const folderData = [
-        {
-          text: '',
-          type: 'save',
-        },
-        {
-          text: folder?._source?.Name,
-          type: 'folder',
-          id: folder?._source?.FolderID,
-        },
-        {
-          text: getFolderDept(folder?._source?.DeptID),
-          type: 'text',
-        },
-        {
-          text: folder?._source?.CreatedDate,
-          type: 'text',
-        },
-        {
-          text: folder?._source?.Size,
-          type: 'text-size',
-        },
-        {
-          text: '',
-          type: 'edit',
-        },
-      ];
-      return <SrcItem grid={SEARCH_RESULT_GRIDS} value={folderData} />;
+      if (index >= (crtPage-1)*itemPerPage && index < (crtPage)*itemPerPage) {
+        const folderData = [
+          {
+            text: '',
+            type: 'save',
+          },
+          {
+            text: folder?._source?.Name,
+            type: 'folder',
+            id: folder?._source?.FolderID,
+          },
+          {
+            text: getFolderDept(folder?._source?.DeptID),
+            type: 'text',
+          },
+          {
+            text: folder?._source?.CreatedDate,
+            type: 'text',
+          },
+          {
+            text: folder?._source?.Size,
+            type: 'text-size',
+          },
+          {
+            text: '',
+            type: 'edit',
+          },
+        ];
+        return <SrcItem grid={SEARCH_RESULT_GRIDS} value={folderData} />;
+      }
     });
   };
   //////////////////////////////////////////////////
@@ -130,7 +134,7 @@ export default function SearchFolderResultPage() {
             Tìm thấy <span className="text14Bold">{recordCount}</span> kết quả
             thư mục phù hợp.
           </p>
-          <Pagination />
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={resData.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>

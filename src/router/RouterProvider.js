@@ -116,8 +116,6 @@ export default function RouterProvider() {
       <Route path="/approval" element={getElement('/approval')} />
       <Route path="/profile" element={getElement('/profile')} />
       <Route path="/staff-manage" element={getElement('/staff-manage')} />
-      <Route path="/company-manage" element={getElement('/company-manage')} />
-      <Route path="/dept-manage" element={getElement('/dept-manage')} />
       <Route path="/folder/:id" element={getElement('/folder')} />
       <Route path="/folder-support/:typeDoc" element={getElement('/folder-support')} />
       <Route path="/folder-support/:typeDoc/:pathDoc" element={getElement('/folder-support')} />
@@ -127,6 +125,8 @@ export default function RouterProvider() {
       <Route path="/shared-folder" element={getElement('/shared-folder')} />
       <Route path="/deleted-folder" element={getElement('/deleted-folder')} />
       <Route path="/private-folder" element={getElement('/private-folder')} />
+      <Route path="/company-manage" element={getElement('/company-manage')} />
+      <Route path="/dept-manage" element={getElement('/dept-manage')} />
     </Routes>
   );
 

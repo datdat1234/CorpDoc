@@ -15,6 +15,8 @@ export default function ApprovalPage() {
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
   const [isCheckAllInput, setIsCheckAllInput] = useState(true);
+  const [crtPage, setCrtPage] = useState(1);
+  const itemPerPage = 20;
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
