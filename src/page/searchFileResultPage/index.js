@@ -44,6 +44,8 @@ export default function SearchFileResultPage() {
       type: '',
     },
   ];
+  const [crtPage, setCrtPage] = useState(1);
+  const itemPerPage = 20;
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -77,34 +79,36 @@ export default function SearchFileResultPage() {
   //////////////////////////////////////////////////
   const renderSearchResult = () => {
     return resData.map((file, index) => {
-      const fileData = [
-        {
-          text: '',
-          type: 'save',
-        },
-        {
-          text: file?._source?.Name,
-          type: 'file',
-          id: file?._source?.FileID,
-        },
-        {
-          text: getFileDept(file?._source?.DeptID),
-          type: 'text',
-        },
-        {
-          text: file?._source?.CreatedDate,
-          type: 'text',
-        },
-        {
-          text: file?._source?.Size,
-          type: 'text-size',
-        },
-        {
-          text: '',
-          type: 'edit',
-        },
-      ];
-      return <SrcItem grid={SEARCH_RESULT_GRIDS} value={fileData} />;
+      if (index >= (crtPage-1)*itemPerPage && index < (crtPage)*itemPerPage) {
+        const fileData = [
+          {
+            text: '',
+            type: 'save',
+          },
+          {
+            text: file?._source?.Name,
+            type: 'file',
+            id: file?._source?.FileID,
+          },
+          {
+            text: getFileDept(file?._source?.DeptID),
+            type: 'text',
+          },
+          {
+            text: file?._source?.CreatedDate,
+            type: 'text',
+          },
+          {
+            text: file?._source?.Size,
+            type: 'text-size',
+          },
+          {
+            text: '',
+            type: 'edit',
+          },
+        ];
+        return <SrcItem grid={SEARCH_RESULT_GRIDS} value={fileData} />;
+      }
     });
   };
   //////////////////////////////////////////////////
@@ -131,7 +135,7 @@ export default function SearchFileResultPage() {
             Tìm thấy <span className="text14Bold">{recordCount}</span> kết quả
             tài liệu phù hợp.
           </p>
-          <Pagination />
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={resData.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>

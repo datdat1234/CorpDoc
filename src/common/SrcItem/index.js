@@ -248,10 +248,11 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
   const renderCheckBox = (item) => {
     return (
       <CheckBoxForm
-        checked={item.isChecked}
-        setCheckAll={item.setCheckAll}
+        arrChecked= {item.arrChecked}
+        setArrChecked= {item.setArrChecked}
         isCheckAllInput={item.isCheckAllInput}
         setIsCheckAllInput={item.setIsCheckAllInput}
+        index={item.index}
       />
     );
   };

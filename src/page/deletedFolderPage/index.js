@@ -35,6 +35,8 @@ export default function DeletedFolderPage() {
   ];
   const [items, setItems] = useState([]);
   const [change, setChange] = useState(false);
+  const [crtPage, setCrtPage] = useState(1);
+  const itemPerPage = 20;
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -63,17 +65,29 @@ export default function DeletedFolderPage() {
   //////////////////////////////////////////////////
   const renderItem = () => {
     const tabItems = [];
-    for (let i = 0; i <= items.length; i++) {
-      tabItems.push(
-        <div key={i}>
-          <SrcItem
-            grid={DELETED_ITEM_GRIDS}
-            value={i === 0 ? header : items[i - 1]}
-            update={change}
-            setUpdate={setChange}
-          />
-        </div>
-      );
+    tabItems.push(
+      <div key={0}>
+        <SrcItem
+          grid={DELETED_ITEM_GRIDS}
+          value={header}
+          update={change}
+          setUpdate={setChange}
+        />
+      </div>
+    );
+    for (let i = 0; i < items.length; i++) {
+      if (i >= (crtPage-1)*itemPerPage && i < (crtPage)*itemPerPage) {
+        tabItems.push(
+          <div key={i+1}>
+            <SrcItem
+              grid={DELETED_ITEM_GRIDS}
+              value={items[i]}
+              update={change}
+              setUpdate={setChange}
+            />
+          </div>
+        );
+      }
     }
     return tabItems;
   };
@@ -84,7 +98,7 @@ export default function DeletedFolderPage() {
       <div className={`${styles.wrapper}`}>
         <div className="w-100">{renderItem()}</div>
         <div className={`${styles.pagination}`}>
-          <Pagination />
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>

@@ -34,6 +34,8 @@ export default function HomePage() {
   ];
   const [items, setItems] = useState([]);
   var switchFolder = useSelector((state) => state.app.folderPage);
+  const [crtPage, setCrtPage] = useState(1);
+  const itemPerPage = 20;
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -62,15 +64,25 @@ export default function HomePage() {
   //////////////////////////////////////////////////
   const renderItem = () => {
     const tabItems = [];
-    for (let i = 0; i <= items.length; i++) {
-      tabItems.push(
-        <div key={i}>
-          <SrcItem
-            grid={HOMEPAGE_ITEM_GRIDS}
-            value={i === 0 ? header : items[i - 1]}
-          />
-        </div>
-      );
+    tabItems.push(
+      <div key={0}>
+        <SrcItem
+          grid={HOMEPAGE_ITEM_GRIDS}
+          value={header}
+        />
+      </div>
+    );
+    for (let i = 0; i < items.length; i++) {
+      if (i >= (crtPage-1)*itemPerPage && i < (crtPage)*itemPerPage) {
+        tabItems.push(
+          <div key={i+1}>
+            <SrcItem
+              grid={HOMEPAGE_ITEM_GRIDS}
+              value={items[i]}
+            />
+          </div>
+        );
+      }
     }
     return tabItems;
   };
@@ -81,7 +93,7 @@ export default function HomePage() {
       <div className={`${styles.wrapper}`}>
         <div className="w-100">{renderItem()}</div>
         <div className={`${styles.pagination}`}>
-          <Pagination />
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>
