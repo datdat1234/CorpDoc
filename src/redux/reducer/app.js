@@ -15,7 +15,7 @@ export default function appReducer(
     fileInfo: {},
     noti: {type:'', message: ''},
     folderPage: false,
-    openModal: {type: '', infoItm: {}},
+    openModal: {type: '', infoItm: {}, update: true, setUpdate: ()=>{}},
   },
   action
 ) {

@@ -1,83 +1,80 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styles from './styles.module.css';
 import Button from 'common/Button';
-import SrcItem from 'common/SrcItem';
-import Pagination from 'common/Pagination';
 import Input from 'common/Input';
-import { STAFF_MANAGE_GRIDS } from 'util/js/constant';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import icon from 'util/js/icon';
+import { setNotification } from 'util/js/helper';
+import { getCompany, editCompanyInfo } from '../../util/js/APIs';
+import { logout } from '../../util/js/APICaller';
 
 export default function CompanyManagePage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
-  const navigate = useNavigate();
-  const [isChecked, setIsChecked] = useState(false);
-  const [isCheckAllInput, setIsCheckAllInput] = useState(true);
+  const userInfo = useSelector((state) => state.app.userInfo);
+  const dispatch = useDispatch();
+  const [name, setName] = useState(userInfo.Name);
+  const [defaultPassword, setDefaultPassword] = useState('');
+  const [companyInfo, setCompanyInfo] = useState({});
+  const [planInfo, setPlanInfo] = useState({PlanName: '', AdminAcctNum: 0, EmplAcctNum: 0, MgrAcctNum: 0});
+  const [handleBtn, setHandleBtn] = useState(false);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
-  
+
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
+  useEffect(()=>{
+    const fetchData = async()=>{
+      const companyInfoRes = await getCompany();
+      
+      setName(companyInfoRes?.data?.data?.company?.CompanyName);
+      setDefaultPassword(companyInfoRes?.data?.data?.company?.DefaultPassword);
+      setCompanyInfo(companyInfoRes?.data?.data?.company);
+      setPlanInfo(companyInfoRes?.data?.data?.plan);
+
+    };
+
+    fetchData();
+  },[])
 
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 
   // #region    FUNCTIONS //////////////////////////
   //////////////////////////////////////////////////
-  const value = [
-    {
-      text: '',
-      type: 'checkbox',
-      isChecked: isChecked && isCheckAllInput,
-      setCheckAll: setIsChecked,
-      isCheckAllInput: true,
-      setIsCheckAllInput: setIsCheckAllInput,
-    },
-    {
-      text: 'Họ và tên',
-      type: 'header',
-    },
-    {
-      text: 'Tên tài khoản',
-      type: 'header',
-    },
-    {
-      text: 'Phân quyền',
-      type: 'header',
-    },
-    {
-      text: '',
-      type: '',
-    },
-  ];
+  const handleSubmitBtn = async () => {
+    setHandleBtn(true);
 
-  const value1 = [
-    {
-      text: '',
-      type: 'checkbox',
-      isChecked: isChecked,
-      setCheckAll: setIsChecked,
-      setIsCheckAllInput: setIsCheckAllInput,
-    },
-    {
-      text: 'Nguyễn Văn A',
-      type: 'text',
-    },
-    {
-      text: 'user1_group1_company',
-      type: 'text',
-    },
-    {
-      text: 'Trưởng phòng',
-      type: 'text',
-    },
-    {
-      text: '',
-      type: 'approval',
-    },
-  ];
+    if(name === '') {
+      setHandleBtn(false);
+      setNotification('warning', 'Vui lòng nhập tên công ty!');
+      return;
+    }
+    if(defaultPassword === '') {
+      setHandleBtn(false);
+      setNotification('warning', 'Vui lòng nhập mật khẩu mặc định!');
+      return;
+    }
+
+    const data = {
+      name: name,
+      defaultPassword: defaultPassword,
+    }
+    try {
+      const res = await editCompanyInfo(data);
+      if (res.status === 200) {
+        setName(res?.data?.data?.company?.Name);
+        setDefaultPassword(res?.data?.data?.company?.DefaultPassword);
+        setCompanyInfo(res?.data?.data?.company);
+        setNotification('success', 'Cập nhật thông tin thành công!');
+      }
+      setHandleBtn(false);
+    } catch (err) {
+      logout();
+    }
+    
+  }
+
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -88,76 +85,72 @@ export default function CompanyManagePage() {
   // #endregion VIEWS //////////////////////////////
   return (
     <div className={`${styles.root}`}>
-      <div className={`border-bottom-1 border-style-solid border-bg5-60 br-10 ${styles.navCtn}`}>
-        <div className='col-12'>
-          <Button
-            name="PHÒNG NHÂN SỰ"
-            ctnStyles="h-100 text24Black"
-            btnStyles="bg-bgColor4 pLeft10 main"
-            onClick={() => console.log(-1)}
-          />
-        </div>
-        <div className={`${styles.storageCtn} pVertical15 pHorizontal15`}>
-          <p className="text14 pVertical5">
-            Đã sử dụng 14,62 GB trong tổng số 15 GB (76%)
-          </p>
-          <div className={`${styles.progressCtn} progress bg-text60`}>
-            <div
-              className={`${styles.progressBar} progress-bar bg-main`}
-              style={{ width: '25%' }}
-            ></div>
-          </div>
-        </div>
-      </div>
       <div className={`${styles.contentCtn}`}>
-        <div className={`${styles.searchCtn}`}>
-          <div className={`${styles.inputCtn} mBottom20`}>
-            <div className={`${styles.inputDetailCtn}`}>
-              <Input type="row-text" text="Tên" />
+        <div className={`${styles.infoCtn}`}>
+        <div className={`${styles.rowCtn}`}>
+            <div className={`${styles.inputRowDetailCtn} mRight10`}>
+              <Input 
+                type="text" 
+                text="Tài khoản" 
+                value={planInfo.PlanName}
+                canChange={false}
+                onEnter={() => {handleSubmitBtn()}}
+              />
             </div>
-            <div className={`${styles.inputDetailCtn}`}>
-              <Input type="row-text" text="Tài khoản" />
-            </div>
-          </div>
-          <div className={`${styles.inputCtn} justify-content-end`}>
-            <div className={`${styles.inputWrapper}`}>
-              <Button
-                name="Tìm kiếm"
-                ctnStyles="pHorizontal43 textH6Bold br-10 bg-header justify-content-end"
-                icon1={<FontAwesomeIcon icon={icon.magnifyingGlass} />}
-                icon1Styles="fs-20 black"
-                btnStyles="bg-header black d-flex justify-content-center align-items-center"
+            <div className={`${styles.inputRowDetailCtn}`}>
+              <Input 
+                type="text" 
+                text="Số quản trị viên tối đa" 
+                value={planInfo.AdminAcctNum}
+                canChange={false}
+                onEnter={() => {handleSubmitBtn()}}
               />
             </div>
           </div>
-        </div>
-        <div className={`${styles.btnCtn}`}>
-          <div className={`${styles.btnWrapper} bg-bgColor3 mRight5`}>
-            <Button
-              name="Cài đặt lại mật khẩu"
-              ctnStyles="pHorizontal15 pVertical10 br-10 text14Bold bg-bgColor3"
-              btnStyles="bg-bgColor3 black"
-            />
+          <div className={`${styles.rowCtn}`}>
+            <div className={`${styles.inputRowDetailCtn} mRight10`}>
+              <Input
+                type="text"
+                text="Số phòng ban tối đa"
+                value={planInfo.MgrAcctNum}
+                canChange={false}
+                onEnter={() => {handleSubmitBtn()}}
+              />
+            </div>
+            <div className={`${styles.inputRowDetailCtn}`}>
+              <Input 
+                type="text" 
+                text="Số người dùng tối đa" 
+                value={planInfo.EmplAcctNum}
+                canChange={false}
+                onEnter={() => {handleSubmitBtn()}}
+              />
+            </div>
           </div>
-          <div className={`${styles.btnWrapper} bg-error`}>
-            <Button
-              name="Chặn tài khoản"
-              ctnStyles="pHorizontal15 pVertical10 br-10 text14Bold bg-error"
-              btnStyles="bg-error white"
-            />
-          </div>
-          <div className={`${styles.totalWrapper} text-end main text20Black`}>
-            Tổng cộng: 3
-          </div>
-        </div>
-        <div className={`${styles.resultCtn}`}>
-          <div className="w-100">
-            <SrcItem grid={STAFF_MANAGE_GRIDS} value={value} />
-            <SrcItem grid={STAFF_MANAGE_GRIDS} value={value1} />
-            <SrcItem grid={STAFF_MANAGE_GRIDS} value={value1} />
-          </div>
-          <div className={`${styles.pagination}`}>
-            <Pagination />
+          <Input 
+            type="text" 
+            text="Tên công ty" 
+            value={name} 
+            setData={setName}
+            onEnter={() => {handleSubmitBtn()}} 
+          />
+          <Input 
+            type="text" 
+            text="Mật khẩu khởi tạo" 
+            placeholder="Nhập mật khẩu mới" 
+            value={defaultPassword} setData={setDefaultPassword}
+            onEnter={() => {handleSubmitBtn()}} 
+          />
+          <div className={`${styles.btnCtn}`}>
+            <div className={`${styles.btnWrapper}`}>
+              <Button
+                name="XÁC NHẬN"
+                ctnStyles="h-100 textH6Bold br-10 bg-text justify-content-end"
+                btnStyles="bg-text white d-flex justify-content-center align-items-center"
+                onClick={() => handleSubmitBtn()}
+                isLoad = {handleBtn}
+              />
+            </div>
           </div>
         </div>
       </div>

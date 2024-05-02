@@ -17,7 +17,7 @@ import styles from './styles.module.css';
 import PDFRenderer from 'common/PDFRenderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
-import ShareModal from 'common/ShareModal';
+import CustomModal from 'common/CustomModal';
 
 export default function Layout({ children }) {
   // #region    VARIABLES //////////////////////////
@@ -146,7 +146,14 @@ export default function Layout({ children }) {
               </div>
             </div>
             {noti.type && <Notification noti={noti}/>}
-            {openModal?.type !== '' && <ShareModal infoItm={openModal.infoItm}/>}
+            {openModal?.type !== '' && 
+              <CustomModal 
+                type={openModal.type} 
+                infoItm={openModal.infoItm} 
+                update={openModal.update} 
+                setUpdate={openModal.setUpdate} 
+              />
+            }
           </div>
           <div
             className={`d-flex flex-column justify-content-center align-items-center ${styles.resizer}`}

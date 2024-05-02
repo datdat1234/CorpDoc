@@ -6,13 +6,13 @@ import Button from 'common/Button';
 import SrcItem from 'common/SrcItem';
 import Pagination from 'common/Pagination';
 import Input from 'common/Input';
-import { STAFF_MANAGE_GRIDS } from 'util/js/constant';
+import { STAFF_ADMIN_MANAGE_GRIDS } from 'util/js/constant';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
-import { getUsedStorage, getAllUsersDept, resetPasswordUser, changeStatusUser } from 'util/js/APIs';
+import { getDeptName, resetPasswordUser, changeStatusUser, getAllUsers } from 'util/js/APIs';
 import { getNameRole, setNotification } from 'util/js/helper';
 
-export default function StaffManagePage() {
+export default function StaffAdminManagePage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const navigate = useNavigate();
@@ -20,11 +20,17 @@ export default function StaffManagePage() {
   const userInfo = useSelector((state) => state.app.userInfo);
   const [arrChecked, setArrChecked] = useState([]);
   const [isCheckAllInput, setIsCheckAllInput] = useState(false);
-  const [usedStorage, setUsedStorage] = useState(0);
-  const [deptData, setDeptData] = useState({Name: '', Storage: 0});
   const [usersData, setUsersData] = useState([]);
   const [change, setChange] = useState(true);
   const [crtPage, setCrtPage] = useState(1);
+
+  // search
+  const [allDept, setAllDept] = useState([]);
+  const [searchName, setSearchName] = useState('');
+  const [searchUserName, setSearchUserName] = useState('');
+  const [searchDept, setSearchDept] = useState('');
+  const [searchRole, setSearchRole] = useState('');
+  const [displayItems, setDisplayItems] = useState([]);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
   
@@ -32,13 +38,12 @@ export default function StaffManagePage() {
   //////////////////////////////////////////////////
   useEffect(()=>{
     const fetchData = async()=>{
-      const deptInfoRes = await getAllUsersDept();
-      setDeptData(deptInfoRes?.data?.data?.deptInfo);
-      setUsersData(deptInfoRes?.data?.data?.usersInDept);
-      setArrChecked(Array(deptInfoRes?.data?.data?.usersInDept.length).fill(false))
-      
-      const usedStorageRes = await getUsedStorage (userInfo.DeptID);
-      setUsedStorage(usedStorageRes?.data?.data > deptInfoRes?.data?.data?.deptInfo?.Storage ? deptInfoRes?.data?.data?.deptInfo?.Storage : usedStorageRes.data?.data); 
+      const users = await getAllUsers();
+      setUsersData(users?.data?.data?.users);
+      setDisplayItems(users?.data?.data?.users);
+      setArrChecked(Array(users?.data?.data?.users.length).fill(false));  
+      const deptRes = await getDeptName();
+      setAllDept(deptRes?.data?.data?.dept);    
     }
 
     fetchData();
@@ -64,6 +69,10 @@ export default function StaffManagePage() {
       type: 'header',
     },
     {
+      text: 'Phòng ban',
+      type: 'header',
+    },
+    {
       text: 'Tên tài khoản',
       type: 'header',
     },
@@ -80,9 +89,9 @@ export default function StaffManagePage() {
   const handleResetPassword = async () => {
     let ids= [];
     let n = 0;
-    for (let i = 0; i < usersData.length; i++) {
+    for (let i = 0; i < displayItems.length; i++) {
       if (arrChecked[i]) {
-        ids.push(usersData[i].UserID);
+        ids.push(displayItems[i].UserID);
         n++;
       }
     }
@@ -101,9 +110,9 @@ export default function StaffManagePage() {
   const handleBlockUser = async () => {
     let ids= [];
     let n = 0;
-    for (let i = 0; i < usersData.length; i++) {
-      if (arrChecked[i] && usersData[i].UserID !== userInfo.UserID) {
-        ids.push(usersData[i].UserID);
+    for (let i = 0; i < displayItems.length; i++) {
+      if (arrChecked[i] && displayItems[i].UserID !== userInfo.UserID) {
+        ids.push(displayItems[i].UserID);
         n++;
       }
     }
@@ -118,6 +127,18 @@ export default function StaffManagePage() {
     });
     setChange(!change)
   }
+
+  const handleSearchBtn = () => {
+    setDisplayItems(
+      usersData.filter(
+        (user) => 
+        user.Name.toLowerCase().search(searchName.toLowerCase()) !== -1 &&
+        user.DeptName.toLowerCase().search(searchDept.toLowerCase()) !== -1 &&
+        user.Username.toLowerCase().search(searchUserName.toLowerCase()) !== -1 &&
+        getNameRole(user.Role).search(searchRole) !== -1 
+      )
+    );
+  }
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -128,36 +149,22 @@ export default function StaffManagePage() {
   // #endregion VIEWS //////////////////////////////
   return (
     <div className={`${styles.root}`}>
-      <div className={`border-bottom-1 border-style-solid border-bg5-60 br-10 ${styles.navCtn}`}>
-        <div className='col-12'>
-          <Button
-            name={deptData.Name}
-            ctnStyles="h-100 text24Black"
-            btnStyles="bg-bgColor4 pLeft10 main"
-            onClick={() => {}}
-          />
-        </div>
-        <div className={`${styles.storageCtn} pVertical15 pHorizontal15`}>
-          <p className="text14 pVertical5">
-            {deptData.Storage-usedStorage < 0.5 && <p className="error text14Bold">Đã sử dụng gần hết bộ nhớ</p>}
-            Đã sử dụng {usedStorage} GB trong tổng số {deptData.Storage} GB ({Math.round(((100 / deptData.Storage) * usedStorage) * 100) / 100}%)
-          </p>
-          <div className={`${styles.progressCtn} progress bg-text60`}>
-            <div
-              className={`${styles.progressBar} progress-bar bg-main`}
-              style={{ width: (((100 / deptData.Storage) * usedStorage))+'%' }}
-            ></div>
-          </div>
-        </div>
-      </div>
-      <div className={`${styles.contentCtn}`}>
+      <div className={`${styles.contentCtn} mTop20`}>
         <div className={`${styles.searchCtn}`}>
           <div className={`${styles.inputCtn} mBottom20`}>
             <div className={`${styles.inputDetailCtn}`}>
-              <Input type="row-text" text="Tên" />
+              <Input type="row-text" text="Tên" value={searchName} setData={setSearchName} />
             </div>
-            <div className={`${styles.inputDetailCtn}`}>
-              <Input type="row-text" text="Tài khoản" />
+            <div className={`${styles.inputDetailCtn} ms-2`}>
+              <Input type="row-text" text="Tên tài khoản" value={searchUserName} setData={setSearchUserName}/>
+            </div>
+          </div>
+          <div className={`${styles.inputCtn} mBottom20`}>
+            <div className={`${styles.inputDetailCtn} ms-2`}>
+              <Input type="row-select" text="Phòng ban" defaultValue={searchDept} value={allDept} setData={setSearchDept} />
+            </div>
+            <div className={`${styles.inputDetailCtn} ms-2`}>
+              <Input type="row-select" text="Chức vụ" defaultValue={searchRole} value={['Quản trị viên', 'Nhân viên', 'Trưởng phòng']} setData={setSearchRole} />
             </div>
           </div>
           <div className={`${styles.inputCtn} justify-content-end`}>
@@ -168,6 +175,7 @@ export default function StaffManagePage() {
                 icon1={<FontAwesomeIcon icon={icon.magnifyingGlass} />}
                 icon1Styles="fs-20 black"
                 btnStyles="bg-header black d-flex justify-content-center align-items-center"
+                onClick={handleSearchBtn}
               />
             </div>
           </div>
@@ -190,12 +198,12 @@ export default function StaffManagePage() {
             />
           </div>
           <div className={`${styles.totalWrapper} text-end main text20Black`}>
-            Tổng cộng: {usersData.length}
+            Tổng cộng: {displayItems.length}
           </div>
         </div>
         <div className={`${styles.resultCtn} ps-1 w-100`}>
-          <SrcItem grid={STAFF_MANAGE_GRIDS} value={value} />
-          {usersData.map((user, index)=> {
+          <SrcItem grid={STAFF_ADMIN_MANAGE_GRIDS} value={value} />
+          {displayItems.map((user, index)=> {
             if (index >= (crtPage-1)*itemPerPage && index < (crtPage)*itemPerPage) {
               let userInfo = [
                 {
@@ -211,6 +219,12 @@ export default function StaffManagePage() {
                   text: user.Name,
                   type: 'text',
                   id: user.UserID,
+                  status: user.Status,
+                },
+                {
+                  text: user.DeptName,
+                  type: 'text',
+                  id: user.DeptID
                 },
                 {
                   text: user.Username,
@@ -219,20 +233,21 @@ export default function StaffManagePage() {
                 {
                   text: getNameRole(user.Role),
                   type: 'text',
+                  value: user.Role,
                 },
                 {
-                  text: user.Status,
-                  type: 'staffManage',
+                  text: 'userModal',
+                  type: 'manage',
                 },
               ];
               return(
-                <SrcItem grid={STAFF_MANAGE_GRIDS} value={userInfo} setUpdate={setChange} update={change}/>
+                <SrcItem grid={STAFF_ADMIN_MANAGE_GRIDS} value={userInfo} setUpdate={setChange} update={change}/>
               )
             }
           })}
         </div>
         <div className={`${styles.pagination}`}>
-          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={usersData.length} itemPerPage={itemPerPage}/>
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={displayItems.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>

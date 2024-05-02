@@ -197,8 +197,8 @@ export const PROFILE_TABS_ADMIN_ICON = [
 export const PROFILE_NAVIGATE_ADMIN = [
   '/profile',
   '/company-manage',
-  '/-manage',
-  '/staff-manage',
+  '/dept-manage',
+  '/staff-admin-manage',
   '',
   '/login',
 ];
@@ -313,8 +313,8 @@ export const APPROVAL_GRIDS = [
   'col-3-5',
   'col-4',
   'col-3-5',
-  'col-3',
   'col-2',
+  'col-3',
 ];
 
 export const STAFF_MANAGE_GRIDS = [
@@ -323,6 +323,23 @@ export const STAFF_MANAGE_GRIDS = [
   'col-6',
   'col-5',
   'col-3',
+];
+
+export const STAFF_ADMIN_MANAGE_GRIDS = [
+  'col-1',
+  'col-6',
+  'col-6',
+  'col-5',
+  'col-5',
+  'col-1',
+];
+
+export const DEPT_MANAGE_GRIDS = [
+  'col-2',
+  'col-10',
+  'col-6',
+  'col-5',
+  'col-1',
 ];
 
 export const NOT_SHOW_SIDEBAR = [
@@ -337,6 +354,7 @@ export const NOT_SHOW_SIDEBAR = [
   '/approval',
   '/profile',
   '/staff-manage',
+  '/staff-admin-manage',
   '/company-manage',
   '/dept-manage',
   '/edit-file',
@@ -346,6 +364,7 @@ export const NOT_SHOW_SIDEBAR = [
 export const IS_SETTING_PAGE = [
   '/profile',
   '/staff-manage',
+  '/staff-admin-manage',
   '/company-manage',
   '/dept-manage',
   '/setting',
