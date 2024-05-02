@@ -30,7 +30,7 @@ export default function Sidebar({}) {
   const [adminDomain, setAdminDomain] = useState({name: 'Văn bản hành chính', childs: []});
   const [bookDomain, setBookDomain] = useState({name: 'Thư viện sách', childs: []});
   const [usedStorage, setUsedStorage] = useState(0);
-  const [crtDept, setCrtDept] = useState('');
+  const [crtDept, setCrtDept] = useState({Name: '', Storage: 0});
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -49,14 +49,14 @@ export default function Sidebar({}) {
       const bookDomainRes = await getSupportStructure(userInfo.DeptID, 'book');
       const bookDomain = bookDomainRes?.data?.data?.dataRes;
       setBookDomain(bookDomain);
+      
+      //get name dept
+      const crtDeptRes = await getCrtDept();
+      setCrtDept(crtDeptRes?.data?.data?.deptInfo);
 
       //get used storage
       const usedStorageRes = await getUsedStorage (userInfo.DeptID);
-      setUsedStorage(usedStorageRes?.data?.data > 1.5 ? 1.5 : usedStorageRes.data?.data); 
-
-      //get name dept
-      const crtDeptRes = await getCrtDept();
-      setCrtDept(crtDeptRes?.data?.data?.deptInfo?.Name);
+      setUsedStorage(usedStorageRes?.data?.data > crtDeptRes?.data?.data?.deptInfo?.Storage ? crtDeptRes?.data?.data?.deptInfo?.Storage : usedStorageRes.data?.data); 
       
     };
 
@@ -90,7 +90,7 @@ export default function Sidebar({}) {
             className={`mBottom5 ${styles.tabCtn}`}
           >
             <Button
-              name={SIDEBAR_TABS_ADMIN[i] + (i===1 ? crtDept : '')}
+              name={SIDEBAR_TABS_ADMIN[i] + (i===1 ? crtDept.Name : '')}
               btnStyles={`textH6ExtraBold ${styles.buttonText}
               ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}`}
               ctnStyles={`br-TopRight-10 br-BottomRight-10 p10 border-bottom-1 border-header border-style-solid
@@ -115,7 +115,7 @@ export default function Sidebar({}) {
           tabItems.push(
             <div key={i} className={`mBottom5 ${styles.tabCtn}`}>
               <Button
-                name={SIDEBAR_TABS[i] + (i===0 ? crtDept : '')}
+                name={SIDEBAR_TABS[i] + (i===0 ? crtDept.Name : '')}
                 btnStyles={`textH6ExtraBold ${styles.buttonText}
                 ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}`}
                 ctnStyles={`br-TopRight-10 br-BottomRight-10 p10 border-bottom-1 border-header border-style-solid
@@ -186,13 +186,13 @@ export default function Sidebar({}) {
       </div>
       <div className={`${styles.storageCtn} pVertical15 pHorizontal15`}>
         <p className="text14 pVertical5">
-          {1.5-usedStorage < 0.5 && <p className="error text14Bold">Đã sử dụng gần hết bộ nhớ</p>}
-          Đã sử dụng {usedStorage} GB trong tổng số 1.5 GB ({Math.round(((100 / 1.5) * usedStorage) * 100) / 100}%)
+          {crtDept.Storage-usedStorage < 0.5 && <p className="error text14Bold">Đã sử dụng gần hết bộ nhớ</p>}
+          Đã sử dụng {usedStorage} GB trong tổng số {crtDept.Storage} GB ({Math.round(((100 / crtDept.Storage) * usedStorage) * 100) / 100}%)
         </p>
         <div className={`${styles.progressCtn} progress bg-text60`}>
           <div
             className={`${styles.progressBar} progress-bar bg-main`}
-            style={{ width: (((100 / 1.5) * usedStorage))+'%' }}
+            style={{ width: (((100 / crtDept.Storage) * usedStorage))+'%' }}
           ></div>
         </div>
       </div>

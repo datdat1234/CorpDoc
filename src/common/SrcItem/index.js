@@ -15,12 +15,13 @@ import {
   resetPasswordUser, 
   changeStatusUser,
   setChangeFolderDelete, 
-  setChangeFileDelete
+  setChangeFileDelete,
+  setApproveFiles
 } from 'util/js/APIs';
 import { setNotification } from 'util/js/helper';
 import UseOnClickOutside from 'util/hook/useOnClickOutside';
 import DeletedBreadCrumbModal from 'common/DeletedBreadCrumbModal';
-import { setFolderPage } from '../../redux/action/app';
+import { setFolderPage, setOpenModal as setGlobalModal } from '../../redux/action/app';
 
 export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, update }) {
   // #region    VARIABLES //////////////////////////
@@ -136,6 +137,16 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
     }
   };
 
+  const handleApproveBtn = async () => {
+    await setApproveFiles([value[1].id]).then((res) => {
+      if (res?.data?.resultCode === "00001") {
+        setNotification('success', 'Tác vụ thành công.');
+        setUpdate(!update);
+      } else {
+        setNotification('error', res?.data?.resultMessage?.vi);
+      }
+    });
+  }
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -261,23 +272,25 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
     return (
       <div className={`${styles.approvalCtn}`}>
         <IconButton
-          icon={<FontAwesomeIcon icon={icon.circleCheck} className="success" />}
-          onClick={() => {
-            console.log('click');
-          }}
+          icon={<FontAwesomeIcon icon={icon.penToSquare} size='lg'/>}
+          ctnStyles="d-flex justify-content-center align-item-center"
+          onClick={() => dispatch(setGlobalModal({type:value[value.length-1].text, infoItm: value, update: update, setUpdate: setUpdate}))}
         />
         <IconButton
-          icon={<FontAwesomeIcon icon={icon.xmark} className="bgColor4" />}
-          ctnStyles="bg-error error br-50 w-16 h-16 d-flex justify-content-center align-item-center"
-          onClick={() => {
-            console.log('click');
-          }}
+          icon={<FontAwesomeIcon icon={icon.circleCheck} size='lg' className="bgColor4" />}
+          ctnStyles="bg-success br-2 w-30 h-30 d-flex justify-content-center align-item-center"
+          onClick={() => handleApproveBtn()}
+        />
+        <IconButton
+          icon={<FontAwesomeIcon icon={icon.xmark} size='lg' className="bgColor4" />}
+          ctnStyles="bg-error br-2 w-30 h-30 d-flex justify-content-center align-item-center"
+          onClick={() => handleChangeStatus(item.text)}
         />
       </div>
     );
   };
 
-  const renderManage = (item) => {
+  const renderStaffManage = (item) => {
     return (
       <div className={`${styles.approvalCtn}`}>
         <IconButton
@@ -301,6 +314,18 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
     );
   };
 
+  const renderManage = (item) => {
+    return (
+      <div className={`${styles.approvalCtn}`}>
+        <IconButton
+          icon={<FontAwesomeIcon icon={icon.penToSquare} size='lg'/>}
+          ctnStyles="d-flex justify-content-center align-item-center"
+          onClick={() => dispatch(setGlobalModal({type:value[value.length-1].text, infoItm: value, update: update, setUpdate: setUpdate}))}
+        />
+      </div>
+    );
+  };
+
   const renderItems = (item, index) => {
     if (item.type.includes('save')) return renderBookmarkBtnCell(save);
     if (item.type.includes('edit')) return renderEditBtnCell(index);
@@ -314,6 +339,7 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
     if (item.type.includes('checkbox')) return renderCheckBox(item);
     if (item.type.includes('approval')) return renderApproval(item);
     if (item.type.includes('manage')) return renderManage(item);
+    if (item.type.includes('staffManage')) return renderStaffManage(item);
   };
 
   const renderGrid = () => {

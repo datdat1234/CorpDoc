@@ -19,6 +19,7 @@ import SearchFolderResultPage from 'page/searchFolderResultPage';
 import SearchFileResultPage from 'page/searchFileResultPage';
 import ProfilePage from 'page/profilePage';
 import StaffManagePage from 'page/staffManagePage';
+import StaffAdminManagePage from 'page/staffAdminManagePage';
 import ApprovalPage from 'page/approvalPage';
 import CompanyManagePage from 'page/companyManagePage';
 import DeptManagePage from 'page/deptManagePage';
@@ -81,6 +82,8 @@ export default function RouterProvider() {
         return <DeletedFolderPage />;
       case '/private-folder':
         return <PrivateFolderPage />;
+      case '/staff-admin-manage':
+        return <StaffAdminManagePage />;
       default:
         return <Navigate replace to="/login" />;
     }
@@ -127,6 +130,7 @@ export default function RouterProvider() {
       <Route path="/private-folder" element={getElement('/private-folder')} />
       <Route path="/company-manage" element={getElement('/company-manage')} />
       <Route path="/dept-manage" element={getElement('/dept-manage')} />
+      <Route path="/staff-admin-manage" element={getElement('/staff-admin-manage')} />
     </Routes>
   );
 

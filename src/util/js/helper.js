@@ -274,6 +274,57 @@ export const formatItemDeletedFile = (data) => {
   return formattedData;
 };
 
+export const formatItemPendingFile = (data) => {
+  const formattedData = [];
+  if(data !== undefined) {
+    for (let i = 0; i < data.length; i++) {
+      let createdDate, updatedDate;
+      if (data[i].CreatedDate) {
+        createdDate = new Date(data[i].CreatedDate);
+      }
+      if (data[i].UpdatedDate) {
+        updatedDate = new Date(data[i].UpdatedDate);
+      }
+      formattedData.push([
+        {
+          text: data[i].Name,
+          type: 'file',
+          id: data[i].FileID,
+        },
+        {
+          text: createdDate.toLocaleString('en-GB',{
+            dateStyle: 'short',
+            timeStyle: 'short',
+            timeZone: 'Asia/Ho_Chi_Minh',
+          }),
+          type: 'text',
+        },
+        {
+          text: updatedDate.toLocaleString('en-GB',{
+            dateStyle: 'short',
+            timeStyle: 'short',
+            timeZone: 'Asia/Ho_Chi_Minh',
+          }),
+          type: 'text',
+        },
+        {
+          text: data[i].Size,
+          type: 'text-size',
+        },
+        {
+          text: data[i].NewValue? 'Sửa đổi' : 'Tạo mới',
+          type: 'text',
+        },
+        {
+          text: '',
+          type: 'approval',
+        },
+      ]);
+    }
+  }
+  return formattedData;
+};
+
 export const getNameRole = (role) => {
   switch (role) { 
     case 'Manager':

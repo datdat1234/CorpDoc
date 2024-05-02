@@ -5,6 +5,21 @@ const getCompanyId = () => {
   return localStorage.getItem('companyId');
 };
 
+//#region Company
+export const getCompany = () => {
+  return get(`${API_URL}/company/get-company`, {
+    companyId: getCompanyId(),
+  });
+}
+
+export const editCompanyInfo = (companyData) => {
+  return post(`${API_URL}/company/edit-company`, {
+    companyId: getCompanyId(),
+    companyData: companyData
+  });
+}
+//#endregion
+
 //#region User
 
 export const checkLogin = (username) => {
@@ -32,6 +47,13 @@ export const getAllUsersDept = () => {
   });
 };
 
+export const getAmountUsersDept = (deptId) => {
+  return post(`${API_URL}/user/get-amount-users-dept`, {
+    companyId: getCompanyId(),
+    deptId: deptId,
+  });
+};
+
 export const resetPasswordUser = (staffId) => {
   return post(`${API_URL}/user/reset-password`, {
     companyId: getCompanyId(),
@@ -54,12 +76,25 @@ export const setCrtDeptAdmin = (deptId) => {
   });
 };
 
+export const getAllUsers = () => {
+  return get(`${API_URL}/user/get-all-users`, {
+    companyId: getCompanyId(),
+  });
+};
+
 //#endregion
 
 //#region Profile
 
 export const editUserInfo = (data) => {
   return post(`${API_URL}/user/edit-user-info`, {
+    companyId: getCompanyId(),
+    ...data,
+  });
+};
+
+export const editStaffInfo = (data) => {
+  return post(`${API_URL}/user/edit-staff-info`, {
     companyId: getCompanyId(),
     ...data,
   });
@@ -140,6 +175,31 @@ export const getUsedStorage = (deptId) => {
   );
 };
 
+export const getPendingFiles = () => {
+  return get(
+    `${API_URL}/file/get-pending-files`,
+    {companyId: getCompanyId(),},
+  );
+};
+
+export const setApproveFiles = (ids) => {
+  return post(
+    `${API_URL}/file/set-approve-files`,{
+      companyId: getCompanyId(),
+      fileIds: ids,
+    },
+  );
+};
+
+export const setDeniedFiles = (ids) => {
+  return post(
+    `${API_URL}/file/set-denied-files`,{
+      companyId: getCompanyId(),
+      fileIds: ids,
+    },
+  );
+};
+
 //#endregion
 
 //#region Dept
@@ -180,6 +240,14 @@ export const setSharedDeptIds = (infoItm, deptIds) => {
     companyId: getCompanyId(),
     id: infoItm.id,
     deptIds: deptIds,
+  });
+};
+
+export const editDeptInfo = (deptId, deptInfo) => {
+  return post(`${API_URL}/dept/edit-dept-info`, {
+    companyId: getCompanyId(),
+    deptId: deptId,
+    deptInfo: deptInfo,
   });
 };
 

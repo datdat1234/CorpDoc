@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import styles from './styles.module.css';
-import SidebarTab from 'common/SidebarTab';
 import Button from 'common/Button';
-import IconButton from 'common/IconButton';
 import Input from 'common/Input';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import icon from 'util/js/icon';
 import { getNameRole, setNotification } from 'util/js/helper';
-import { editUserInfo } from '../../util/js/APIs';
+import { editUserInfo, getCrtDept } from '../../util/js/APIs';
 import { setUserInfo } from '../../redux/action/app';
 import { logout } from '../../util/js/APICaller';
 
@@ -19,6 +14,7 @@ export default function ProfilePage() {
   //////////////////////////////////////////////////
   const userInfo = useSelector((state) => state.app.userInfo);
   const dispatch = useDispatch();
+  const [crtDept, setCrtDept] = useState('');
   const [name, setName] = useState(userInfo.Name);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -29,6 +25,14 @@ export default function ProfilePage() {
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
+  useEffect(()=>{
+    const fetchData = async()=>{
+      const crtDeptRes = await getCrtDept();
+      setCrtDept(crtDeptRes?.data?.data?.deptInfo?.Name);
+    };
+
+    fetchData();
+  },[])
 
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
@@ -121,7 +125,7 @@ export default function ProfilePage() {
               <Input
                 type="text"
                 text="Phòng ban"
-                value="Phòng nhân sự"
+                value={crtDept}
                 canChange={false}
                 onEnter={() => {handleSubmitBtn()}}
               />

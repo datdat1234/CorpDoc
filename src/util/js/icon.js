@@ -40,6 +40,7 @@ import {
   faRotateLeft,
   faUserLock,
   faUnlock,
+  faPenToSquare,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -89,6 +90,7 @@ const icon = {
   rotateLeft: faRotateLeft,
   userLock: faUserLock,
   unlock: faUnlock,
+  penToSquare: faPenToSquare,
 };
 
 export default icon;

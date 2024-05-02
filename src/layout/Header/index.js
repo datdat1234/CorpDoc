@@ -47,7 +47,7 @@ export default function Header() {
   const [notiAlert, setNotiAlert] = useState(false);
   let profileTab, profileTabIcon, profileNavigate;
   switch (userInfo.Role) {
-    case 'admin':
+    case 'Admin':
       profileTab = PROFILE_TABS_ADMIN;
       profileNavigate = PROFILE_NAVIGATE_ADMIN;
       break;
