@@ -292,31 +292,27 @@ export const formatItemPendingFile = (data) => {
           id: data[i].FileID,
         },
         {
-          text: createdDate.toLocaleString('en-GB',{
-            dateStyle: 'short',
-            timeStyle: 'short',
-            timeZone: 'Asia/Ho_Chi_Minh',
-          }),
-          type: 'text',
-        },
-        {
-          text: updatedDate.toLocaleString('en-GB',{
-            dateStyle: 'short',
-            timeStyle: 'short',
-            timeZone: 'Asia/Ho_Chi_Minh',
-          }),
-          type: 'text',
-        },
-        {
-          text: data[i].Size,
-          type: 'text-size',
-        },
-        {
           text: data[i].NewValue? 'Sửa đổi' : 'Tạo mới',
           type: 'text',
         },
         {
-          text: '',
+          text: data[i].username,
+          type: 'text',
+        },
+        {
+          text: (data[i].NewValue? updatedDate : createdDate).toLocaleString('en-GB',{
+            dateStyle: 'short',
+            timeStyle: 'short',
+            timeZone: 'Asia/Ho_Chi_Minh',
+          }),
+          type: 'text',
+        },
+        {
+          text: data[i].deptname,
+          type: 'text',
+        },
+        {
+          text: data[i],
           type: 'approval',
         },
       ]);

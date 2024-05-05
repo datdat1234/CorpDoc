@@ -36,6 +36,7 @@ export default function Sidebar({}) {
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
+  console.log(child)
   useEffect(() => {
     const fetchData = async () => {
       const rootId = await localStorage.getItem('root');
@@ -57,11 +58,11 @@ export default function Sidebar({}) {
       //get used storage
       const usedStorageRes = await getUsedStorage (userInfo.DeptID);
       setUsedStorage(usedStorageRes?.data?.data > crtDeptRes?.data?.data?.deptInfo?.Storage ? crtDeptRes?.data?.data?.deptInfo?.Storage : usedStorageRes.data?.data); 
-      
+
     };
 
     fetchData();
-  }, [switchFolder]);
+  }, [switchFolder || userInfo]);
 
   useEffect(()=>{
     if (location.pathname === '/home') {

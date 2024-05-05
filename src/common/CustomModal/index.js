@@ -47,6 +47,12 @@ export default function CustomModal({
   const [resetPassword, setResetPassword] = useState(false);
   const [status, setStatus] = useState('Active');
 
+  // approvalModal
+  const [desc, setDesc] = useState('');
+  const [criteria, setCriteria] = useState([]);
+  const [author, setAuthor] = useState('');
+  const [newValue, setNewValue] = useState(null);
+
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -77,6 +83,14 @@ export default function CustomModal({
           setName(infoItm[1].text);
           setDept({Name: infoItm[2].text, DeptID: infoItm[2].id});
           setStatus(infoItm[1].status);
+          break;
+        case 'approvalModal':
+          const info = infoItm[infoItm.length - 1].text;
+          setName(info.Name);
+          setCriteria(info.Criteria);
+          setDesc(info.Description);
+          setAuthor(info.Author);
+          setNewValue(info.NewValue);
           break;
         default: break;
       }
@@ -171,13 +185,13 @@ export default function CustomModal({
 
   // #region    VIEWS //////////////////////////////
   //////////////////////////////////////////////////
-  const renderSharedTag = () => {
-    return sharedDepts?.map((dept, index) => {
+  const renderSharedTag = (items, handleFunc = (e)=>{}) => {
+    return items?.map((item, index) => {
       return (
         <CriteriaTag
           key={index}
-          text={dept}
-          handleClick={handleCloseShareDept}
+          text={item}
+          handleClick={handleFunc}
         />
       );
     });
@@ -191,9 +205,13 @@ export default function CustomModal({
         return 'Chỉnh sửa thông tin phòng ban';
       case 'userModal':
         return 'Chỉnh sửa thông tin nhân viên';
+      case 'approvalModal':
+        return 'Thông tin chi tiết';
       default: break;
     }
   }
+
+  console.log(infoItm)
 
   const renderViews = () => {
     switch (type){
@@ -208,7 +226,7 @@ export default function CustomModal({
               setData={handleSetShareDept}
               isSelect={true}
             />
-            <div className={`${styles.checkboxCtn}`}>{renderSharedTag()}</div>
+            <div className={`${styles.checkboxCtn}`}>{renderSharedTag(sharedDepts, handleCloseShareDept)}</div>
           </div>
         )
       case 'deptModal':
@@ -287,6 +305,63 @@ export default function CustomModal({
             />
           </div>
         )
+      case 'approvalModal':
+        return (
+          <div className={`${styles.body}`}>
+            <Input 
+              type="text" 
+              text={newValue? 'Tên cũ' : 'Tên'}
+              value={name}
+              canChange={false}
+            />
+            {newValue &&
+              <Input 
+                type="text" 
+                text="Tên mới"
+                value={newValue?.name}
+                canChange={false}
+              />
+            }
+            <Input 
+              type="text" 
+              text={newValue? 'Tác giả cũ' : 'Tác giả'}
+              value={author}
+              setData={setAuthor}
+              canChange={false}
+            />
+            {newValue &&
+              <Input 
+                type="text" 
+                text="Tác giả mới"
+                value={newValue?.author}
+                canChange={false}
+              />
+            }
+            <Input 
+              type="text" 
+              text={newValue? 'Mô tả cũ' : 'Mô tả'}
+              value={desc}
+              setData={setDesc}
+              canChange={false}
+            />
+            {newValue &&
+              <Input 
+                type="text" 
+                text="Mô tả mới"
+                value={newValue?.author}
+                canChange={false}
+              />
+            }
+            <p className="textH6Bold text-nowrapm mb-2">{newValue? 'Tiêu chí cũ' : 'Tiêu chí'}</p>
+            <div className={`${styles.checkboxCtn} mb-2`}>{renderSharedTag(criteria)}</div>
+            {newValue && 
+              <>
+                <p className="textH6Bold text-nowrapm mb-2">Tiêu chí mới</p>
+                <div className={`${styles.checkboxCtn} mb-2`}>{renderSharedTag(newValue.criteria)}</div>
+              </>
+            }
+          </div>
+        )
       default: break;
     }
   }
@@ -300,16 +375,18 @@ export default function CustomModal({
           <FontAwesomeIcon icon={icon.xmark} size='lg' className={`${styles.icon} pointer`} onClick={handleCloseModal} />
         </div>
         {renderViews()}
-        <div className={`${styles.footer}`}>
-          <div className={`${styles.btnCtn}`}>
-            <Button
-              name="XÁC NHẬN"
-              ctnStyles="h-100 textH6Bold br-10 bg-text justify-content-end"
-              btnStyles="bg-text white d-flex justify-content-center align-items-center"
-              onClick={handleSaveBtn}
-            />
+        {type !== 'approvalModal' &&
+          <div className={`${styles.footer}`}>
+            <div className={`${styles.btnCtn}`}>
+              <Button
+                name="XÁC NHẬN"
+                ctnStyles="h-100 textH6Bold br-10 bg-text justify-content-end"
+                btnStyles="bg-text white d-flex justify-content-center align-items-center"
+                onClick={handleSaveBtn}
+              />
+            </div>
           </div>
-        </div>
+        }
       </div>
     </div>
   );

@@ -272,6 +272,7 @@ export default function Header() {
     await setCrtDeptAdmin(value.DeptID);
     dispatch(setFolderPage(!switchFolder))
     userInfo.DeptID = value.DeptID;
+    localStorage.setItem("root", value.RootFolderID);
     dispatch(setUserInfo(userInfo));
   };
 

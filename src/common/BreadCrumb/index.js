@@ -18,6 +18,7 @@ export default function BreadCrumb({}) {
   const { id } = useParams();
   const [item, setItems] = useState('');
   var switchFolder = useSelector((state) => state.app.folderPage);
+  var userInfo = useSelector((state) => state.app.userInfo);
   const ref = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ export default function BreadCrumb({}) {
     };
 
     fetchData();
-  }, [switchFolder]);
+  }, [switchFolder || userInfo]);
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 

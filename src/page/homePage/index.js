@@ -34,6 +34,7 @@ export default function HomePage() {
   ];
   const [items, setItems] = useState([]);
   var switchFolder = useSelector((state) => state.app.folderPage);
+  var userInfo = useSelector((state) => state.app.userInfo);
   const [crtPage, setCrtPage] = useState(1);
   const itemPerPage = 20;
   //////////////////////////////////////////////////
@@ -50,7 +51,7 @@ export default function HomePage() {
     };
 
     fetchData();
-  }, [switchFolder]);
+  }, [switchFolder || userInfo.DeptID]);
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 
