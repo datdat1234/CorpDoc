@@ -25,6 +25,12 @@ export default function StaffManagePage() {
   const [usersData, setUsersData] = useState([]);
   const [change, setChange] = useState(true);
   const [crtPage, setCrtPage] = useState(1);
+
+  // search
+  const [searchName, setSearchName] = useState('');
+  const [searchUserName, setSearchUserName] = useState('');
+  const [searchRole, setSearchRole] = useState('Tất cả');
+  const [displayItems, setDisplayItems] = useState([]);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
   
@@ -35,6 +41,7 @@ export default function StaffManagePage() {
       const deptInfoRes = await getAllUsersDept();
       setDeptData(deptInfoRes?.data?.data?.deptInfo);
       setUsersData(deptInfoRes?.data?.data?.usersInDept);
+      setDisplayItems(deptInfoRes?.data?.data?.usersInDept);
       setArrChecked(Array(deptInfoRes?.data?.data?.usersInDept.length).fill(false))
       
       const usedStorageRes = await getUsedStorage (userInfo.DeptID);
@@ -118,6 +125,17 @@ export default function StaffManagePage() {
     });
     setChange(!change)
   }
+
+  const handleSearchBtn = () => {
+    setDisplayItems(
+      usersData.filter(
+        (user) => 
+        user.Name.toLowerCase().search(searchName.toLowerCase()) !== -1 &&
+        user.Username.toLowerCase().search(searchUserName.toLowerCase()) !== -1 &&
+        (getNameRole(user.Role).search(searchRole) !== -1 || searchRole === 'Tất cả')
+      )
+    );
+  }
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -154,10 +172,15 @@ export default function StaffManagePage() {
         <div className={`${styles.searchCtn}`}>
           <div className={`${styles.inputCtn} mBottom20`}>
             <div className={`${styles.inputDetailCtn}`}>
-              <Input type="row-text" text="Tên" />
+              <Input type="row-text" text="Tên" value={searchName} setData={setSearchName} />
             </div>
+            <div className={`${styles.inputDetailCtn} ms-2`}>
+              <Input type="row-text" text="Tên tài khoản" value={searchUserName} setData={setSearchUserName}/>
+            </div>
+          </div>
+          <div className={`${styles.inputCtn} mBottom20`}>
             <div className={`${styles.inputDetailCtn}`}>
-              <Input type="row-text" text="Tài khoản" />
+              <Input type="row-select" text="Chức vụ" defaultValue={searchRole} value={['Quản trị viên', 'Nhân viên', 'Trưởng phòng', 'Tất cả']} setData={setSearchRole} />
             </div>
           </div>
           <div className={`${styles.inputCtn} justify-content-end`}>
@@ -168,6 +191,7 @@ export default function StaffManagePage() {
                 icon1={<FontAwesomeIcon icon={icon.magnifyingGlass} />}
                 icon1Styles="fs-20 black"
                 btnStyles="bg-header black d-flex justify-content-center align-items-center"
+                onClick={handleSearchBtn}
               />
             </div>
           </div>
@@ -190,12 +214,12 @@ export default function StaffManagePage() {
             />
           </div>
           <div className={`${styles.totalWrapper} text-end main text20Black`}>
-            Tổng cộng: {usersData.length}
+            Tổng cộng: {displayItems.length}
           </div>
         </div>
         <div className={`${styles.resultCtn} ps-1 w-100`}>
           <SrcItem grid={STAFF_MANAGE_GRIDS} value={value} />
-          {usersData.map((user, index)=> {
+          {displayItems.map((user, index)=> {
             if (index >= (crtPage-1)*itemPerPage && index < (crtPage)*itemPerPage) {
               let userInfo = [
                 {
@@ -232,7 +256,7 @@ export default function StaffManagePage() {
           })}
         </div>
         <div className={`${styles.pagination}`}>
-          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={usersData.length} itemPerPage={itemPerPage}/>
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={displayItems.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>

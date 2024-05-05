@@ -13,6 +13,7 @@ export default function FolderPage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   var switchFolder = useSelector((state) => state.app.folderPage);
+  var userInfo = useSelector((state) => state.app.userInfo);
   var header = [
     {
       text: '',
@@ -55,7 +56,7 @@ export default function FolderPage() {
     };
 
     fetchData();
-  }, [switchFolder]);
+  }, [switchFolder || userInfo]);
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 

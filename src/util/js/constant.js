@@ -310,10 +310,10 @@ export const SEARCH_RESULT_GRIDS = [
 export const APPROVAL_GRIDS = [
   'col-1',
   'col-7',
-  'col-3-5',
+  'col-2',
   'col-4',
   'col-3-5',
-  'col-2',
+  'col-3-5',
   'col-3',
 ];
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import SrcItem from 'common/SrcItem';
@@ -13,6 +13,8 @@ import icon from 'util/js/icon';
 import IconButton from 'common/IconButton';
 import { setFileInfo } from '../../redux/action/app';
 import BreadCrumbSupport from 'common/BreadCrumbSupport';
+import BreadCrumbModal from 'common/BreadCrumbModal';
+import UseOnClickOutside from 'util/hook/useOnClickOutside';
 
 export default function SupportFolderPage() {
   // #region    VARIABLES //////////////////////////
@@ -49,11 +51,16 @@ export default function SupportFolderPage() {
   const [items, setItems] = useState([]);
   const [path, setPath] = useState('');
   const [crtPage, setCrtPage] = useState(1);
+  var modals = Array(header.length).fill(false);
+  const [modal, setModal] = useState(modals);
+  const ref = useRef();
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
+  UseOnClickOutside(ref, () => setModal(false));
+
   useEffect(()=> {  
     let pathArr = [];
     if (pathDoc?.length > 0) {
@@ -128,6 +135,16 @@ export default function SupportFolderPage() {
     }
   }
 
+  const setOpenModal = (index) => {
+    if(modal[index] === true) {
+      modals = Array(header.length).fill(false);
+    }
+    else {
+      modals = Array(header.length).fill(false);
+      modals[index] = true;
+    }
+    setModal(modals);
+  }
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -177,11 +194,18 @@ export default function SupportFolderPage() {
                     </p>
                   }
                 </div>
-                <div className={`col-1`}>
+                <div className={`col-1`} ref={ref}>
                   <IconButton
                     icon={<FontAwesomeIcon icon={icon.ellipsisVertical} />}
-                    onClick={() => {console.log('click')}}
+                    onClick={() => setOpenModal(i)}
                   />
+                  {modal[i] && 
+                    <BreadCrumbModal 
+                      ctnStyles='br-15 br-TopRight-2' 
+                      isSupportFolder={true}
+                      isFolder={items[i][1].type === "file"? false: true}
+                    />
+                  }
                 </div>
               </div>
             </div>

@@ -56,7 +56,7 @@ export default function UploadFileSupportPage() {
       userId: userInfo?.UserID,
       deptId: userInfo?.DeptID,
       deleted: false,
-      status: 'Active',
+      status: 'Pending',
       isPrivate: false,
     };
     const response = await uploadFileSupport(fileMetadata, fileContent);

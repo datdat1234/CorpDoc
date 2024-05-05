@@ -28,8 +28,8 @@ export default function StaffAdminManagePage() {
   const [allDept, setAllDept] = useState([]);
   const [searchName, setSearchName] = useState('');
   const [searchUserName, setSearchUserName] = useState('');
-  const [searchDept, setSearchDept] = useState('');
-  const [searchRole, setSearchRole] = useState('');
+  const [searchDept, setSearchDept] = useState('Tất cả');
+  const [searchRole, setSearchRole] = useState('Tất cả');
   const [displayItems, setDisplayItems] = useState([]);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
@@ -43,7 +43,9 @@ export default function StaffAdminManagePage() {
       setDisplayItems(users?.data?.data?.users);
       setArrChecked(Array(users?.data?.data?.users.length).fill(false));  
       const deptRes = await getDeptName();
-      setAllDept(deptRes?.data?.data?.dept);    
+      const dept = deptRes?.data?.data?.dept;
+      dept.push('Tất cả')
+      setAllDept(dept);    
     }
 
     fetchData();
@@ -133,9 +135,9 @@ export default function StaffAdminManagePage() {
       usersData.filter(
         (user) => 
         user.Name.toLowerCase().search(searchName.toLowerCase()) !== -1 &&
-        user.DeptName.toLowerCase().search(searchDept.toLowerCase()) !== -1 &&
+        (user.DeptName.toLowerCase().search(searchDept.toLowerCase()) !== -1 || searchDept === 'Tất cả')&&
         user.Username.toLowerCase().search(searchUserName.toLowerCase()) !== -1 &&
-        getNameRole(user.Role).search(searchRole) !== -1 
+        (getNameRole(user.Role).search(searchRole) !== -1 || searchRole === 'Tất cả')
       )
     );
   }
@@ -164,7 +166,7 @@ export default function StaffAdminManagePage() {
               <Input type="row-select" text="Phòng ban" defaultValue={searchDept} value={allDept} setData={setSearchDept} />
             </div>
             <div className={`${styles.inputDetailCtn} ms-2`}>
-              <Input type="row-select" text="Chức vụ" defaultValue={searchRole} value={['Quản trị viên', 'Nhân viên', 'Trưởng phòng']} setData={setSearchRole} />
+              <Input type="row-select" text="Chức vụ" defaultValue={searchRole} value={['Quản trị viên', 'Nhân viên', 'Trưởng phòng', 'Tất cả']} setData={setSearchRole} />
             </div>
           </div>
           <div className={`${styles.inputCtn} justify-content-end`}>

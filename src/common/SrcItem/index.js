@@ -274,7 +274,7 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
         <IconButton
           icon={<FontAwesomeIcon icon={icon.penToSquare} size='lg'/>}
           ctnStyles="d-flex justify-content-center align-item-center"
-          onClick={() => dispatch(setGlobalModal({type:value[value.length-1].text, infoItm: value, update: update, setUpdate: setUpdate}))}
+          onClick={() => dispatch(setGlobalModal({type:value[value.length-1].type+'Modal', infoItm: value, update: update, setUpdate: setUpdate}))}
         />
         <IconButton
           icon={<FontAwesomeIcon icon={icon.circleCheck} size='lg' className="bgColor4" />}

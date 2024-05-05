@@ -39,10 +39,13 @@ export default function ApprovalPage() {
       const pendingFilesRes = await getPendingFiles();
 
       setItems(formatItemPendingFile(pendingFilesRes?.data?.data?.files));
+      setDisplayItems(formatItemPendingFile(pendingFilesRes?.data?.data?.files));
       setArrChecked(Array(pendingFilesRes?.data?.data?.files.length).fill(false));
 
       const deptRes = await getDeptName();
-      setAllDept(deptRes?.data?.data?.dept); 
+      const dept = deptRes?.data?.data?.dept;
+      dept.push('Tất cả')
+      setAllDept(dept);
     }
 
     fetchData();
@@ -68,7 +71,11 @@ export default function ApprovalPage() {
       type: 'header',
     },
     {
-      text: 'Phòng ban',
+      text: 'Loại',
+      type: 'header',
+    },
+    {
+      text: 'Người yêu cầu',
       type: 'header',
     },
     {
@@ -76,11 +83,7 @@ export default function ApprovalPage() {
       type: 'header',
     },
     {
-      text: 'Kích thước',
-      type: 'header',
-    },
-    {
-      text: 'Loại',
+      text: 'Phòng ban',
       type: 'header',
     },
     {
@@ -124,13 +127,14 @@ export default function ApprovalPage() {
       }
     });
   }
+  console.log(items);
   const handleSearchBtn = () => {
     setDisplayItems(
       items.filter(
         (item) => 
-        item.Name.toLowerCase().search(searchName.toLowerCase()) !== -1 &&
-        item.DeptName.toLowerCase().search(searchDept.toLowerCase()) !== -1 &&
-        item.Username.toLowerCase().search(searchUserName.toLowerCase()) !== -1
+        item[0].text.toLowerCase().search(searchName.toLowerCase()) !== -1 &&
+        (item[4].text.toLowerCase().search(searchDept.toLowerCase()) !== -1 || searchDept === 'Tất cả') &&
+        item[2].text.toLowerCase().search(searchUserName.toLowerCase()) !== -1
       )
     );
   }
@@ -159,7 +163,7 @@ export default function ApprovalPage() {
           <div className={`${styles.inputDetailCtn}`}>
             <Input type="row-text" text="Tên văn bản" value={searchName} setData={setSearchName}/>
           </div>
-          <div className={`${styles.inputDetailCtn}`}>
+          <div className={`${styles.inputDetailCtn} ms-2`}>
             <Input type="row-text" text="Tên nhân viên" value={searchUserName} setData={setSearchUserName}/>
           </div>
         </div>
@@ -167,9 +171,9 @@ export default function ApprovalPage() {
           <div className={`${styles.inputDetailCtn}`}>
             <Input type="row-select" text="Phòng ban" defaultValue={searchDept} value={allDept} setData={setSearchDept} />
           </div>
-          <div className={`${styles.inputDetailCtn}`}>
-            <Input type="row-date" text="Ngày đăng tải" />
-          </div>
+          {/* <div className={`${styles.inputDetailCtn}`}>
+            <Input type="row-date" text="Ngày đăng tải" value={searchDate} setData={setSearchDate}/>
+          </div> */}
         </div>
         <div className={`${styles.inputCtn} justify-content-end`}>
           <div className={`${styles.inputWrapper}`}>
@@ -229,7 +233,7 @@ export default function ApprovalPage() {
           <p className="text14 mLeft10">
             Có <span className="text14Bold">{items.length}</span> yêu cầu chưa được xét duyệt.
           </p>
-          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage}/>
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={displayItems.length} itemPerPage={itemPerPage}/>
         </div>
       </div>
     </div>

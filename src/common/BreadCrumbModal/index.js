@@ -17,6 +17,7 @@ export default function BreadCrumbModal({
   handleDeleteBtn,
   isFolder = true,
   infoItm = '',
+  isSupportFolder = false,
 }) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
@@ -47,7 +48,7 @@ export default function BreadCrumbModal({
     tabItems.push(
       <div key={0} className={styles.tabCtn}>
         <Button
-          ctnStyles={`h-60 border-bottom-1 border-style-solid`}
+          ctnStyles={`h-60 border-style-solid`}
           name={!save? "Lưu": "Bỏ lưu"}
           icon1Styles="w-24 h-24 fs-16"
           icon2Styles="w-24 h-24 fs-16"
@@ -61,7 +62,7 @@ export default function BreadCrumbModal({
       tabItems.push(
         <div key={1} className={styles.tabCtn}>
           <Button
-            ctnStyles={`h-60 border-bottom-1 border-style-solid`}
+            ctnStyles={`h-60 border-top-1 border-style-solid`}
             name={BREAD_CRUMB_TABS[1].text}
             icon1Styles="w-24 h-24 fs-16"
             icon2Styles="w-24 h-24 fs-16"
@@ -85,7 +86,7 @@ export default function BreadCrumbModal({
       tabItems.push(
         <div key={2} className={styles.tabCtn}>
           <Button
-            ctnStyles={`h-60 border-bottom-1 border-style-solid`}
+            ctnStyles={`h-60 border-top-1 border-style-solid`}
             name={BREAD_CRUMB_TABS[2].text}
             icon1Styles="w-24 h-24 fs-16"
             icon2Styles="w-24 h-24 fs-16"
@@ -105,33 +106,33 @@ export default function BreadCrumbModal({
         </div>
       );
     }
-    for (let i = 3; i < tabLength; i++) {
-      tabItems.push(
-        <div key={i} className={styles.tabCtn}>
-          <Button
-            ctnStyles={`h-60 ${
-              i !== tabLength - 1 && 'border-bottom-1 border-style-solid'
-            }`}
-            name={BREAD_CRUMB_TABS[i].text}
-            icon1Styles="w-24 h-24 fs-16"
-            icon2Styles="w-24 h-24 fs-16"
-            btnStyles="bg-bgColor4 text14SemiBold pLeft10"
-            icon1={
-              BREAD_CRUMB_TABS[i].icon1 && (
-                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[i].icon1} />
-              )
-            }
-            icon2={
-              BREAD_CRUMB_TABS[i].icon2 && (
-                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[i].icon2} />
-              )
-            }
-            onClick={() => navigate(`/${i===3 && isFolder? 'edit-folder' : BREAD_CRUMB_TABS[i].navigate}`,{
-              state: { id: infoItm },})
-            }
-          />
-        </div>
-      );
+    if (!isSupportFolder) {
+      for (let i = 3; i < tabLength; i++) {
+        tabItems.push(
+          <div key={i} className={styles.tabCtn}>
+            <Button
+              ctnStyles={`h-60 border-top-1 border-style-solid`}
+              name={BREAD_CRUMB_TABS[i].text}
+              icon1Styles="w-24 h-24 fs-16"
+              icon2Styles="w-24 h-24 fs-16"
+              btnStyles="bg-bgColor4 text14SemiBold pLeft10"
+              icon1={
+                BREAD_CRUMB_TABS[i].icon1 && (
+                  <FontAwesomeIcon icon={BREAD_CRUMB_TABS[i].icon1} />
+                )
+              }
+              icon2={
+                BREAD_CRUMB_TABS[i].icon2 && (
+                  <FontAwesomeIcon icon={BREAD_CRUMB_TABS[i].icon2} />
+                )
+              }
+              onClick={() => navigate(`/${i===3 && isFolder? 'edit-folder' : BREAD_CRUMB_TABS[i].navigate}`,{
+                state: { id: infoItm },})
+              }
+            />
+          </div>
+        );
+      }
     }
     return tabItems;
   };
@@ -140,11 +141,11 @@ export default function BreadCrumbModal({
   return (
     <div className={`${styles.root} ${ctnStyles}`}>
       <div
-        className={`pHorizontal20 bg-bgColor4 ${userInfo.Role === 'Staff' && 'br-BottomLeft-15 br-BottomRight-15'}`}
+        className={`pHorizontal20 bg-bgColor4 ${(userInfo.Role === 'Staff' || isSupportFolder)&& 'br-BottomLeft-15 br-BottomRight-15'}`}
       >
         {renderTabs()}
       </div>
-      {userInfo.Role !== 'Staff' &&
+      {(userInfo.Role !== 'Staff' && (!isSupportFolder || (isSupportFolder && !isFolder)))&&
         <div key={6} className={`pHorizontal20 bg-bgColor5 br-BottomLeft-15 br-BottomRight-15 ${styles.tabCtn}`}>
           <Button
             ctnStyles={`h-60 bg-bgColor5`}

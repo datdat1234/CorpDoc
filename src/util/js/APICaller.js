@@ -159,7 +159,6 @@ export const handleResponse = async (res) => {
       break;
     case '00019':
       setNotification('error', resultMessage);
-      logout();
       break;
     case '00021':
       setNotification('error', resultMessage);
