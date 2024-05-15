@@ -48,8 +48,11 @@ export default function SettingSidebar() {
   //////////////////////////////////////////////////
   useEffect(()=>{
     switch (location.pathname){
+      case '/staff-admin-manage':
+        setCurrentTab(3);
+        break;
       case '/staff-manage':
-        setCurrentTab(userInfo.Role === 'Manager'? 1 : 3);
+        setCurrentTab(1);
         break;
       case '/dept-manage':
         setCurrentTab(2);
@@ -59,7 +62,7 @@ export default function SettingSidebar() {
         break;
       default: setCurrentTab(0);
     }
-  },[])
+  },[location.pathname])
 
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
