@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import logo1 from 'asset/images/logo1.png';
+import logo1 from 'asset/images/logo1.webp';
 import styles from './styles.module.css';
 import Button from 'common/Button';
 import HoverModal from 'common/HoverModal';

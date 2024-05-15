@@ -1,23 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Button from 'common/Button';
-import SidebarTab from 'common/SidebarTab';
-import Notification from 'common/Notification';
-import Header from './Header';
-import FileHeader from './FileHeader';
-import Sidebar from './Sidebar';
-import SettingSidebar from './SettingSidebar';
 import {
   NO_LAYOUT_LINKS,
   NOT_SHOW_SIDEBAR,
   IS_SETTING_PAGE,
 } from 'util/js/constant';
 import styles from './styles.module.css';
-import PDFRenderer from 'common/PDFRenderer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
-import CustomModal from 'common/CustomModal';
+
+const Notification = React.lazy(() => import('common/Notification'));
+const Header = React.lazy(() => import('./Header'));
+const FileHeader = React.lazy(() => import('./FileHeader'));
+const Sidebar = React.lazy(() => import('./Sidebar'));
+const SettingSidebar = React.lazy(() => import('./SettingSidebar'));
+const CustomModal = React.lazy(() => import('common/CustomModal'));
+const PDFRenderer = React.lazy(() => import('common/PDFRenderer'));
 
 export default function Layout({ children }) {
   // #region    VARIABLES //////////////////////////
