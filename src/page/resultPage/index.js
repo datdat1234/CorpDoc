@@ -124,9 +124,7 @@ export default function ResultPage() {
           btnStyles="bg-bgColor4 pLeft10"
           icon1Styles="w-24 h-24 d-flex justify-content-center align-items-center"
           icon1={<FontAwesomeIcon icon={icon.angleLeft} />}
-          onClick={() =>
-            navigate('/upload-file', { state: { isShowCritetia: true } })
-          }
+          onClick={() => navigate(-1)}
         />
       </div>
       <div className={`${styles.notiCtn}`}>

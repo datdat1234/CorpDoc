@@ -106,15 +106,11 @@ export const SEARCH_TABS_ICON = [
   },
 ];
 
-export const PROFILE_TABS = ['Thông tin cá nhân', 'Cài đặt', 'Đăng xuất'];
+export const PROFILE_TABS = ['Thông tin cá nhân', 'Đăng xuất'];
 
 export const PROFILE_TABS_ICON = [
   {
     left: icon.user,
-    right: null,
-  },
-  {
-    left: icon.gear,
     right: null,
   },
   {
@@ -123,12 +119,11 @@ export const PROFILE_TABS_ICON = [
   },
 ];
 
-export const PROFILE_NAVIGATE = ['/profile', '', '/login'];
+export const PROFILE_NAVIGATE = ['/profile', '/login'];
 
 export const PROFILE_TABS_MANAGER = [
   'Thông tin cá nhân',
   'Quản lý nhân viên',
-  'Cài đặt',
   'Đăng xuất',
 ];
 
@@ -142,10 +137,6 @@ export const PROFILE_TABS_MANAGER_ICON = [
     right: null,
   },
   {
-    left: icon.gear,
-    right: null,
-  },
-  {
     left: null,
     right: icon.rightFromBracket,
   },
@@ -154,7 +145,6 @@ export const PROFILE_TABS_MANAGER_ICON = [
 export const PROFILE_NAVIGATE_MANAGER = [
   '/profile',
   '/staff-manage',
-  '',
   '/login',
 ];
 
@@ -163,7 +153,6 @@ export const PROFILE_TABS_ADMIN = [
   'Thông tin công ty',
   'Thông tin phòng ban',
   'Quản lý nhân viên',
-  'Cài đặt',
   'Đăng xuất',
 ];
 
@@ -199,7 +188,6 @@ export const PROFILE_NAVIGATE_ADMIN = [
   '/company-manage',
   '/dept-manage',
   '/staff-admin-manage',
-  '',
   '/login',
 ];
 
