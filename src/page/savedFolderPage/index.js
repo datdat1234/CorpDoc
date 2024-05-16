@@ -45,7 +45,6 @@ export default function SavedFolderPage() {
       const childRes = await getSavedFolder();
       const folders = childRes?.data?.data?.folders;
       const files = childRes?.data?.data?.files;
-      console.log(formatItemFolder(folders));
       setItems(formatItemFolder(folders).concat(formatItemFile(files)));
     };
 

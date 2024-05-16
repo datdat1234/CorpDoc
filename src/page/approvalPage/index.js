@@ -127,7 +127,7 @@ export default function ApprovalPage() {
       }
     });
   }
-  console.log(items);
+
   const handleSearchBtn = () => {
     setDisplayItems(
       items.filter(

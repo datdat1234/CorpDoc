@@ -69,7 +69,6 @@ export default function LoginPage({ setIsLogin }) {
   };
 
   const handleNavigate = async (tab) => {
-    // console.log('ok')
     setErrUsername('');
     setErrPassword('');
     setErrLogin('');
@@ -83,7 +82,6 @@ export default function LoginPage({ setIsLogin }) {
       try {
         dispatch(setGlobalLoading(true));
         const res = await login(username, password);
-        // console.log(res);
         const resultCode = res?.data?.resultCode;
         if (resultCode !== '00047') {
           setErrLogin(res?.data?.resultMessage.vi);
