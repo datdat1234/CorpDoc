@@ -9,14 +9,13 @@ import {
 import styles from './styles.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
-
-const Notification = React.lazy(() => import('common/Notification'));
-const Header = React.lazy(() => import('./Header'));
-const FileHeader = React.lazy(() => import('./FileHeader'));
-const Sidebar = React.lazy(() => import('./Sidebar'));
-const SettingSidebar = React.lazy(() => import('./SettingSidebar'));
-const CustomModal = React.lazy(() => import('common/CustomModal'));
-const PDFRenderer = React.lazy(() => import('common/PDFRenderer'));
+import Notification from 'common/Notification';
+import Header from './Header';
+import FileHeader from './FileHeader';
+import Sidebar from './Sidebar';
+import SettingSidebar from './SettingSidebar';
+import CustomModal from 'common/CustomModal';
+import PDFRenderer from 'common/PDFRenderer';
 
 export default function Layout({ children }) {
   // #region    VARIABLES //////////////////////////
