@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { startTransition, Suspense, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import styles from './styles.module.css';
@@ -8,6 +8,7 @@ import { getNameRole, setNotification } from 'util/js/helper';
 import { editUserInfo, getCrtDept } from '../../util/js/APIs';
 import { setUserInfo } from '../../redux/action/app';
 import { logout } from '../../util/js/APICaller';
+import Loading from "common/Loader";
 
 export default function ProfilePage() {
   // #region    VARIABLES //////////////////////////
@@ -74,7 +75,6 @@ export default function ProfilePage() {
       }
       try {
         const res = await editUserInfo(data);
-        console.log(res);
         if (res.status === 200) {
           if (name !== userInfo.Name) userInfo.Name = name;
           dispatch(setUserInfo(userInfo));

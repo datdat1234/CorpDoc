@@ -229,7 +229,6 @@ export default function Header() {
       if (element === '')
         onClick.push(() => {
           handleMouseLeave();
-          // console.log('ok');
         });
       else if (element === '/login')
         onClick.push(() => {

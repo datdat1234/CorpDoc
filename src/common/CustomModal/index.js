@@ -109,7 +109,6 @@ export default function CustomModal({
   };
 
   const handleSetShareDept = (dept) => {
-    console.log(dept);
     if (sharedDepts.find(o => o.DeptID === dept.DeptID) || dept === '') return;
     else {
       setSharedDepts([...sharedDepts, dept]);
@@ -210,8 +209,6 @@ export default function CustomModal({
       default: break;
     }
   }
-
-  console.log(infoItm)
 
   const renderViews = () => {
     switch (type){
