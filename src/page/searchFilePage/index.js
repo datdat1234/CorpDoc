@@ -29,6 +29,7 @@ export default function SearchFilePage() {
   const [isSave, setIsSave] = useState(false);
   const [isShare, setIsShare] = useState(false);
   const [fileCriteria, setFileCriteria] = useState([]);
+  const [desc, setDesc] = useState('');
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -59,6 +60,7 @@ export default function SearchFilePage() {
       date: date,
       criteria: fileCriteria,
       isSave: isSave,
+      desc: desc,
       // isShare: isShare,
     };
 
@@ -153,6 +155,12 @@ export default function SearchFilePage() {
             <Input type="date" text="Ngày được xác nhận" />
           </div> */}
         </div>
+        <Input 
+          type="textarea" 
+          text="Mô tả" 
+          value={desc} 
+          setData={setDesc} 
+        />
         <Input
           type="select"
           text="Tiêu chí của tài liệu"
