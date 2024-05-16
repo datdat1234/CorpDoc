@@ -13,10 +13,14 @@ import {
   SIDEBAR_TABS_ADMIN,
   SIDEBAR_NAVIGATE_ADMIN,
   SIDEBAR_ICONS_ADMIN,
-  SIDEBAR_STRUCTURE,
 } from 'util/js/constant';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getChildByFolderId, getSupportStructure, getUsedStorage, getCrtDept } from 'util/js/APIs';
+import {
+  getChildByFolderId,
+  getSupportStructure,
+  getUsedStorage,
+  getCrtDept,
+} from 'util/js/APIs';
 
 export default function Sidebar({}) {
   // #region    VARIABLES //////////////////////////
@@ -27,16 +31,21 @@ export default function Sidebar({}) {
   const [child, setChild] = useState([]);
   const userInfo = useSelector((state) => state.app.userInfo);
   var switchFolder = useSelector((state) => state.app.folderPage);
-  const [adminDomain, setAdminDomain] = useState({name: 'Văn bản hành chính', childs: []});
-  const [bookDomain, setBookDomain] = useState({name: 'Thư viện sách', childs: []});
+  const [adminDomain, setAdminDomain] = useState({
+    name: 'Văn bản hành chính',
+    childs: [],
+  });
+  const [bookDomain, setBookDomain] = useState({
+    name: 'Thư viện sách',
+    childs: [],
+  });
   const [usedStorage, setUsedStorage] = useState(0);
-  const [crtDept, setCrtDept] = useState({Name: '', Storage: 0});
+  const [crtDept, setCrtDept] = useState({ Name: '', Storage: 0 });
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
-  console.log(child)
   useEffect(() => {
     const fetchData = async () => {
       const rootId = await localStorage.getItem('root');
@@ -44,32 +53,38 @@ export default function Sidebar({}) {
       setChild(childRes?.data?.data?.child);
 
       // get support tree
-      const adminDomainRes = await getSupportStructure(userInfo.DeptID, 'admin-doc');
+      const adminDomainRes = await getSupportStructure(
+        userInfo.DeptID,
+        'admin-doc'
+      );
       const adminDomain = adminDomainRes?.data?.data?.dataRes;
       setAdminDomain(adminDomain);
       const bookDomainRes = await getSupportStructure(userInfo.DeptID, 'book');
       const bookDomain = bookDomainRes?.data?.data?.dataRes;
       setBookDomain(bookDomain);
-      
+
       //get name dept
       const crtDeptRes = await getCrtDept();
       setCrtDept(crtDeptRes?.data?.data?.deptInfo);
 
       //get used storage
-      const usedStorageRes = await getUsedStorage (userInfo.DeptID);
-      setUsedStorage(usedStorageRes?.data?.data > crtDeptRes?.data?.data?.deptInfo?.Storage ? crtDeptRes?.data?.data?.deptInfo?.Storage : usedStorageRes.data?.data); 
-
+      const usedStorageRes = await getUsedStorage(userInfo.DeptID);
+      setUsedStorage(
+        usedStorageRes?.data?.data > crtDeptRes?.data?.data?.deptInfo?.Storage
+          ? crtDeptRes?.data?.data?.deptInfo?.Storage
+          : usedStorageRes.data?.data
+      );
     };
 
     fetchData();
   }, [switchFolder || userInfo]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (location.pathname === '/home') {
       if (userInfo.Role === 'Admin') setCurrentTab(1);
       else setCurrentTab(0);
     }
-  },[location.pathname])
+  }, [location.pathname]);
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 
@@ -91,7 +106,7 @@ export default function Sidebar({}) {
             className={`mBottom5 ${styles.tabCtn}`}
           >
             <Button
-              name={SIDEBAR_TABS_ADMIN[i] + (i===1 ? crtDept.Name : '')}
+              name={SIDEBAR_TABS_ADMIN[i] + (i === 1 ? crtDept.Name : '')}
               btnStyles={`textH6ExtraBold ${styles.buttonText}
               ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}`}
               ctnStyles={`br-TopRight-10 br-BottomRight-10 p10 border-bottom-1 border-header border-style-solid
@@ -100,14 +115,13 @@ export default function Sidebar({}) {
               icon1={<FontAwesomeIcon icon={SIDEBAR_ICONS_ADMIN[i]} />}
               onClick={() => {
                 setCurrentTab(i);
-                navigate(SIDEBAR_NAVIGATE_ADMIN[i])
+                navigate(SIDEBAR_NAVIGATE_ADMIN[i]);
               }}
             />
           </div>
         );
       }
-    }
-    else {
+    } else {
       for (let i = 0; i < SIDEBAR_TABS.length; i++) {
         if (
           userInfo.Role === 'Manager' ||
@@ -116,7 +130,7 @@ export default function Sidebar({}) {
           tabItems.push(
             <div key={i} className={`mBottom5 ${styles.tabCtn}`}>
               <Button
-                name={SIDEBAR_TABS[i] + (i===0 ? crtDept.Name : '')}
+                name={SIDEBAR_TABS[i] + (i === 0 ? crtDept.Name : '')}
                 btnStyles={`textH6ExtraBold ${styles.buttonText}
                 ${currentTab === i ? 'bg-header' : 'bg-bgColor4'}`}
                 ctnStyles={`br-TopRight-10 br-BottomRight-10 p10 border-bottom-1 border-header border-style-solid
@@ -143,14 +157,14 @@ export default function Sidebar({}) {
         <FolderSupStruct
           name={adminDomain.name}
           childs={adminDomain.childs}
-          typeDoc={"admin-doc"}
+          typeDoc={'admin-doc'}
         />
       </div>,
       <div key={2}>
         <FolderSupStruct
           name={bookDomain?.name}
           childs={bookDomain?.childs}
-          typeDoc={"book"}
+          typeDoc={'book'}
         />
       </div>
     );
@@ -163,10 +177,7 @@ export default function Sidebar({}) {
     for (let i = 0; i < child.length; i++) {
       tabItems.push(
         <div key={i}>
-          <FolderStruct
-            name={child[i].Name}
-            ident={child[i].FolderID}
-          />
+          <FolderStruct name={child[i].Name} ident={child[i].FolderID} />
         </div>
       );
     }
@@ -187,13 +198,16 @@ export default function Sidebar({}) {
       </div>
       <div className={`${styles.storageCtn} pVertical15 pHorizontal15`}>
         <p className="text14 pVertical5">
-          {crtDept.Storage-usedStorage < 0.5 && <p className="error text14Bold">Đã sử dụng gần hết bộ nhớ</p>}
-          Đã sử dụng {usedStorage} GB trong tổng số {crtDept.Storage} GB ({Math.round(((100 / crtDept.Storage) * usedStorage) * 100) / 100}%)
+          {crtDept.Storage - usedStorage < 0.5 && (
+            <p className="error text14Bold">Đã sử dụng gần hết bộ nhớ</p>
+          )}
+          Đã sử dụng {usedStorage} GB trong tổng số {crtDept.Storage} GB (
+          {Math.round((100 / crtDept.Storage) * usedStorage * 100) / 100}%)
         </p>
         <div className={`${styles.progressCtn} progress bg-text60`}>
           <div
             className={`${styles.progressBar} progress-bar bg-main`}
-            style={{ width: (((100 / crtDept.Storage) * usedStorage))+'%' }}
+            style={{ width: (100 / crtDept.Storage) * usedStorage + '%' }}
           ></div>
         </div>
       </div>
