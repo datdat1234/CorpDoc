@@ -29,6 +29,7 @@ export default function SearchFolderPage() {
   const [isSave, setIsSave] = useState(false);
   const [isShare, setIsShare] = useState(false);
   const [folderCriteria, setFolderCriteria] = useState([]);
+  const [desc, setDesc] = useState('');
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -59,6 +60,7 @@ export default function SearchFolderPage() {
       date: date,
       criteria: folderCriteria,
       isSave: isSave,
+      desc: desc,
       // isShare: isShare,
     };
 
@@ -153,6 +155,12 @@ export default function SearchFolderPage() {
             <Input type="date" text="Ngày được xác nhận" />
           </div> */}
         </div>
+        <Input
+          type="textarea"
+          text="Mô tả"
+          value={desc}
+          setData={setDesc}
+        />
         <Input
           type="select"
           text="Tiêu chí của tài liệu"
