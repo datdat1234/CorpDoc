@@ -5,7 +5,6 @@ import styles from './styles.module.css';
 import icon from 'util/js/icon';
 import Button from 'common/Button';
 import Input from 'common/Input';
-import CriteriaTag from 'common/CriteriaTag';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getFolderInfo, editFolder } from 'util/js/APIs';
 import { setGlobalLoading } from '../../redux/action/app';
@@ -23,7 +22,6 @@ export default function EditFolderPage() {
   const [folderName, setFolderName] = useState('');
   const [author, setAuthor] = useState('');
   const [desc, setDesc] = useState('');
-  const [folders, setFolders] = useState([]);
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
