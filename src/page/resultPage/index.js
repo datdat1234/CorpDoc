@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styles from './styles.module.css';
 import icon from 'util/js/icon';
 import Button from 'common/Button';
@@ -9,17 +10,27 @@ export default function ResultPage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const navigate = useNavigate();
+  var userInfo = useSelector((state) => state.app.userInfo);
   const { state } = useLocation();
-  const { type, status, isNew } = state;
+  const { type, status, isNew, action } = state;
   const [pageType, setPageType] = useState(type || 'file');
   const [pageStatus, setPageStatus] = useState(status || 'error');
   const [newPage, setNewPage] = useState(isNew || false);
+  const [name, setName] = useState('');
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
-
+  useEffect(()=> {
+    let str = '';
+    switch (action) {
+      case 'add': str = pageType === 'file'? 'Tải lên tài liệu': (isNew? 'Tạo mới miền cấu trúc' : 'Tạo mới thư mục'); break;
+      case 'edit': str = 'Chỉnh sửa' + pageType === 'file'? ' tài liệu': ' thư mục'; break;
+      default: str='Tải lên tài liệu'
+    }
+    setName(str)
+  },[])
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 
@@ -34,6 +45,7 @@ export default function ResultPage() {
       }
     } else {
       if (pageStatus === 'success') {
+        if (newPage === true) return 'TẠO MIỀN CẤU TRÚC MỚI THÀNH CÔNG';
         return 'TẠO THƯ MỤC THÀNH CÔNG';
       } else {
         if (newPage === true) return 'TẠO MIỀN CẤU TRÚC MỚI KHÔNG THÀNH CÔNG';
@@ -44,7 +56,7 @@ export default function ResultPage() {
 
   const renderSmallText = () => {
     if (pageType === 'file') {
-      if (pageStatus === 'success') {
+      if (userInfo.Role === 'Staff' && pageStatus === 'success') {
         return (
           <div>
             Yêu cầu tải lên đã được gửi đến{' '}
@@ -55,23 +67,7 @@ export default function ResultPage() {
       } else {
         return <div>Tải lên không thành công. Vui lòng thử lại.</div>;
       }
-    } else {
-      if (pageStatus === 'success') {
-        return (
-          <div>
-            Yêu cầu tạo thư mục đã được gửi đến{' '}
-            <span className="text18Bold">trưởng phòng ban</span>. Vui lòng đợi
-            xác nhận để có thể hiển thị và sử dụng.
-          </div>
-        );
-      } else {
-        if (newPage === true)
-          return (
-            <div>Tạo miền cấu trúc mới không thành công. Vui lòng thử lại.</div>
-          );
-        return <div>Tạo thư mục mới không thành công. Vui lòng thử lại.</div>;
-      }
-    }
+    } 
   };
 
   const renderBtnText = () => {
@@ -85,7 +81,6 @@ export default function ResultPage() {
       if (pageStatus === 'success') {
         return 'Tiếp tục tạo thư mục';
       } else {
-        if (newPage === true) return 'Thử lại';
         return 'Thử lại';
       }
     }
@@ -119,7 +114,7 @@ export default function ResultPage() {
     <div className={`${styles.root}`}>
       <div className={`${styles.navCtn}`}>
         <Button
-          name="Tải lên tài liệu cho miền Đồ án tốt nghiệp _ Luận văn tốt nghiệp"
+          name={name}
           ctnStyles="h-100 text18SemiBold border-bottom-1 border-style-solid border-bg5-60 br-10"
           btnStyles="bg-bgColor4 pLeft10"
           icon1Styles="w-24 h-24 d-flex justify-content-center align-items-center"
