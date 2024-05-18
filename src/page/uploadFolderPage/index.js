@@ -60,6 +60,10 @@ export default function UploadFolderPage() {
 
   // #region    FUNCTIONS //////////////////////////
   //////////////////////////////////////////////////
+  const getRootFolder = () => {
+    return localStorage.getItem('root');
+  };
+  
   const handleUploadFolder = async () => {
     dispatch(setGlobalLoading(true));
     if (folderName === '' || showCritNumber === folderCriteria.length || (!newStructure && folderParentInfo === '')) {
@@ -67,19 +71,23 @@ export default function UploadFolderPage() {
       dispatch(setGlobalLoading(false));
       return;
     }
+
+    const rootFolder = await getRootFolder();
+
     const folderInfo = {
       folderName,
       author,
       desc,
       folderCriteria,
-      folderParentInfo: folders.find(
+      folderParentInfo: !newStructure ? folders.find(
         (folder) => folder.Path === folderParentInfo
-      )?.FolderID,
+      )?.FolderID : rootFolder,
       userId: userInfo?.UserID,
       deptId: userInfo?.DeptID,
       deleted: false,
       isPrivate: false,
     };
+
     const response = await uploadFolder(folderInfo);
     if (response?.data?.resultCode === '00093') {
       navigate(`/result-page`, { state: { type: 'folder', status: 'success', action: 'add', isNew: newStructure } });
