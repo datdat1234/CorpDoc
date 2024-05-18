@@ -62,7 +62,7 @@ export default function UploadFolderPage() {
   //////////////////////////////////////////////////
   const handleUploadFolder = async () => {
     dispatch(setGlobalLoading(true));
-    if (folderName === '' || showCritNumber === folderCriteria.length || folderParentInfo === '') {
+    if (folderName === '' || showCritNumber === folderCriteria.length || (!newStructure && folderParentInfo === '')) {
       setNotification('warning', 'Vui lòng nhập các trường bắt buộc.');
       dispatch(setGlobalLoading(false));
       return;
@@ -82,10 +82,10 @@ export default function UploadFolderPage() {
     };
     const response = await uploadFolder(folderInfo);
     if (response?.data?.resultCode === '00093') {
-      navigate(`/result-page`, { state: { type: 'folder', status: 'success' } });
+      navigate(`/result-page`, { state: { type: 'folder', status: 'success', action: 'add', isNew: newStructure } });
     } else {
       navigate(`/result-page`, {
-        state: { type: 'folder', status: 'error' },
+        state: { type: 'folder', status: 'error', action: 'add', isNew: newStructure },
       });
     }
     dispatch(setGlobalLoading(false));
