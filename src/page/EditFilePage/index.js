@@ -64,9 +64,9 @@ export default function EditFilePage() {
     };
     const response = await editFile(fileInfo);
     if (response?.data?.resultCode === '00001') {
-      navigate(`/result-page`, { state: { type: 'file', status: 'success' } });
+      navigate(`/result-page`, { state: { type: 'file', status: 'success', action: 'edit' } });
     } else {
-      navigate(`/result-page`, { state: { type: 'file', status: 'error' } });
+      navigate(`/result-page`, { state: { type: 'file', status: 'error', action: 'edit' } });
     }
     dispatch(setGlobalLoading(false));
   };

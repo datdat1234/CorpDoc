@@ -58,10 +58,10 @@ export default function EditFolderPage() {
     };
     const response = await editFolder(folderInfo);
     if (response?.data?.resultCode === '00001') {
-      navigate(`/result-page`, { state: { type: 'folder', status: 'success' } });
+      navigate(`/result-page`, { state: { type: 'folder', status: 'success', action: 'edit' } });
     } else {
       navigate(`/result-page`, {
-        state: { type: 'folder', status: 'error' },
+        state: { type: 'folder', status: 'edit',action: 'edit' },
       });
     }
     dispatch(setGlobalLoading(false));
