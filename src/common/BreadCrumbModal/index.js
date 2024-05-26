@@ -108,6 +108,7 @@ export default function BreadCrumbModal({
     }
     if (!isSupportFolder) {
       for (let i = 3; i < tabLength; i++) {
+        if (i > 3 && !isFolder) break;
         tabItems.push(
           <div key={i} className={styles.tabCtn}>
             <Button
