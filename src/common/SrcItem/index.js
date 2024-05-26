@@ -16,7 +16,8 @@ import {
   changeStatusUser,
   setChangeFolderDelete, 
   setChangeFileDelete,
-  setApproveFiles
+  setApproveFiles,
+  setDeniedFiles
 } from 'util/js/APIs';
 import { setNotification } from 'util/js/helper';
 import UseOnClickOutside from 'util/hook/useOnClickOutside';
@@ -139,6 +140,17 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
 
   const handleApproveBtn = async () => {
     await setApproveFiles([value[1].id]).then((res) => {
+      if (res?.data?.resultCode === "00001") {
+        setNotification('success', 'Tác vụ thành công.');
+        setUpdate(!update);
+      } else {
+        setNotification('error', res?.data?.resultMessage?.vi);
+      }
+    });
+  }
+
+  const handleDeniedBtn = async () => {
+    await setDeniedFiles([value[1].id]).then((res) => {
       if (res?.data?.resultCode === "00001") {
         setNotification('success', 'Tác vụ thành công.');
         setUpdate(!update);
@@ -284,7 +296,7 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
         <IconButton
           icon={<FontAwesomeIcon icon={icon.xmark} size='lg' className="bgColor4" />}
           ctnStyles="bg-error br-2 w-30 h-30 d-flex justify-content-center align-item-center"
-          onClick={() => handleChangeStatus(item.text)}
+          onClick={() => handleDeniedBtn()}
         />
       </div>
     );

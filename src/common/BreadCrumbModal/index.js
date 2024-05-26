@@ -106,34 +106,81 @@ export default function BreadCrumbModal({
         </div>
       );
     }
-    if (!isSupportFolder) {
-      for (let i = 3; i < tabLength; i++) {
-        if (i > 3 && !isFolder) break;
-        tabItems.push(
-          <div key={i} className={styles.tabCtn}>
-            <Button
-              ctnStyles={`h-60 border-top-1 border-style-solid`}
-              name={BREAD_CRUMB_TABS[i].text}
-              icon1Styles="w-24 h-24 fs-16"
-              icon2Styles="w-24 h-24 fs-16"
-              btnStyles="bg-bgColor4 text14SemiBold pLeft10"
-              icon1={
-                BREAD_CRUMB_TABS[i].icon1 && (
-                  <FontAwesomeIcon icon={BREAD_CRUMB_TABS[i].icon1} />
-                )
-              }
-              icon2={
-                BREAD_CRUMB_TABS[i].icon2 && (
-                  <FontAwesomeIcon icon={BREAD_CRUMB_TABS[i].icon2} />
-                )
-              }
-              onClick={() => navigate(`/${i===3 && isFolder? 'edit-folder' : BREAD_CRUMB_TABS[i].navigate}`,{
-                state: { id: infoItm },})
-              }
-            />
-          </div>
-        );
-      }
+    if (isFolder) {
+      tabItems.push(
+        <div key={3} className={styles.tabCtn}>
+          <Button
+            ctnStyles={`h-60 border-top-1 border-style-solid`}
+            name={BREAD_CRUMB_TABS[3].text}
+            icon1Styles="w-24 h-24 fs-16"
+            icon2Styles="w-24 h-24 fs-16"
+            btnStyles="bg-bgColor4 text14SemiBold pLeft10"
+            icon1={
+              BREAD_CRUMB_TABS[3].icon1 && (
+                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[3].icon1} />
+              )
+            }
+            icon2={
+              BREAD_CRUMB_TABS[3].icon2 && (
+                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[3].icon2} />
+              )
+            }
+            onClick={() => navigate(`/${BREAD_CRUMB_TABS[3].navigate}`,{
+              state: { id: infoItm },})
+            }
+          />
+        </div>
+      );
+    }
+    if (!isFolder || (isFolder && userInfo.Role !== 'Staff')) {
+      tabItems.push(
+        <div key={4} className={styles.tabCtn}>
+          <Button
+            ctnStyles={`h-60 border-top-1 border-style-solid`}
+            name={BREAD_CRUMB_TABS[4].text}
+            icon1Styles="w-24 h-24 fs-16"
+            icon2Styles="w-24 h-24 fs-16"
+            btnStyles="bg-bgColor4 text14SemiBold pLeft10"
+            icon1={
+              BREAD_CRUMB_TABS[4].icon1 && (
+                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[4].icon1} />
+              )
+            }
+            icon2={
+              BREAD_CRUMB_TABS[4].icon2 && (
+                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[4].icon2} />
+              )
+            }
+            onClick={() => navigate(`/${isFolder? 'edit-folder': 'edit-file'}`,{ state: { id: infoItm } })}
+          />
+        </div>
+      );
+    }
+    if (isFolder && userInfo.Role !== 'Staff') {
+      tabItems.push(
+        <div key={5} className={styles.tabCtn}>
+          <Button
+            ctnStyles={`h-60 border-top-1 border-style-solid`}
+            name={BREAD_CRUMB_TABS[5].text}
+            icon1Styles="w-24 h-24 fs-16"
+            icon2Styles="w-24 h-24 fs-16"
+            btnStyles="bg-bgColor4 text14SemiBold pLeft10"
+            icon1={
+              BREAD_CRUMB_TABS[5].icon1 && (
+                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[5].icon1} />
+              )
+            }
+            icon2={
+              BREAD_CRUMB_TABS[5].icon2 && (
+                <FontAwesomeIcon icon={BREAD_CRUMB_TABS[5].icon2} />
+              )
+            }
+            onClick={() => navigate(`/${BREAD_CRUMB_TABS[5].navigate}`,{
+              state: { id: infoItm },})
+            }
+          />
+        </div>
+      );
     }
     return tabItems;
   };

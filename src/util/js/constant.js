@@ -221,16 +221,16 @@ export const BREAD_CRUMB_TABS = [
     icon2: null,
   },
   {
-    icon1: icon.pencil,
-    text: 'Sửa thông tin',
-    icon2: icon.caretRight,
-    navigate: 'edit-file',
-  },
-  {
     icon1: icon.upload,
     text: 'Tải lên tài liệu',
     icon2: icon.caretRight,
     navigate: 'upload-file',
+  },
+  {
+    icon1: icon.pencil,
+    text: 'Sửa thông tin',
+    icon2: icon.caretRight,
+    navigate: 'edit-file',
   },
   {
     icon1: icon.folder,
