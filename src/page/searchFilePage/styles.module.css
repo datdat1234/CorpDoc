@@ -29,6 +29,7 @@
 
 .inputRowDetailCtn {
   /* width: calc(50% - 5px); */
+  max-height: calc(100vh - var(--rowSingle) * 2 - 80px);
   width: 100%;
 }
 

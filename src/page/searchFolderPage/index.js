@@ -9,9 +9,7 @@ import CriteriaTag from 'common/CriteriaTag';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   getFolderCriteria,
-  getFolderAuthor,
   getDeptName,
-  searchFolder,
 } from 'util/js/APIs';
 
 export default function SearchFolderPage() {
@@ -20,7 +18,6 @@ export default function SearchFolderPage() {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.app.userInfo);
   const [criteria, setCritetia] = useState([]);
-  const [authorData, setAuthorData] = useState([]);
   const [deptData, setDeptData] = useState([]);
   const [name, setName] = useState('');
   const [dept, setDept] = useState('');
@@ -38,10 +35,8 @@ export default function SearchFolderPage() {
   useEffect(() => {
     const fetchData = async () => {
       const critRes = await getFolderCriteria();
-      const authorRes = await getFolderAuthor();
       const deptRes = await getDeptName();
       setCritetia(critRes?.data?.data?.criteria);
-      setAuthorData(authorRes?.data?.data?.author);
       setDeptData(deptRes?.data?.data?.dept);
     };
 
@@ -133,10 +128,9 @@ export default function SearchFolderPage() {
           </div>
           <div className={`${styles.inputRowDetailCtn}`}>
             <Input
-              type="select"
-              text="Người tạo"
-              placeholder={authorData.length !== 0 ? author : ''}
-              value={authorData}
+              type="text"
+              text="Tác giả"
+              value={author}
               setData={setAuthor}
             />
           </div>

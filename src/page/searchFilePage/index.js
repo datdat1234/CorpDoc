@@ -9,9 +9,7 @@ import CriteriaTag from 'common/CriteriaTag';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   getFileCriteria,
-  getFileAuthor,
   getDeptName,
-  searchFile,
 } from 'util/js/APIs';
 
 export default function SearchFilePage() {
@@ -20,7 +18,6 @@ export default function SearchFilePage() {
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.app.userInfo);
   const [criteria, setCritetia] = useState([]);
-  const [authorData, setAuthorData] = useState([]);
   const [deptData, setDeptData] = useState([]);
   const [name, setName] = useState('');
   const [dept, setDept] = useState('');
@@ -38,10 +35,8 @@ export default function SearchFilePage() {
   useEffect(() => {
     const fetchData = async () => {
       const critRes = await getFileCriteria();
-      const authorRes = await getFileAuthor();
       const deptRes = await getDeptName();
       setCritetia(critRes?.data?.data?.criteria);
-      setAuthorData(authorRes?.data?.data?.author);
       setDeptData(deptRes?.data?.data?.dept);
     };
 
@@ -132,12 +127,11 @@ export default function SearchFilePage() {
             />
           </div>
           <div className={`${styles.inputRowDetailCtn}`}>
-            <Input
-              type="select"
-              text="Người tạo"
-              placeholder={authorData.length !== 0 ? author : ''}
-              value={authorData}
-              setData={setAuthor}
+            <Input 
+              type="text" 
+              text="Tác giả" 
+              value={author} 
+              setData={setAuthor} 
             />
           </div>
         </div>
