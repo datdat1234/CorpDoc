@@ -26,7 +26,7 @@ export default function ResultPage() {
     let str = '';
     switch (action) {
       case 'add': str = pageType === 'file'? 'Tải lên tài liệu': (isNew? 'Tạo mới miền cấu trúc' : 'Tạo mới thư mục'); break;
-      case 'edit': str = 'Chỉnh sửa' + pageType === 'file'? ' tài liệu': ' thư mục'; break;
+      case 'edit': str = 'Chỉnh sửa' + (pageType === 'file'? ' tài liệu': ' thư mục'); break;
       default: str='Tải lên tài liệu'
     }
     setName(str)

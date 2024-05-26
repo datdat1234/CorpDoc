@@ -300,7 +300,7 @@ export const formatItemPendingFile = (data) => {
           type: 'text',
         },
         {
-          text: (data[i].NewValue? updatedDate : createdDate).toLocaleString('en-GB',{
+          text: (data[i].NewValue !== null? updatedDate : createdDate).toLocaleString('en-GB',{
             dateStyle: 'short',
             timeStyle: 'short',
             timeZone: 'Asia/Ho_Chi_Minh',
