@@ -87,6 +87,11 @@ export default function UploadFileSupportPage() {
     if (type === 'book') return 'Thư viện sách';
     else return 'Văn bản hành chính';
   };
+
+  const handleScanFile = () => {
+    setNotification('warning', 'Tính năng này chưa được hỗ trợ');
+    return;
+  };
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -115,6 +120,7 @@ export default function UploadFileSupportPage() {
             btnStyles="bg-main pLeft10"
             icon1Styles="fs-16 d-flex justify-content-center align-items-center mRight10"
             icon1={<FontAwesomeIcon icon={icon.camera} />}
+            onClick={handleScanFile}
           />
           <p className="textH6Bold mHorizontal10">Hoặc</p>
           <Button

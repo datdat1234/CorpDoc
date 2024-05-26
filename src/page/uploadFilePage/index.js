@@ -103,6 +103,11 @@ export default function UploadFilePage() {
   const handleCloseCriteria = (criterion) => {
     setFileCriteria(fileCriteria.filter((value) => value !== criterion));
   };
+
+  const handleScanFile = () => {
+    setNotification('warning', 'Tính năng này chưa được hỗ trợ');
+    return;
+  };
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -141,6 +146,7 @@ export default function UploadFilePage() {
             btnStyles="bg-main pLeft10"
             icon1Styles="fs-16 d-flex justify-content-center align-items-center mRight10"
             icon1={<FontAwesomeIcon icon={icon.camera} />}
+            onClick={handleScanFile}
           />
           <p className="textH6Bold mHorizontal10">Hoặc</p>
           <Button
