@@ -157,7 +157,7 @@ export default function SearchFolderPage() {
         />
         <Input
           type="select"
-          text="Tiêu chí của tài liệu"
+          text="Tiêu chí của thư mục"
           value={criteria}
           setData={handleSetCriteria}
         />
