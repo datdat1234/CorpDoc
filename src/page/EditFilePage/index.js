@@ -8,7 +8,7 @@ import Input from 'common/Input';
 import CriteriaTag from 'common/CriteriaTag';
 import { setNotification } from 'util/js/helper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getFolderCriteria, getFileInfo, editFile } from 'util/js/APIs';
+import { getFolderCriteria, getFileInfo, editFile, setApproveFiles } from 'util/js/APIs';
 import { setGlobalLoading } from '../../redux/action/app';
 
 export default function EditFilePage() {
@@ -16,6 +16,7 @@ export default function EditFilePage() {
   //////////////////////////////////////////////////
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.app.userInfo);
   const isLoad = useSelector((state) => state.app.globalLoading);
   const { state } = useLocation();
   const { id } = state;
@@ -63,6 +64,9 @@ export default function EditFilePage() {
       fileCriteria: fileCriteria,
     };
     const response = await editFile(fileInfo);
+    if (userInfo.Role !== 'Staff') {
+      await setApproveFiles([fileInfo.fileId]);
+    }
     if (response?.data?.resultCode === '00001') {
       navigate(`/result-page`, { state: { type: 'file', status: 'success', action: 'edit' } });
     } else {

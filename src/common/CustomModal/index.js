@@ -191,6 +191,7 @@ export default function CustomModal({
           key={index}
           text={item}
           handleClick={handleFunc}
+          isShowIcon={false}
         />
       );
     });
@@ -345,7 +346,7 @@ export default function CustomModal({
               <Input 
                 type="text" 
                 text="Mô tả mới"
-                value={newValue?.author}
+                value={newValue?.description}
                 canChange={false}
               />
             }

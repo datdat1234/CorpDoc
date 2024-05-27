@@ -39,50 +39,44 @@ export default function ResultPage() {
   const handleBigText = () => {
     if (pageType === 'file') {
       if (pageStatus === 'success') {
-        return 'TẢI LÊN THÀNH CÔNG';
+        return action==='edit'? 'CHỈNH SỬA THÀNH CÔNG' : 'TẢI LÊN THÀNH CÔNG';
       } else {
-        return 'TẢI LÊN THẤT BẠI';
+        return action==='edit'? 'CHỈNH SỬA THẤT BẠI' : 'TẢI LÊN THẤT BẠI';
       }
     } else {
       if (pageStatus === 'success') {
         if (newPage === true) return 'TẠO MIỀN CẤU TRÚC MỚI THÀNH CÔNG';
-        return 'TẠO THƯ MỤC THÀNH CÔNG';
+        return action==='edit'? 'CHỈNH SỬA THÀNH CÔNG' : 'TẠO THƯ MỤC THÀNH CÔNG';
       } else {
         if (newPage === true) return 'TẠO MIỀN CẤU TRÚC MỚI KHÔNG THÀNH CÔNG';
-        return 'TẠO THƯ MỤC MỚI KHÔNG THÀNH CÔNG';
+        return action==='edit'? 'CHỈNH SỬA KHÔNG THÀNH CÔNG' : 'TẠO THƯ MỤC MỚI KHÔNG THÀNH CÔNG';
       }
     }
   };
 
   const renderSmallText = () => {
     if (pageType === 'file') {
-      if (userInfo.Role === 'Staff' && pageStatus === 'success') {
-        return (
-          <div>
-            Yêu cầu tải lên đã được gửi đến{' '}
-            <span className="text18Bold">trưởng phòng ban</span>. Vui lòng đợi
-            xác nhận để có thể hiển thị và sử dụng.
-          </div>
-        );
+      if (pageStatus === 'success') {
+        if (userInfo.Role === 'Staff') {
+          return (
+            <div>
+              Yêu cầu {action==='edit'? 'chỉnh sửa' : 'tải lên'} đã được gửi đến{' '}
+              <span className="text18Bold">trưởng phòng ban</span>. Vui lòng đợi
+              xác nhận để có thể hiển thị và sử dụng.
+            </div>
+          );
+        }
       } else {
-        return <div>Tải lên không thành công. Vui lòng thử lại.</div>;
+        return <div>{action==='edit'? 'Chỉnh sửa' : 'Tải lên'} không thành công. Vui lòng thử lại.</div>;
       }
     } 
   };
 
   const renderBtnText = () => {
-    if (pageType === 'file') {
-      if (pageStatus === 'success') {
-        return 'Tiếp tục tải lên';
-      } else {
-        return 'Thử lại';
-      }
+    if (pageStatus === 'success') {
+      return 'Quay về trang chủ';
     } else {
-      if (pageStatus === 'success') {
-        return 'Tiếp tục tạo thư mục';
-      } else {
-        return 'Thử lại';
-      }
+      return 'Thử lại';
     }
   };
 
@@ -139,7 +133,7 @@ export default function ResultPage() {
           name={renderBtnText()}
           ctnStyles="h-56 bg-text br-8"
           btnStyles="text-center textH6Bold white bg-text"
-          onClick={() => navigate(-1)}
+          onClick={() => pageStatus === 'success'? navigate('/') : navigate(-1)}
         />
       </div>
     </div>
