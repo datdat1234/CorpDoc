@@ -66,7 +66,7 @@ export default function UploadFilePage() {
       userId: userInfo?.UserID,
       deptId: userInfo?.DeptID,
       deleted: false,
-      status: 'Pending',
+      status: userInfo.Role === 'Staff'? 'Pending' : 'Active',
       isPrivate: false,
     };
     const response = await uploadFile(fileMetadata, fileContent);
