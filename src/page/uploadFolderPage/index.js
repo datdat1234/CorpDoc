@@ -47,8 +47,8 @@ export default function UploadFolderPage() {
         isPrivateTmp = isPrivateRes?.data?.data?.isPrivate;
       }
 
-      const critRes = await getFolderCriteria(isPrivate);
-      const folderRes = await getFolderPath(userInfo?.DeptID, isPrivate);
+      const critRes = await getFolderCriteria(isPrivateTmp);
+      const folderRes = await getFolderPath(userInfo?.DeptID, isPrivateTmp);
       let allFolders = folderRes?.data?.data?.folder;
       setCritetia(critRes?.data?.data?.criteria);
       setFolders(allFolders);
