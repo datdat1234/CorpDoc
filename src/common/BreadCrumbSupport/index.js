@@ -13,7 +13,6 @@ export default function BreadCrumbSupport({path}) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const [modal, setModal] = useState(false);
-  const [save, setSave] = useState(false);
   // const { id } = useParams();
   const ref = useRef();
   //////////////////////////////////////////////////
@@ -28,16 +27,7 @@ export default function BreadCrumbSupport({path}) {
 
   // #region    FUNCTIONS //////////////////////////
   //////////////////////////////////////////////////
-  const handleChangeSave = async () => {
-    // await setChangeSaveFolder(save, id).then((res)=>{
-    //   if (res?.data?.data) {
-    //     setNotification("success", !save? "Đã thêm vào danh mục đã lưu.": "Đã xóa khỏi danh mục đã lưu.")
-    //     setSave(!save);
-    //   } else {
-    //     setNotification("error", res?.data?.resultMessage?.vi);
-    //   }
-    // });
-  };
+
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -51,7 +41,6 @@ export default function BreadCrumbSupport({path}) {
       className={`w-100 pHorizontal10 ${
         modal ? 'br-2 br-TopLeft-15 br-TopRight-15' : 'br-15'
       } ${styles.root}`}
-      onClick={() => setModal(!modal)}
       ref={ref}
     >
       <FontAwesomeIcon icon={icon.angleRight} />
@@ -59,7 +48,6 @@ export default function BreadCrumbSupport({path}) {
         {path}
       </p>
       <FontAwesomeIcon icon={icon.caretDown} />
-      {modal && <BreadCrumbModal ctnStyles='w-100 br-2 br-BottomLeft-15 br-BottomRight-15' save={save} setSave={setSave} handleChangeSave={handleChangeSave} isSupportFolder={true}/>}
     </div>
   );
 }

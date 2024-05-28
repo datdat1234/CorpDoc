@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import SrcItem from 'common/SrcItem';
 import styles from './styles.module.css';
-import { SUPPORT_ITEM_GRIDS } from 'util/js/constant';
+import { SUPPORT_ITEM_GRIDS, HOMEPAGE_ITEM_GRIDS } from 'util/js/constant';
 import Pagination from 'common/Pagination';
 import { getSupportStructure, viewFile } from 'util/js/APIs';
 import { formatItemSupportFolder, formatItemFile } from 'util/js/helper';
@@ -161,19 +161,23 @@ export default function SupportFolderPage() {
     if (items !== undefined) {
       for (let i = 0; i < items.length; i++) {
         if (i >= (crtPage-1)*itemPerPage && i < (crtPage)*itemPerPage) {
+          if (items[i][1].type === 'file') items[i][4].text = 'support';
           tabItems.push(
+            items[i][1].type === 'file'?
+            <div key={i}>
+              <SrcItem
+                grid={HOMEPAGE_ITEM_GRIDS}
+                value={items[i]}
+              />
+            </div>:
             <div key={i}>
               <div className={`${styles.item}`}>
-                <IconButton
-                  icon={<FontAwesomeIcon icon={icon.unBookmark} />}
-                  ctnStyles="col-1 mRight10"
-                  onClick={() => {console.log('click')}}
-                />
+                <div className='col-1'></div>
                 <div
                   className={`w-100 ${styles.textCtn}`}
                   onClick={() => handleOnclick(i)}
                 >
-                  <div className={`${styles.icon} ${items[i][1].type === "file" ? 'text' : 'main'}`}>{<FontAwesomeIcon icon={items[i][1].type === "file" ? icon.file : icon.folder} size={'lg'} />}</div>
+                  <div className={`${styles.icon} ${items[i][1].type === "file" ? 'text' : 'main'}`}>{<FontAwesomeIcon icon={items[i][1].type === "file" ? icon.file : icon.folder} />}</div>
                   <p className={`w-100 mLeft10 ${styles.btn} ${items[i][1].type === "file" ? 'text14Bold' : 'text14Medium'}`}>{items[i][1].text}</p>
                 </div>
                 <div
@@ -190,23 +194,11 @@ export default function SupportFolderPage() {
                 >
                   {items[i][1].type === "file" &&
                     <p className={`text14Medium ellipsis ta-right mRight10'`}>
-                      {items[i][3].text}
+                      {items[i][3].text} KB
                     </p>
                   }
                 </div>
-                <div className={`col-1`} ref={ref}>
-                  <IconButton
-                    icon={<FontAwesomeIcon icon={icon.ellipsisVertical} />}
-                    onClick={() => setOpenModal(i)}
-                  />
-                  {modal[i] && 
-                    <BreadCrumbModal 
-                      ctnStyles='br-15 br-TopRight-2' 
-                      isSupportFolder={true}
-                      isFolder={items[i][1].type === "file"? false: true}
-                    />
-                  }
-                </div>
+                <></>
               </div>
             </div>
           );
