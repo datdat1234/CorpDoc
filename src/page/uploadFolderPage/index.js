@@ -7,7 +7,7 @@ import Button from 'common/Button';
 import Input from 'common/Input';
 import CriteriaTag from 'common/CriteriaTag';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getFolderCriteria, getFolderPath, uploadFolder } from 'util/js/APIs';
+import { getFolderCriteria, getFolderPath, uploadFolder, checkIsPrivate } from 'util/js/APIs';
 import { setGlobalLoading } from '../../redux/action/app';
 import { setNotification } from 'util/js/helper';
 
@@ -21,7 +21,7 @@ export default function UploadFolderPage() {
   const location = useLocation();
   const newStructure = location.state ? location.state.newStructure : null;
   const id = location.state ? location.state.id : null;
-  const isPrivate = location.state ? location.state.isPrivate : false;
+  const [isPrivate, setIsPrivate] = useState(location.state ? location.state.isPrivate : false);
   const [criteria, setCritetia] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [author, setAuthor] = useState('');
@@ -38,12 +38,21 @@ export default function UploadFolderPage() {
   //////////////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
+
+      var isPrivateTmp = isPrivate;
+
+      if (id) {
+        const isPrivateRes = await checkIsPrivate(id);
+        setIsPrivate(isPrivateRes?.data?.data?.isPrivate);
+        isPrivateTmp = isPrivateRes?.data?.data?.isPrivate;
+      }
+
       const critRes = await getFolderCriteria(isPrivate);
       const folderRes = await getFolderPath(userInfo?.DeptID, isPrivate);
       let allFolders = folderRes?.data?.data?.folder;
       setCritetia(critRes?.data?.data?.criteria);
-      setFolders(allFolders);      
-      for(let i=0; i<allFolders.length; i++) {
+      setFolders(allFolders);
+      for (let i = 0; i < allFolders.length; i++) {
         if (allFolders[i].FolderID === id) {
           setFolderParentInfo(allFolders[i].Path);
           setFolderCriteria(allFolders[i].Criteria);
@@ -64,7 +73,7 @@ export default function UploadFolderPage() {
   const getRootFolder = () => {
     return localStorage.getItem('root');
   };
-  
+
   const handleUploadFolder = async () => {
     dispatch(setGlobalLoading(true));
     if (folderName === '' || showCritNumber === folderCriteria.length || (!newStructure && folderParentInfo === '')) {
@@ -145,7 +154,7 @@ export default function UploadFolderPage() {
   };
 
   const renderName = () => {
-    if(isPrivate) return 'thư mục riêng';
+    if (isPrivate) return 'thư mục riêng';
     return folderParent;
   };
   //////////////////////////////////////////////////
@@ -169,7 +178,7 @@ export default function UploadFolderPage() {
             text="* Thư mục cha"
             value={handlePathValue()}
             setData={handleSetParentInfo}
-            onEnter={() => {handleUploadFolder()}}
+            onEnter={() => { handleUploadFolder() }}
             defaultValue={folderParentInfo}
           />
         )}
@@ -179,7 +188,7 @@ export default function UploadFolderPage() {
           bonusText="(tối đa 50 ký tự)"
           value={folderName}
           setData={setFolderName}
-          onEnter={() => {handleUploadFolder()}}
+          onEnter={() => { handleUploadFolder() }}
         />
         <Input
           type="text"
@@ -187,21 +196,21 @@ export default function UploadFolderPage() {
           bonusText="(Tối đa 20 ký tự)"
           value={author}
           setData={setAuthor}
-          onEnter={() => {handleUploadFolder()}}
+          onEnter={() => { handleUploadFolder() }}
         />
-        <Input 
-          type="textarea" 
-          text="Mô tả" 
-          value={desc} 
-          setData={setDesc} 
-          onEnter={() => {handleUploadFolder()}}
+        <Input
+          type="textarea"
+          text="Mô tả"
+          value={desc}
+          setData={setDesc}
+          onEnter={() => { handleUploadFolder() }}
         />
         <Input
           type="select-keydown"
           text="* Tiêu chí của thư mục"
           value={criteria}
           setData={handleSetCriteria}
-          onEnter={() => {handleUploadFolder()}}
+          onEnter={() => { handleUploadFolder() }}
         />
         <div className={`${styles.checkboxCtn}`}>{renderCriterionTag()}</div>
         <div className={`${styles.btnCtn} mBottom10`}>

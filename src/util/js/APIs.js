@@ -178,25 +178,25 @@ export const getUsedStorage = (deptId) => {
 export const getPendingFiles = () => {
   return get(
     `${API_URL}/file/get-pending-files`,
-    {companyId: getCompanyId(),},
+    { companyId: getCompanyId(), },
   );
 };
 
 export const setApproveFiles = (ids) => {
   return post(
-    `${API_URL}/file/set-approve-files`,{
-      companyId: getCompanyId(),
-      fileIds: ids,
-    },
+    `${API_URL}/file/set-approve-files`, {
+    companyId: getCompanyId(),
+    fileIds: ids,
+  },
   );
 };
 
 export const setDeniedFiles = (ids) => {
   return post(
-    `${API_URL}/file/set-denied-files`,{
-      companyId: getCompanyId(),
-      fileIds: ids,
-    },
+    `${API_URL}/file/set-denied-files`, {
+    companyId: getCompanyId(),
+    fileIds: ids,
+  },
   );
 };
 
@@ -236,7 +236,7 @@ export const getDeptShared = (infoItm) => {
 };
 
 export const setSharedDeptIds = (infoItm, deptIds) => {
-  return post(`${API_URL}/${infoItm.isFolder? 'folder':'file'}/set-shared-depts`, {
+  return post(`${API_URL}/${infoItm.isFolder ? 'folder' : 'file'}/set-shared-depts`, {
     companyId: getCompanyId(),
     id: infoItm.id,
     deptIds: deptIds,
@@ -272,7 +272,7 @@ export const getFolderPath = (deptId, isPrivate = false) => {
   return get(`${API_URL}/folder/get-path`, {
     companyId: getCompanyId(),
     deptId,
-    isPrivate: isPrivate ? isPrivate : false 
+    isPrivate: isPrivate ? isPrivate : false
   });
 };
 
@@ -393,6 +393,16 @@ export const getPrivateFolder = () => {
     `${API_URL}/folder/get-private-folder`,
     {
       companyId: getCompanyId(),
+    },
+  );
+};
+
+export const checkIsPrivate = (folderId) => {
+  return get(
+    `${API_URL}/folder/is-private-folder`,
+    {
+      companyId: getCompanyId(),
+      folderId: folderId,
     },
   );
 };
