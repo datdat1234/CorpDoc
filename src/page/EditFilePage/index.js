@@ -19,7 +19,7 @@ export default function EditFilePage() {
   const userInfo = useSelector((state) => state.app.userInfo);
   const isLoad = useSelector((state) => state.app.globalLoading);
   const { state } = useLocation();
-  const { id } = state;
+  const { id, isSupportFolder } = state;
   const [criteria, setCritetia] = useState([]);
   const [fileName, setFileName] = useState('');
   const [author, setAuthor] = useState('');
@@ -139,14 +139,19 @@ export default function EditFilePage() {
           setData={setDesc} 
           onEnter={() => {handleUploadFile()}}
         />
-        <Input
-          type="select"
-          text="* Tiêu chí của tài liệu"
-          value={criteria}
-          setData={handleSetCriteria}
-          onEnter={() => {handleUploadFile()}}
-        />
-        <div className={`${styles.checkboxCtn}`}>{renderCriterionTag()}</div>
+        {
+        !isSupportFolder &&
+        <>
+          <Input
+            type="select"
+            text="* Tiêu chí của tài liệu"
+            value={criteria}
+            setData={handleSetCriteria}
+            onEnter={() => {handleUploadFile()}}
+            />
+          <div className={`${styles.checkboxCtn}`}>{renderCriterionTag()}</div>
+        </>
+        }
         <div className={`${styles.btnCtn} mBottom10`}>
           <div className={`${styles.btnWrapper}`}>
             <Button

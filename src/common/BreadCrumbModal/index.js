@@ -8,6 +8,8 @@ import { BREAD_CRUMB_TABS } from 'util/js/constant';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
 import { setOpenModal } from '../../redux/action/app';
+import { downloadFile } from 'util/js/APIs';
+import { saveAs } from 'file-saver';
 
 export default function BreadCrumbModal({
   ctnStyles = '',
@@ -36,7 +38,15 @@ export default function BreadCrumbModal({
 
   // #region    FUNCTIONS //////////////////////////
   //////////////////////////////////////////////////
-
+  const handleDownloadfile = async (fileId) => {
+    try {
+      const response = await downloadFile(fileId);
+      const blob = new Blob([response?.data], { type: 'application/pdf' });
+      saveAs(blob, `${fileId}.pdf`);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -77,7 +87,7 @@ export default function BreadCrumbModal({
                 <FontAwesomeIcon icon={BREAD_CRUMB_TABS[1].icon2} />
               )
             }
-            onClick={() => console.log(1)}
+            onClick={() => handleDownloadfile(infoItm)}
           />
         </div>
       );
@@ -151,7 +161,7 @@ export default function BreadCrumbModal({
                 <FontAwesomeIcon icon={BREAD_CRUMB_TABS[4].icon2} />
               )
             }
-            onClick={() => navigate(`/${isFolder? 'edit-folder': 'edit-file'}`,{ state: { id: infoItm } })}
+            onClick={() => navigate(`/${isFolder? 'edit-folder': 'edit-file'}`,{ state: { id: infoItm, isSupportFolder: isSupportFolder } })}
           />
         </div>
       );

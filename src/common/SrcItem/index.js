@@ -191,7 +191,9 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
           handleChangeSave={handleChangeSave} 
           handleDeleteBtn={handleDeleteBtn} 
           isFolder={value[1].type==="file"? false: true} 
-          infoItm={value[1].id}/>}
+          infoItm={value[1].id}
+          isSupportFolder={value[4].text==="support"}
+        />}
       </div>
     );
   };
