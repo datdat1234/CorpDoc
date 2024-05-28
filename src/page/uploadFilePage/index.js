@@ -35,7 +35,7 @@ export default function UploadFilePage() {
   //////////////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
-      const criteriaRes = await getFolderCriteria();
+      const criteriaRes = await getFolderCriteria(isPrivate);
       setCritetia(criteriaRes?.data?.data?.criteria);
       if (id) {
         const response = await getFolderInfo(id);
@@ -69,7 +69,7 @@ export default function UploadFilePage() {
       deptId: userInfo?.DeptID,
       deleted: false,
       status: userInfo.Role === 'Staff'? 'Pending' : 'Active',
-      isPrivate: isPrivate?? false,
+      isPrivate: isPrivate ? isPrivate : false,
     };
     const response = await uploadFile(fileMetadata, fileContent);
     if (response?.data?.resultCode === '00034') {

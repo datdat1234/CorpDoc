@@ -268,10 +268,11 @@ export const getFolderAuthor = () => {
   });
 };
 
-export const getFolderPath = (deptId) => {
+export const getFolderPath = (deptId, isPrivate = false) => {
   return get(`${API_URL}/folder/get-path`, {
     companyId: getCompanyId(),
     deptId,
+    isPrivate: isPrivate ? isPrivate : false 
   });
 };
 

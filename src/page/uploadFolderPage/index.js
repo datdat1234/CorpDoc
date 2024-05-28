@@ -39,7 +39,7 @@ export default function UploadFolderPage() {
   useEffect(() => {
     const fetchData = async () => {
       const critRes = await getFolderCriteria(isPrivate);
-      const folderRes = await getFolderPath(userInfo?.DeptID);
+      const folderRes = await getFolderPath(userInfo?.DeptID, isPrivate);
       let allFolders = folderRes?.data?.data?.folder;
       setCritetia(critRes?.data?.data?.criteria);
       setFolders(allFolders);      
@@ -84,9 +84,9 @@ export default function UploadFolderPage() {
         (folder) => folder.Path === folderParentInfo
       )?.FolderID : rootFolder,
       userId: userInfo?.UserID,
-      deptId: userInfo?.DeptID,
+      deptId: isPrivate ? null : userInfo?.DeptID,
       deleted: false,
-      isPrivate: false,
+      isPrivate: isPrivate ? isPrivate : false,
     };
 
     const response = await uploadFolder(folderInfo);
@@ -143,13 +143,18 @@ export default function UploadFolderPage() {
       );
     });
   };
+
+  const renderName = () => {
+    if(isPrivate) return 'thư mục riêng';
+    return folderParent;
+  };
   //////////////////////////////////////////////////
   // #endregion VIEWS //////////////////////////////
   return (
     <div className={`${styles.root}`}>
       <div className={`${styles.navCtn}`}>
         <Button
-          name={newStructure ? 'Tạo miền cấu trúc mới' : 'Thêm thư mục mới thuộc ' + folderParent}
+          name={newStructure ? 'Tạo miền cấu trúc mới' : 'Thêm thư mục mới thuộc ' + renderName()}
           ctnStyles="h-100 text18SemiBold border-bottom-1 border-style-solid border-bg5-60 br-10"
           btnStyles="bg-bgColor4 pLeft10"
           icon1Styles="w-24 h-24 d-flex justify-content-center align-items-center"
