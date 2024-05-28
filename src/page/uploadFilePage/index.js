@@ -19,7 +19,7 @@ export default function UploadFilePage() {
   const userInfo = useSelector((state) => state.app.userInfo);
   const isLoad = useSelector((state) => state.app.globalLoading);
   const { state } = useLocation();
-  const { id } = state;
+  const { id, isPrivate } = state;
   const [criteria, setCritetia] = useState([]);
   const [fileName, setFileName] = useState('');
   const [author, setAuthor] = useState('');
@@ -37,9 +37,11 @@ export default function UploadFilePage() {
     const fetchData = async () => {
       const criteriaRes = await getFolderCriteria();
       setCritetia(criteriaRes?.data?.data?.criteria);
-      const response = await getFolderInfo(id);
-      const resData = response?.data?.data;
-      setFileCriteria(resData?.Criteria);
+      if (id) {
+        const response = await getFolderInfo(id);
+        const resData = response?.data?.data;
+        setFileCriteria(resData?.Criteria);
+      }
     };
 
     fetchData();
@@ -67,7 +69,7 @@ export default function UploadFilePage() {
       deptId: userInfo?.DeptID,
       deleted: false,
       status: userInfo.Role === 'Staff'? 'Pending' : 'Active',
-      isPrivate: false,
+      isPrivate: isPrivate?? false,
     };
     const response = await uploadFile(fileMetadata, fileContent);
     if (response?.data?.resultCode === '00034') {

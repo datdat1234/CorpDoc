@@ -255,9 +255,10 @@ export const editDeptInfo = (deptId, deptInfo) => {
 
 //#region Folder
 
-export const getFolderCriteria = () => {
+export const getFolderCriteria = (isPrivate = false) => {
   return get(`${API_URL}/folder/criteria`, {
     companyId: getCompanyId(),
+    isPrivate: isPrivate
   });
 };
 

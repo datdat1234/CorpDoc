@@ -128,7 +128,7 @@ export default function Header() {
           domainNavigate = [
             () => {
               handleMouseLeave();
-              navigate('/upload-file-private');
+              navigate('/upload-file', { state: {id: 'f69eb825-7714-4df4-8e86-4b7c2bf9b702', isPrivate: true}});
             },
             () => {
               handleMouseLeave();
@@ -175,6 +175,7 @@ export default function Header() {
           ];
         }
         let domainSmallhover = [];
+        if (userInfo.Role === 'Admin') domainSmallhover.push(0);
         if (folders !== undefined) {
           for (let i = 0; i < folders.length; i++) {
             domainUpload.push(folders[i].Name);

@@ -21,6 +21,7 @@ export default function UploadFolderPage() {
   const location = useLocation();
   const newStructure = location.state ? location.state.newStructure : null;
   const id = location.state ? location.state.id : null;
+  const isPrivate = location.state ? location.state.isPrivate : false;
   const [criteria, setCritetia] = useState([]);
   const [folderName, setFolderName] = useState('');
   const [author, setAuthor] = useState('');
@@ -37,7 +38,7 @@ export default function UploadFolderPage() {
   //////////////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
-      const critRes = await getFolderCriteria();
+      const critRes = await getFolderCriteria(isPrivate);
       const folderRes = await getFolderPath(userInfo?.DeptID);
       let allFolders = folderRes?.data?.data?.folder;
       setCritetia(critRes?.data?.data?.criteria);
