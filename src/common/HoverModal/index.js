@@ -134,12 +134,12 @@ export default function HoverModal({
           onClick={[
             () => {
               handleMouseLeave();
-              navigate('/upload-folder', { state: { newStructure: false, id:onClickSmallHover[i-2] } });
+              navigate('/upload-folder', { state: { newStructure: false, id:onClickSmallHover[i-2], isPrivate: (i===0 && userInfo.Role === 'Admin'? true: false) } });
               setIsHovered1(0);
             },
             () => {
               handleMouseLeave();
-              navigate('/upload-file', { state: { id:onClickSmallHover[i-2] } });
+              navigate('/upload-file', { state: { id:onClickSmallHover[i-2], isPrivate: (i===0 && userInfo.Role === 'Admin'? true: false) } });
               setIsHovered1(0);
             },
           ]}
