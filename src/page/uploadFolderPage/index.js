@@ -38,9 +38,7 @@ export default function UploadFolderPage() {
   //////////////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
-
       var isPrivateTmp = isPrivate;
-
       if (id) {
         const isPrivateRes = await checkIsPrivate(id);
         setIsPrivate(isPrivateRes?.data?.data?.isPrivate);

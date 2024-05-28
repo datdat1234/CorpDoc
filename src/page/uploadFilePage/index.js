@@ -8,7 +8,7 @@ import Input from 'common/Input';
 import CriteriaTag from 'common/CriteriaTag';
 import { extractFileName, extractFileType, setNotification } from 'util/js/helper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getFolderCriteria, uploadFile, getFolderInfo } from 'util/js/APIs';
+import { getFolderCriteria, uploadFile, getFolderInfo, checkIsPrivate } from 'util/js/APIs';
 import { setGlobalLoading } from '../../redux/action/app';
 
 export default function UploadFilePage() {
@@ -16,10 +16,11 @@ export default function UploadFilePage() {
   //////////////////////////////////////////////////
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const userInfo = useSelector((state) => state.app.userInfo);
   const isLoad = useSelector((state) => state.app.globalLoading);
-  const { state } = useLocation();
-  const { id, isPrivate } = state;
+  const id = location.state ? location.state.id : null;
+  const [isPrivate, setIsPrivate] = useState(location.state ? location.state.isPrivate : false);
   const [criteria, setCritetia] = useState([]);
   const [fileName, setFileName] = useState('');
   const [author, setAuthor] = useState('');
@@ -35,7 +36,14 @@ export default function UploadFilePage() {
   //////////////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
-      const criteriaRes = await getFolderCriteria(isPrivate);
+      var isPrivateTmp = isPrivate;
+      if (id) {
+        const isPrivateRes = await checkIsPrivate(id);
+        setIsPrivate(isPrivateRes?.data?.data?.isPrivate);
+        isPrivateTmp = isPrivateRes?.data?.data?.isPrivate;
+      }
+
+      const criteriaRes = await getFolderCriteria(isPrivateTmp);
       setCritetia(criteriaRes?.data?.data?.criteria);
       if (id) {
         const response = await getFolderInfo(id);
@@ -68,7 +76,7 @@ export default function UploadFilePage() {
       userId: userInfo?.UserID,
       deptId: userInfo?.DeptID,
       deleted: false,
-      status: userInfo.Role === 'Staff'? 'Pending' : 'Active',
+      status: userInfo.Role === 'Staff' ? 'Pending' : 'Active',
       isPrivate: isPrivate ? isPrivate : false,
     };
     const response = await uploadFile(fileMetadata, fileContent);
@@ -166,7 +174,7 @@ export default function UploadFilePage() {
           bonusText="(tối đa 50 ký tự)"
           value={fileName}
           setData={setFileName}
-          onEnter={() => {handleUploadFile()}}
+          onEnter={() => { handleUploadFile() }}
         />
         <Input
           type="text"
@@ -174,21 +182,21 @@ export default function UploadFilePage() {
           bonusText="(Tối đa 20 ký tự)"
           value={author}
           setData={setAuthor}
-          onEnter={() => {handleUploadFile()}}
+          onEnter={() => { handleUploadFile() }}
         />
-        <Input 
-          type="textarea" 
-          text="Mô tả" 
-          value={desc} 
-          setData={setDesc} 
-          onEnter={() => {handleUploadFile()}}
+        <Input
+          type="textarea"
+          text="Mô tả"
+          value={desc}
+          setData={setDesc}
+          onEnter={() => { handleUploadFile() }}
         />
         <Input
           type="select"
           text="* Tiêu chí của tài liệu"
           value={criteria}
           setData={handleSetCriteria}
-          onEnter={() => {handleUploadFile()}}
+          onEnter={() => { handleUploadFile() }}
         />
         <div className={`${styles.checkboxCtn}`}>{renderCriterionTag()}</div>
         <div className={`${styles.btnCtn} mBottom10`}>
