@@ -20,7 +20,7 @@ export default function EditFilePage() {
   const isLoad = useSelector((state) => state.app.globalLoading);
   const { state } = useLocation();
   const { id, isSupportFolder } = state;
-  const [criteria, setCritetia] = useState([]);
+  const [criteria, setCriteria] = useState([]);
   const [fileName, setFileName] = useState('');
   const [author, setAuthor] = useState('');
   const [desc, setDesc] = useState('');
@@ -33,13 +33,14 @@ export default function EditFilePage() {
   useEffect(() => {
     const fetchData = async () => {
       const criteriaData = await getFolderCriteria();
-      setCritetia(criteriaData?.data?.data?.criteria);
+      setCriteria(criteriaData?.data?.data?.criteria);
       const response = await getFileInfo(id);
       const resData = response?.data?.data;
-      setFileName(resData.Name);
-      setDesc(resData.Description);
-      setAuthor(resData.Author);
-      setFileCriteria(resData.Criteria);
+      console.log(resData)
+      setFileName(resData?.Name);
+      setDesc(resData?.Description);
+      setAuthor(resData?.Author);
+      setFileCriteria(resData?.Criteria);
     };
 
     fetchData();
@@ -92,6 +93,7 @@ export default function EditFilePage() {
   //////////////////////////////////////////////////
   const renderCriterionTag = () => {
     return fileCriteria?.map((criterion, index) => {
+      console.log(criterion);
       return (
         <CriteriaTag
           key={index}
@@ -122,7 +124,7 @@ export default function EditFilePage() {
           bonusText="(tối đa 50 ký tự)"
           value={fileName}
           setData={setFileName}
-          onEnter={() => {handleUploadFile()}}
+          onEnter={() => { handleUploadFile() }}
         />
         <Input
           type="text"
@@ -130,27 +132,27 @@ export default function EditFilePage() {
           bonusText="(Tối đa 20 ký tự)"
           value={author}
           setData={setAuthor}
-          onEnter={() => {handleUploadFile()}}
+          onEnter={() => { handleUploadFile() }}
         />
-        <Input 
-          type="textarea" 
-          text="Mô tả" 
-          value={desc} 
-          setData={setDesc} 
-          onEnter={() => {handleUploadFile()}}
+        <Input
+          type="textarea"
+          text="Mô tả"
+          value={desc}
+          setData={setDesc}
+          onEnter={() => { handleUploadFile() }}
         />
         {
-        !isSupportFolder &&
-        <>
-          <Input
-            type="select"
-            text="* Tiêu chí của tài liệu"
-            value={criteria}
-            setData={handleSetCriteria}
-            onEnter={() => {handleUploadFile()}}
+          !isSupportFolder &&
+          <>
+            <Input
+              type="select"
+              text="* Tiêu chí của tài liệu"
+              value={criteria}
+              setData={handleSetCriteria}
+              onEnter={() => { handleUploadFile() }}
             />
-          <div className={`${styles.checkboxCtn}`}>{renderCriterionTag()}</div>
-        </>
+            <div className={`${styles.checkboxCtn}`}>{renderCriterionTag()}</div>
+          </>
         }
         <div className={`${styles.btnCtn} mBottom10`}>
           <div className={`${styles.btnWrapper}`}>

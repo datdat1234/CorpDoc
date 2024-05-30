@@ -3,24 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import SrcItem from 'common/SrcItem';
 import styles from './styles.module.css';
-import { SUPPORT_ITEM_GRIDS, HOMEPAGE_ITEM_GRIDS } from 'util/js/constant';
+import { SUPPORT_ITEM_GRIDS } from 'util/js/constant';
 import Pagination from 'common/Pagination';
 import { getSupportStructure, viewFile } from 'util/js/APIs';
 import { formatItemSupportFolder, formatItemFile } from 'util/js/helper';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
-import IconButton from 'common/IconButton';
 import { setFileInfo } from '../../redux/action/app';
 import BreadCrumbSupport from 'common/BreadCrumbSupport';
-import BreadCrumbModal from 'common/BreadCrumbModal';
 import UseOnClickOutside from 'util/hook/useOnClickOutside';
 
 export default function SupportFolderPage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   var userInfo = useSelector((state) => state.app.userInfo);
-  var switchFolder = useSelector((state) => state.app.folderPage);
   const itemPerPage = 20;
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -134,17 +131,6 @@ export default function SupportFolderPage() {
       handleViewfile(items[i][1].id);
     }
   }
-
-  const setOpenModal = (index) => {
-    if(modal[index] === true) {
-      modals = Array(header.length).fill(false);
-    }
-    else {
-      modals = Array(header.length).fill(false);
-      modals[index] = true;
-    }
-    setModal(modals);
-  }
   //////////////////////////////////////////////////
   // #endregion FUNCTIONS //////////////////////////
 
@@ -166,7 +152,7 @@ export default function SupportFolderPage() {
             items[i][1].type === 'file'?
             <div key={i}>
               <SrcItem
-                grid={HOMEPAGE_ITEM_GRIDS}
+                grid={SUPPORT_ITEM_GRIDS}
                 value={items[i]}
               />
             </div>:

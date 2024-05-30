@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
 
-export default function NotificationTab({noti}) {
+export default function NotificationTab({ noti }) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
-  const date= Date.parse(noti.Time)
-  const formattedDate = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', year: 'numeric', month: 'numeric', day: 'numeric'}).format(date);
-  
+  const date = Date.parse(noti.Time)
+  const formattedDate = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', year: 'numeric', month: 'numeric', day: 'numeric' }).format(date);
+
 
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
@@ -33,7 +33,7 @@ export default function NotificationTab({noti}) {
       className={`w-100 text14
         ${styles.root} 
         ${!noti.IsSeen && 'bg-subColor1'}`}
-      onClick={()=>{console.log("click")}}
+      onClick={() => { console.log("click") }}
     >
       <div className={`ellipsis text14SemiBold`}>
         {noti.Title}

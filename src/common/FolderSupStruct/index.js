@@ -5,7 +5,6 @@ import { setFolderPage } from '../../redux/action/app';
 import styles from './styles.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
-import { getChildByFolderId } from 'util/js/APIs';
 
 export default function FolderSupStruct({ name = '', childs, typeDoc = "", pathDoc = "" }) {
   // #region    VARIABLES //////////////////////////

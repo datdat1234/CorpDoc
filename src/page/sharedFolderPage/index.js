@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import BreadCrumb from 'common/BreadCrumb';
 import SrcItem from 'common/SrcItem';
 import styles from './styles.module.css';
 import { HOMEPAGE_ITEM_GRIDS } from 'util/js/constant';

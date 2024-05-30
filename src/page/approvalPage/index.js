@@ -49,7 +49,7 @@ export default function ApprovalPage() {
     }
 
     fetchData();
-  },[change])
+  }, [change])
 
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
@@ -62,7 +62,7 @@ export default function ApprovalPage() {
       type: 'checkbox',
       arrChecked: arrChecked,
       setArrChecked: setArrChecked,
-      isCheckAllInput: isCheckAllInput, 
+      isCheckAllInput: isCheckAllInput,
       setIsCheckAllInput: setIsCheckAllInput,
       index: -1,
     },
@@ -93,7 +93,7 @@ export default function ApprovalPage() {
   ];
 
   const handleApproveBtn = async () => {
-    let ids= [];
+    let ids = [];
     for (let i = 0; i < items.length; i++) {
       if (arrChecked[i]) {
         ids.push(items[i][0].id);
@@ -111,7 +111,7 @@ export default function ApprovalPage() {
   }
 
   const handleDeniedBtn = async () => {
-    let ids= [];
+    let ids = [];
     for (let i = 0; i < items.length; i++) {
       if (arrChecked[i]) {
         ids.push(items[i][0].id);
@@ -131,10 +131,10 @@ export default function ApprovalPage() {
   const handleSearchBtn = () => {
     setDisplayItems(
       items.filter(
-        (item) => 
-        item[0].text.toLowerCase().search(searchName.toLowerCase()) !== -1 &&
-        (item[4].text.toLowerCase().search(searchDept.toLowerCase()) !== -1 || searchDept === 'Tất cả') &&
-        item[2].text.toLowerCase().search(searchUserName.toLowerCase()) !== -1
+        (item) =>
+          item[0].text.toLowerCase().search(searchName.toLowerCase()) !== -1 &&
+          (item[4].text.toLowerCase().search(searchDept.toLowerCase()) !== -1 || searchDept === 'Tất cả') &&
+          item[2].text.toLowerCase().search(searchUserName.toLowerCase()) !== -1
       )
     );
   }
@@ -161,10 +161,10 @@ export default function ApprovalPage() {
       <div className={`${styles.searchCtn}`}>
         <div className={`${styles.inputCtn} mBottom20`}>
           <div className={`${styles.inputDetailCtn}`}>
-            <Input type="row-text" text="Tên văn bản" value={searchName} setData={setSearchName}/>
+            <Input type="row-text" text="Tên văn bản" value={searchName} setData={setSearchName} />
           </div>
           <div className={`${styles.inputDetailCtn} ms-2`}>
-            <Input type="row-text" text="Tên nhân viên" value={searchUserName} setData={setSearchUserName}/>
+            <Input type="row-text" text="Tên nhân viên" value={searchUserName} setData={setSearchUserName} />
           </div>
         </div>
         <div className={`${styles.inputCtn} mBottom20`}>
@@ -209,22 +209,22 @@ export default function ApprovalPage() {
       <div className={`${styles.resultCtn}`}>
         <div className="w-100">
           <SrcItem grid={APPROVAL_GRIDS} value={value} />
-          {displayItems.map((file, index)=> {
-            if (index >= (crtPage-1)*itemPerPage && index < (crtPage)*itemPerPage) {
+          {displayItems.map((file, index) => {
+            if (index >= (crtPage - 1) * itemPerPage && index < (crtPage) * itemPerPage) {
               let fileInfo = [
                 {
                   text: '',
                   type: 'checkbox',
                   arrChecked: arrChecked,
                   setArrChecked: setArrChecked,
-                  isCheckAllInput: isCheckAllInput, 
+                  isCheckAllInput: isCheckAllInput,
                   setIsCheckAllInput: setIsCheckAllInput,
                   index: index,
                 },
                 ...file,
               ];
-              return(
-                <SrcItem grid={APPROVAL_GRIDS} value={fileInfo} setUpdate={setChange} update={change}/>
+              return (
+                <SrcItem grid={APPROVAL_GRIDS} value={fileInfo} setUpdate={setChange} update={change} />
               )
             }
           })}
@@ -233,7 +233,7 @@ export default function ApprovalPage() {
           <p className="text14 mLeft10">
             Có <span className="text14Bold">{items.length}</span> yêu cầu chưa được xét duyệt.
           </p>
-          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={displayItems.length} itemPerPage={itemPerPage}/>
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={displayItems.length} itemPerPage={itemPerPage} />
         </div>
       </div>
     </div>

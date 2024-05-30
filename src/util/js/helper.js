@@ -1,6 +1,3 @@
-import React from 'react';
-import get from 'lodash/get';
-import isObject from 'lodash/isObject';
 import { setNoti } from '../../redux/action/app';
 import store from '../../redux/store';
 
@@ -337,3 +334,23 @@ export const setNotification = (type, message) => {
     store.dispatch(setNoti({type: '', message: ''}));
   }, 3000);
 }
+
+export const formatCriteria = (data, type) => {
+  if (type === 'remove') {
+    const criteria = data.flatMap((obj) => obj.Criteria);
+    const uniqueCriteria = [...new Set(criteria)];
+    const handledCriteria = uniqueCriteria.map((criterion) =>
+      criterion.replace(/_/g, ' ')
+    );
+    handledCriteria.sort((a, b) => a.localeCompare(b));
+    const uppercaseCriteria = handledCriteria.map(
+      (criterion) => criterion.charAt(0).toUpperCase() + criterion.slice(1)
+    );
+    return uppercaseCriteria;
+  } else {
+    const convertedCriteria = data.map((criterion) =>
+      criterion.toLowerCase().replace(/\s/g, '_')
+    );
+    return convertedCriteria;
+  }
+};

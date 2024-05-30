@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import BreadCrumb from 'common/BreadCrumb';
 import SrcItem from 'common/SrcItem';
 import styles from './styles.module.css';
 import { DELETED_ITEM_GRIDS } from 'util/js/constant';
 import Pagination from 'common/Pagination';
 import { getDeletedFolder } from 'util/js/APIs';
 import { formatItemDeletedFolder, formatItemDeletedFile } from 'util/js/helper';
-import { upload } from '@testing-library/user-event/dist/upload';
 
 export default function DeletedFolderPage() {
   // #region    VARIABLES //////////////////////////

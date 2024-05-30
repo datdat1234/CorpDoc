@@ -74,9 +74,9 @@ export default function HomePage() {
       </div>
     );
     for (let i = 0; i < items.length; i++) {
-      if (i >= (crtPage-1)*itemPerPage && i < (crtPage)*itemPerPage) {
+      if (i >= (crtPage - 1) * itemPerPage && i < (crtPage) * itemPerPage) {
         tabItems.push(
-          <div key={i+1}>
+          <div key={i + 1}>
             <SrcItem
               grid={HOMEPAGE_ITEM_GRIDS}
               value={items[i]}
@@ -94,7 +94,7 @@ export default function HomePage() {
       <div className={`${styles.wrapper}`}>
         <div className="w-100">{renderItem()}</div>
         <div className={`${styles.pagination}`}>
-          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage}/>
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage} />
         </div>
       </div>
     </div>

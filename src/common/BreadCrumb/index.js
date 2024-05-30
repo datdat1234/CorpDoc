@@ -10,7 +10,7 @@ import UseOnClickOutside from 'util/hook/useOnClickOutside';
 import { setNotification } from 'util/js/helper';
 import { setFolderPage } from '../../redux/action/app';
 
-export default function BreadCrumb({}) {
+export default function BreadCrumb({isPrivate = false}) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   const [modal, setModal] = useState(false);
@@ -93,6 +93,7 @@ export default function BreadCrumb({}) {
         save={save} setSave={setSave} 
         handleChangeSave={handleChangeSave} 
         handleDeleteBtn={handleDeleteBtn}
+        isPrivate={isPrivate}
         infoItm={id} />}
     </div>
   );

@@ -9,12 +9,12 @@ import CheckBoxForm from 'common/CheckBoxForm';
 import BreadCrumbModal from 'common/BreadCrumbModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
-import { 
-  setChangeSaveFolder, 
-  setChangeSaveFile, 
-  resetPasswordUser, 
+import {
+  setChangeSaveFolder,
+  setChangeSaveFile,
+  resetPasswordUser,
   changeStatusUser,
-  setChangeFolderDelete, 
+  setChangeFolderDelete,
   setChangeFileDelete,
   setApproveFiles,
   setDeniedFiles
@@ -24,7 +24,7 @@ import UseOnClickOutside from 'util/hook/useOnClickOutside';
 import DeletedBreadCrumbModal from 'common/DeletedBreadCrumbModal';
 import { setFolderPage, setOpenModal as setGlobalModal } from '../../redux/action/app';
 
-export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, update }) {
+export default function SrcItem({ value = [], grid = [], setUpdate = (e) => { }, update, isPrivate = false }) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
   var modals = Array(grid.length).fill(false);
@@ -93,7 +93,7 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
       if (res?.data?.data) {
         setNotification(
           'success',
-          'Đã cài đặt lại mật khẩu cho người dùng ' + value[1].text 
+          'Đã cài đặt lại mật khẩu cho người dùng ' + value[1].text
         );
       } else {
         setNotification('error', res?.data?.resultMessage?.vi);
@@ -107,7 +107,7 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
         const status = res.data?.data === "Active" ? "kích hoạt" : "chặn";
         setNotification(
           'success',
-          'Đã '+ status +' người dùng ' + value[1].text 
+          'Đã ' + status + ' người dùng ' + value[1].text
         );
         setUpdate(!update)
       } else {
@@ -185,14 +185,15 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
           icon={<FontAwesomeIcon icon={icon.ellipsisVertical} />}
           onClick={() => setOpenModal(index)}
         />
-        {modal[index] && <BreadCrumbModal 
-          ctnStyles="br-15 br-TopRight-2" 
-          save={save} setSave={setSave} 
-          handleChangeSave={handleChangeSave} 
-          handleDeleteBtn={handleDeleteBtn} 
-          isFolder={value[1].type==="file"? false: true} 
+        {modal[index] && <BreadCrumbModal
+          ctnStyles="br-15 br-TopRight-2"
+          save={save} setSave={setSave}
+          handleChangeSave={handleChangeSave}
+          handleDeleteBtn={handleDeleteBtn}
+          isFolder={value[1].type === "file" ? false : true}
           infoItm={value[1].id}
-          isSupportFolder={value[4].text==="support"}
+          isPrivate={isPrivate}
+          isSupportFolder={value[4].text === "support"}
         />}
       </div>
     );
@@ -205,9 +206,9 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
           icon={<FontAwesomeIcon icon={icon.ellipsisVertical} />}
           onClick={() => setOpenModal(index)}
         />
-        {modal[index] && <DeletedBreadCrumbModal 
-          ctnStyles="br-15 br-TopRight-2 header" 
-          isFolder={value[0].type==="file"? false: true} 
+        {modal[index] && <DeletedBreadCrumbModal
+          ctnStyles="br-15 br-TopRight-2 header"
+          isFolder={value[0].type === "file" ? false : true}
           infoItm={value[0].id}
           update={update}
           setUpdate={setUpdate}
@@ -219,9 +220,8 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
   const renderTextCell = (text, type) => {
     return (
       <p
-        className={`text14Medium ellipsis ${
-          type === 'text-size' && 'ta-right mRight10'
-        }`}
+        className={`text14Medium ellipsis ${type === 'text-size' && 'ta-right mRight10'
+          }`}
       >
         {text} {type === 'text-size' && 'KB'}
       </p>
@@ -273,8 +273,8 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
   const renderCheckBox = (item) => {
     return (
       <CheckBoxForm
-        arrChecked= {item.arrChecked}
-        setArrChecked= {item.setArrChecked}
+        arrChecked={item.arrChecked}
+        setArrChecked={item.setArrChecked}
         isCheckAllInput={item.isCheckAllInput}
         setIsCheckAllInput={item.setIsCheckAllInput}
         index={item.index}
@@ -286,9 +286,9 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
     return (
       <div className={`${styles.approvalCtn}`}>
         <IconButton
-          icon={<FontAwesomeIcon icon={icon.penToSquare} size='lg'/>}
+          icon={<FontAwesomeIcon icon={icon.penToSquare} size='lg' />}
           ctnStyles="d-flex justify-content-center align-item-center"
-          onClick={() => dispatch(setGlobalModal({type:value[value.length-1].type+'Modal', infoItm: value, update: update, setUpdate: setUpdate}))}
+          onClick={() => dispatch(setGlobalModal({ type: value[value.length - 1].type + 'Modal', infoItm: value, update: update, setUpdate: setUpdate }))}
         />
         <IconButton
           icon={<FontAwesomeIcon icon={icon.circleCheck} size='lg' className="bgColor4" />}
@@ -313,16 +313,16 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
           onClick={() => handleResetPassword()}
         />
         {item.text === 'Active' ?
-        <IconButton
-          icon={<FontAwesomeIcon icon={icon.userLock} className="bgColor4" />}
-          ctnStyles="bg-error br-2 w-30 h-30 d-flex justify-content-center align-item-center"
-          onClick={() => handleChangeStatus(item.text)}
-        />:
-        <IconButton
-          icon={<FontAwesomeIcon icon={icon.unlock} className="bgColor4" />}
-          ctnStyles="bg-error br-2 w-30 h-30 d-flex justify-content-center align-item-center"
-          onClick={() => handleChangeStatus(item.text)}
-        />
+          <IconButton
+            icon={<FontAwesomeIcon icon={icon.userLock} className="bgColor4" />}
+            ctnStyles="bg-error br-2 w-30 h-30 d-flex justify-content-center align-item-center"
+            onClick={() => handleChangeStatus(item.text)}
+          /> :
+          <IconButton
+            icon={<FontAwesomeIcon icon={icon.unlock} className="bgColor4" />}
+            ctnStyles="bg-error br-2 w-30 h-30 d-flex justify-content-center align-item-center"
+            onClick={() => handleChangeStatus(item.text)}
+          />
         }
       </div>
     );
@@ -332,9 +332,9 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
     return (
       <div className={`${styles.approvalCtn}`}>
         <IconButton
-          icon={<FontAwesomeIcon icon={icon.penToSquare} size='lg'/>}
+          icon={<FontAwesomeIcon icon={icon.penToSquare} size='lg' />}
           ctnStyles="d-flex justify-content-center align-item-center"
-          onClick={() => dispatch(setGlobalModal({type:value[value.length-1].text, infoItm: value, update: update, setUpdate: setUpdate}))}
+          onClick={() => dispatch(setGlobalModal({ type: value[value.length - 1].text, infoItm: value, update: update, setUpdate: setUpdate }))}
         />
       </div>
     );
@@ -359,7 +359,7 @@ export default function SrcItem({ value = [], grid = [], setUpdate=(e)=>{}, upda
   const renderGrid = () => {
     return grid.map((val, index) => {
       return (
-        <div key={index} className={`${val} ${value[index].type.includes('save') || value[index].type.includes('edit')? '' : 'pe-2'}`}>
+        <div key={index} className={`${val} ${value[index].type.includes('save') || value[index].type.includes('edit') ? '' : 'pe-2'}`}>
           {renderItems(value[index], index)}
         </div>
       );

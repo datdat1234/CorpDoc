@@ -120,7 +120,7 @@ export default function SearchFilePage() {
           <div className={`${styles.inputRowDetailCtn} mRight10`}>
             <Input
               type="select"
-              text="Phòng ban"
+              text="Phòng ban chia sẻ"
               placeholder={deptData.length !== 0 ? dept : ''}
               value={deptData}
               setData={setDept}

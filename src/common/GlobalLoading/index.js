@@ -1,7 +1,6 @@
 import Loading from "../Loader";
 import React from "react";
 import { useSelector } from "react-redux";
-import styles from "./styles.module.css";
 
 export default function GlobalLoading() {
   // #region    VARIABLES //////////////////////////

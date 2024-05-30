@@ -5,7 +5,7 @@ import SrcItem from 'common/SrcItem';
 import styles from './styles.module.css';
 import { HOMEPAGE_ITEM_GRIDS } from 'util/js/constant';
 import Pagination from 'common/Pagination';
-import { getChildByFolderId, getFileByCriteria } from 'util/js/APIs';
+import { getChildByFolderId, getFileByCriteria, checkIsPrivate } from 'util/js/APIs';
 import { formatItemFolder, formatItemFile } from 'util/js/helper';
 import { useParams } from 'react-router-dom';
 
@@ -39,6 +39,7 @@ export default function FolderPage() {
   const { id } = useParams();
   const [items, setItems] = useState([]);
   const [crtPage, setCrtPage] = useState(1);
+  const [isPrivate, setIsPrivate] = useState(false);
   const itemPerPage = 20;
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
@@ -47,6 +48,12 @@ export default function FolderPage() {
   //////////////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
+
+      if (id) {
+        const isPrivateRes = await checkIsPrivate(id);
+        setIsPrivate(isPrivateRes?.data?.data?.isPrivate);
+      }
+
       setItems([]);
       const childRes = await getChildByFolderId(id);
       const filesRes = await getFileByCriteria(id);
@@ -79,12 +86,13 @@ export default function FolderPage() {
       </div>
     );
     for (let i = 0; i < items.length; i++) {
-      if (i >= (crtPage-1)*itemPerPage && i < (crtPage)*itemPerPage) {
+      if (i >= (crtPage - 1) * itemPerPage && i < (crtPage) * itemPerPage) {
         tabItems.push(
-          <div key={i+1}>
+          <div key={i + 1}>
             <SrcItem
               grid={HOMEPAGE_ITEM_GRIDS}
               value={items[i]}
+              isPrivate={isPrivate}
             />
           </div>
         );
@@ -97,10 +105,10 @@ export default function FolderPage() {
   return (
     <div className={`${styles.root}`}>
       <div className={`${styles.wrapper}`}>
-        <BreadCrumb />
+        <BreadCrumb isPrivate={isPrivate} />
         <div className="w-100">{renderItem()}</div>
         <div className={`${styles.pagination}`}>
-          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage}/>
+          <Pagination selectedPage={crtPage} setSelectedPage={setCrtPage} itemLength={items.length} itemPerPage={itemPerPage} />
         </div>
       </div>
     </div>

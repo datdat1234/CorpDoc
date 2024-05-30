@@ -34,6 +34,7 @@ export default function PrivateFolderPage() {
   const [items, setItems] = useState([]);
   const [crtPage, setCrtPage] = useState(1);
   const itemPerPage = 20;
+  const isPrivate = true;
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -77,6 +78,7 @@ export default function PrivateFolderPage() {
             <SrcItem
               grid={HOMEPAGE_ITEM_GRIDS}
               value={items[i]}
+              isPrivate={isPrivate}
             />
           </div>
         );

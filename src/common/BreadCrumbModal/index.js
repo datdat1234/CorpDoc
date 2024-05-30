@@ -1,7 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import UseOnClickOutside from 'util/hook/useOnClickOutside';
 import styles from './styles.module.css';
 import Button from 'common/Button';
 import { BREAD_CRUMB_TABS } from 'util/js/constant';
@@ -18,6 +17,7 @@ export default function BreadCrumbModal({
   handleChangeSave,
   handleDeleteBtn,
   isFolder = true,
+  isPrivate = false,
   infoItm = '',
   isSupportFolder = false,
 }) {
@@ -26,7 +26,6 @@ export default function BreadCrumbModal({
   const navigate = useNavigate();
   const userInfo = useSelector((state) => state.app.userInfo);
   const dispatch = useDispatch();
-  
   //////////////////////////////////////////////////
   // #endregion VARIABLES //////////////////////////
 
@@ -92,7 +91,7 @@ export default function BreadCrumbModal({
         </div>
       );
     }
-    if (userInfo.Role !== 'Staff') {
+    if (userInfo.Role !== 'Staff' && !isPrivate) {
       tabItems.push(
         <div key={2} className={styles.tabCtn}>
           <Button

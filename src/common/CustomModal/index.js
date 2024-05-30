@@ -1,16 +1,15 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import UseOnClickOutside from 'util/hook/useOnClickOutside';
 import styles from './styles.module.css';
 import Button from 'common/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import icon from 'util/js/icon';
 import Input from 'common/Input';
-import { 
-  getAllOtherDept, 
-  getDeptShared, 
-  setSharedDeptIds, 
+import {
+  getAllOtherDept,
+  getDeptShared,
+  setSharedDeptIds,
   editDeptInfo,
   getDept,
   resetPasswordUser,
@@ -19,13 +18,13 @@ import {
 } from 'util/js/APIs';
 import CriteriaTag from 'common/CriteriaTag';
 import { setOpenModal } from '../../redux/action/app';
-import { setNotification } from 'util/js/helper';
+import { setNotification, formatCriteria } from 'util/js/helper';
 
 export default function CustomModal({
-  type='', 
-  infoItm='',
-  update=true,
-  setUpdate=(e)=>{},
+  type = '',
+  infoItm = '',
+  update = true,
+  setUpdate = (e) => { },
 }) {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
@@ -43,7 +42,7 @@ export default function CustomModal({
 
   // userModal
   const [allDept, setAllDept] = useState([]);
-  const [dept, setDept] = useState({Name: '', DeptID: ''});
+  const [dept, setDept] = useState({ Name: '', DeptID: '' });
   const [resetPassword, setResetPassword] = useState(false);
   const [status, setStatus] = useState('Active');
 
@@ -58,9 +57,9 @@ export default function CustomModal({
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
-  useEffect(() =>{
-    const fetchData = async()=>{
-      switch (type){
+  useEffect(() => {
+    const fetchData = async () => {
+      switch (type) {
         case 'shareModal':
           const deptRes = await getAllOtherDept();
           setDeptData(deptRes?.data?.data?.dept);
@@ -77,11 +76,11 @@ export default function CustomModal({
           let allDeptRaw = allDeptRes?.data?.data?.dept;
           let allDeptAft = [];
           for (let i = 0; i < allDeptRaw.length; i++) {
-            allDeptAft.push({Name: allDeptRaw[i].Name, DeptID: allDeptRaw[i].DeptID});
+            allDeptAft.push({ Name: allDeptRaw[i].Name, DeptID: allDeptRaw[i].DeptID });
           }
           setAllDept(allDeptAft);
           setName(infoItm[1].text);
-          setDept({Name: infoItm[2].text, DeptID: infoItm[2].id});
+          setDept({ Name: infoItm[2].text, DeptID: infoItm[2].id });
           setStatus(infoItm[1].status);
           break;
         case 'approvalModal':
@@ -97,7 +96,7 @@ export default function CustomModal({
     }
 
     fetchData()
-  },[]);
+  }, []);
 
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
@@ -116,7 +115,7 @@ export default function CustomModal({
   };
 
   const handleCloseModal = () => {
-    dispatch(setOpenModal({type: '', infoItm:{}}));
+    dispatch(setOpenModal({ type: '', infoItm: {} }));
   }
 
   const validateDeptModal = () => {
@@ -143,7 +142,7 @@ export default function CustomModal({
     switch (type) {
       case 'shareModal':
         let ids = [];
-        for(let i = 0; i<sharedDepts.length; i++) ids.push(sharedDepts[i].DeptID)
+        for (let i = 0; i < sharedDepts.length; i++) ids.push(sharedDepts[i].DeptID)
         await setSharedDeptIds(infoItm, ids);
         handleCloseModal();
         setNotification("success", "Chia sẻ thành công.");
@@ -168,7 +167,7 @@ export default function CustomModal({
           deptId: dept.DeptID,
         }
         if (infoItm[4].value === 'Staff') {
-          let crtStatus = status === 'Active' ? 'Blocked': 'Active';
+          let crtStatus = status === 'Active' ? 'Blocked' : 'Active';
           await changeStatusUser([infoItm[1].id], crtStatus);
         }
         await editStaffInfo(data);
@@ -184,7 +183,7 @@ export default function CustomModal({
 
   // #region    VIEWS //////////////////////////////
   //////////////////////////////////////////////////
-  const renderSharedTag = (items, handleFunc = (e)=>{}) => {
+  const renderSharedTag = (items, handleFunc = (e) => { }) => {
     return items?.map((item, index) => {
       return (
         <CriteriaTag
@@ -198,7 +197,7 @@ export default function CustomModal({
   };
 
   const renderNameModal = () => {
-    switch (type){
+    switch (type) {
       case 'shareModal':
         return 'Chọn phòng ban chia sẻ';
       case 'deptModal':
@@ -212,12 +211,12 @@ export default function CustomModal({
   }
 
   const renderViews = () => {
-    switch (type){
+    switch (type) {
       case 'shareModal':
         return (
           <div className={`${styles.body}`}>
-            <Input 
-              type="select" 
+            <Input
+              type="select"
               text="Phòng ban"
               value={deptData}
               defaultValue={'Chọn phòng ban'}
@@ -230,20 +229,20 @@ export default function CustomModal({
       case 'deptModal':
         return (
           <div className={`${styles.body}`}>
-            <Input 
-              type="text" 
+            <Input
+              type="text"
               text="Tên"
               value={name}
               setData={setName}
             />
-            <Input 
-              type="text" 
-              text={"Dung lượng tối đa (Tối đa: "+ maxStorage +" GB)"}
+            <Input
+              type="text"
+              text={"Dung lượng tối đa (Tối đa: " + maxStorage + " GB)"}
               value={storage}
               setData={setStorage}
             />
-            <Input 
-              type="text" 
+            <Input
+              type="text"
               text="Số nhân viên"
               value={infoItm[3].text}
               canChange={false}
@@ -253,17 +252,17 @@ export default function CustomModal({
       case 'userModal':
         return (
           <div className={`${styles.body}`}>
-            {infoItm[4].value !== 'Staff'? 
-              <Input 
-                type="text" 
+            {infoItm[4].value !== 'Staff' ?
+              <Input
+                type="text"
                 text="Phòng ban"
                 value={dept.Name}
                 setData={setName}
                 canChange={false}
               />
               :
-              <Input 
-                type="select" 
+              <Input
+                type="select"
                 text="Phòng ban"
                 value={allDept}
                 defaultValue={dept.Name}
@@ -271,23 +270,23 @@ export default function CustomModal({
                 isSelect={true}
               />
             }
-            <Input 
-              type="text" 
+            <Input
+              type="text"
               text="Họ và tên"
               value={name}
               setData={setName}
             />
-            {infoItm[4].value !== 'Staff'? 
-              <Input 
-                type="text" 
+            {infoItm[4].value !== 'Staff' ?
+              <Input
+                type="text"
                 text="Trạng thái"
                 value={status}
                 setData={setName}
                 canChange={false}
               />
               :
-              <Input 
-                type="select" 
+              <Input
+                type="select"
                 text="Trạng thái"
                 value={['Active', 'Blocked']}
                 defaultValue={status}
@@ -306,56 +305,56 @@ export default function CustomModal({
       case 'approvalModal':
         return (
           <div className={`${styles.body}`}>
-            <Input 
-              type="text" 
-              text={newValue? 'Tên cũ' : 'Tên'}
+            <Input
+              type="text"
+              text={newValue ? 'Tên cũ' : 'Tên'}
               value={name}
               canChange={false}
             />
             {newValue &&
-              <Input 
-                type="text" 
+              <Input
+                type="text"
                 text="Tên mới"
                 value={newValue?.name}
                 canChange={false}
               />
             }
-            <Input 
-              type="text" 
-              text={newValue? 'Tác giả cũ' : 'Tác giả'}
+            <Input
+              type="text"
+              text={newValue ? 'Tác giả cũ' : 'Tác giả'}
               value={author}
               setData={setAuthor}
               canChange={false}
             />
             {newValue &&
-              <Input 
-                type="text" 
+              <Input
+                type="text"
                 text="Tác giả mới"
                 value={newValue?.author}
                 canChange={false}
               />
             }
-            <Input 
-              type="text" 
-              text={newValue? 'Mô tả cũ' : 'Mô tả'}
+            <Input
+              type="text"
+              text={newValue ? 'Mô tả cũ' : 'Mô tả'}
               value={desc}
               setData={setDesc}
               canChange={false}
             />
             {newValue &&
-              <Input 
-                type="text" 
+              <Input
+                type="text"
                 text="Mô tả mới"
                 value={newValue?.description}
                 canChange={false}
               />
             }
-            <p className="textH6Bold text-nowrapm mb-2">{newValue? 'Tiêu chí cũ' : 'Tiêu chí'}</p>
+            <p className="textH6Bold text-nowrapm mb-2">{newValue ? 'Tiêu chí cũ' : 'Tiêu chí'}</p>
             <div className={`${styles.checkboxCtn} mb-2`}>{renderSharedTag(criteria)}</div>
-            {newValue && 
+            {newValue &&
               <>
                 <p className="textH6Bold text-nowrapm mb-2">Tiêu chí mới</p>
-                <div className={`${styles.checkboxCtn} mb-2`}>{renderSharedTag(newValue.criteria)}</div>
+                <div className={`${styles.checkboxCtn} mb-2`}>{renderSharedTag(formatCriteria([{ Criteria: newValue.criteria }], 'remove'))}</div>
               </>
             }
           </div>
