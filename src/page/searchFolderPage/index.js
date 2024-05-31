@@ -35,9 +35,13 @@ export default function SearchFolderPage() {
   useEffect(() => {
     const fetchData = async () => {
       const critRes = await getFolderCriteria();
-      const deptRes = await getDeptName();
+      const deptRes = await getDeptName(userInfo?.DeptID);
       setCritetia(critRes?.data?.data?.criteria);
-      setDeptData(deptRes?.data?.data?.dept);
+
+      var deptArr = deptRes?.data?.data?.dept;
+      deptArr.push('Phòng ban của bạn');
+
+      setDeptData(deptArr);
     };
 
     fetchData();
@@ -58,6 +62,10 @@ export default function SearchFolderPage() {
       desc: desc,
       // isShare: isShare,
     };
+
+    if (dept === 'Phòng ban của bạn') {
+      searchData.dept = '';
+    }
 
     navigate('/search-folder-result', {
       state: {
@@ -120,7 +128,7 @@ export default function SearchFolderPage() {
           <div className={`${styles.inputRowDetailCtn} mRight10`}>
             <Input
               type="select"
-              text="Phòng ban chia sẻ"
+              text="Phòng ban"
               placeholder={deptData.length !== 0 ? dept : ''}
               value={deptData}
               setData={setDept}

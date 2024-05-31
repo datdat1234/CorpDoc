@@ -204,9 +204,10 @@ export const setDeniedFiles = (ids) => {
 
 //#region Dept
 
-export const getDeptName = () => {
+export const getDeptName = (deptId = null) => {
   return get(`${API_URL}/dept/get-dept-name`, {
     companyId: getCompanyId(),
+    deptId: deptId,
   });
 };
 

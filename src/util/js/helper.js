@@ -59,7 +59,7 @@ export const extractFileName = (name) => {
 
 export const extractFileType = (name) => {
   const arr = name.split('.');
-  return arr[1];
+  return arr[arr.length - 1];
 };
 
 export const formatItemFolder = (data) => {
