@@ -15,7 +15,6 @@ import { getNameRole, setNotification } from 'util/js/helper';
 export default function StaffAdminManagePage() {
   // #region    VARIABLES //////////////////////////
   //////////////////////////////////////////////////
-  const navigate = useNavigate();
   const itemPerPage = 10;
   const userInfo = useSelector((state) => state.app.userInfo);
   const [arrChecked, setArrChecked] = useState([]);

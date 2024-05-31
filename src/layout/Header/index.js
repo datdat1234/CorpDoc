@@ -67,7 +67,7 @@ export default function Header() {
 
   // Dept for Admin
   const [depts, setDepts] = useState([]);
-  const [crtDept, setCrtDept] = useState({DeptID: '', Name: ''});
+  const [crtDept, setCrtDept] = useState({ DeptID: '', Name: '' });
   const colourStyles = {
     control: (styles) => ({
       ...styles,
@@ -85,7 +85,7 @@ export default function Header() {
       padding: '15px 15px',
       fontWeight: '500',
       backgroundColor: isFocused && '#402e32',
-      color: isFocused? '#fff' : '#000',
+      color: isFocused ? '#fff' : '#000',
     })
   };
   const selectRef = useRef();
@@ -103,7 +103,7 @@ export default function Header() {
           setDepts(deptsRes?.data?.data?.dept);
           const crtDeptAdminRes = await getCrtDept();
           const crtDeptAdmin = crtDeptAdminRes?.data?.data?.deptInfo;
-          setCrtDept(crtDeptAdmin? crtDeptAdmin : deptsRes?.data?.data?.dept[0]);
+          setCrtDept(crtDeptAdmin ? crtDeptAdmin : deptsRes?.data?.data?.dept[0]);
         }
 
         // get domainfolder
@@ -115,20 +115,20 @@ export default function Header() {
             'Tài liệu mật',
             'Thư viện sách',
             'Văn bản hành chính',
-          ]; 
+          ];
         }
         else {
           domainUpload = [
             'Thư viện sách',
             'Văn bản hành chính',
-          ]; 
+          ];
         }
         let domainNavigate = [];
         if (userInfo.Role === 'Admin') {
           domainNavigate = [
             () => {
               handleMouseLeave();
-              navigate('/upload-file', { state: {id: 'f69eb825-7714-4df4-8e86-4b7c2bf9b702', isPrivate: true}});
+              navigate('/upload-file', { state: { isPrivate: true } });
             },
             () => {
               handleMouseLeave();
@@ -142,8 +142,8 @@ export default function Header() {
                 state: { supportType: 'admin-docs' },
               });
             },
-          ]; 
-        } 
+          ];
+        }
         else {
           domainNavigate = [
             () => {
@@ -158,7 +158,7 @@ export default function Header() {
                 state: { supportType: 'admin-docs' },
               });
             },
-          ]; 
+          ];
         }
         let domainIcon = [];
         if (userInfo.Role === 'Admin') {
@@ -166,7 +166,7 @@ export default function Header() {
             { left: null, right: icon.caretRight },
             { left: null, right: icon.caretRight },
             { left: null, right: icon.caretRight },
-          ]; 
+          ];
         }
         else {
           domainIcon = [
@@ -184,8 +184,8 @@ export default function Header() {
               navigate('/upload-file', { state: { id: folders[i].FolderID } });
             })
             domainIcon.push({ left: null, right: icon.caretRight });
-            if (userInfo.Role === 'Admin') domainSmallhover.push(i+3);
-            else domainSmallhover.push(i+2);
+            if (userInfo.Role === 'Admin') domainSmallhover.push(i + 3);
+            else domainSmallhover.push(i + 2);
             setUploadSmallhover(prevState => ([...prevState, folders[i].FolderID]))
           }
         }
@@ -312,13 +312,13 @@ export default function Header() {
             />
           ) : (
             <div className='d-flex align-items-center justify-content-between br-15 bg-bgColor3'>
-            <Select
-              ref={selectRef}
-              value={{ value: crtDept?.DeptID, label: crtDept?.Name }}
-              options={handleOptions()}
-              styles={colourStyles}
-              onChange={(item) => handleChangeSelect(item.value)}
-            />
+              <Select
+                ref={selectRef}
+                value={{ value: crtDept?.DeptID, label: crtDept?.Name }}
+                options={handleOptions()}
+                styles={colourStyles}
+                onChange={(item) => handleChangeSelect(item.value)}
+              />
             </div>
           )}
         </div>

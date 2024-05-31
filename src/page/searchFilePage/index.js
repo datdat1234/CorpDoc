@@ -35,9 +35,13 @@ export default function SearchFilePage() {
   useEffect(() => {
     const fetchData = async () => {
       const critRes = await getFileCriteria();
-      const deptRes = await getDeptName();
+      const deptRes = await getDeptName(userInfo?.DeptID);
       setCritetia(critRes?.data?.data?.criteria);
-      setDeptData(deptRes?.data?.data?.dept);
+
+      var deptArr = deptRes?.data?.data?.dept;
+      deptArr.push('Phòng ban của bạn');
+
+      setDeptData(deptArr);
     };
 
     fetchData();
@@ -58,6 +62,10 @@ export default function SearchFilePage() {
       desc: desc,
       // isShare: isShare,
     };
+
+    if (dept === 'Phòng ban của bạn') {
+      searchData.dept = '';
+    }
 
     navigate('/search-file-result', {
       state: {
@@ -120,18 +128,18 @@ export default function SearchFilePage() {
           <div className={`${styles.inputRowDetailCtn} mRight10`}>
             <Input
               type="select"
-              text="Phòng ban chia sẻ"
+              text="Phòng ban"
               placeholder={deptData.length !== 0 ? dept : ''}
               value={deptData}
               setData={setDept}
             />
           </div>
           <div className={`${styles.inputRowDetailCtn}`}>
-            <Input 
-              type="text" 
-              text="Tác giả" 
-              value={author} 
-              setData={setAuthor} 
+            <Input
+              type="text"
+              text="Tác giả"
+              value={author}
+              setData={setAuthor}
             />
           </div>
         </div>
@@ -149,11 +157,11 @@ export default function SearchFilePage() {
             <Input type="date" text="Ngày được xác nhận" />
           </div> */}
         </div>
-        <Input 
-          type="textarea" 
-          text="Mô tả" 
-          value={desc} 
-          setData={setDesc} 
+        <Input
+          type="textarea"
+          text="Mô tả"
+          value={desc}
+          setData={setDesc}
         />
         <Input
           type="select"
