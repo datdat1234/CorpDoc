@@ -302,7 +302,7 @@ export default function Header() {
       </div>
       <div className={styles.remainCtn}></div>
       {userInfo.Role === 'Admin' && (
-        <div className="position-relative">
+        <div className={`${styles.deptSwitch} position-relative`}>
           {isHovered === 1 || isHovered === 2 ? (
             <Button
               ctnStyles="d-flex align-items-center justify-content-between pHorizontal15 br-15 bg-bgColor3"
