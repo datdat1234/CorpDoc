@@ -128,7 +128,7 @@ export default function Header() {
           domainNavigate = [
             () => {
               handleMouseLeave();
-              navigate('/upload-file', { state: {id: 'f69eb825-7714-4df4-8e86-4b7c2bf9b702', isPrivate: true}});
+              navigate('/upload-file', { state: {isPrivate: true}});
             },
             () => {
               handleMouseLeave();

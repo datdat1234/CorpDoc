@@ -33,9 +33,10 @@ export default function UploadFilePage() {
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
+  console.log(id)
   useEffect(() => {
     const fetchData = async () => {
-      const criteriaRes = await getFolderCriteria();
+      const criteriaRes = await getFolderCriteria(isPrivate);
       setCritetia(criteriaRes?.data?.data?.criteria);
       if (id) {
         const response = await getFolderInfo(id);
