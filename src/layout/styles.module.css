@@ -16,7 +16,8 @@
 
 .bodyLeft {
   flex: 1 1 auto;
-  min-width: 610px;
+  min-width: max-content;
+  overflow: auto;
 }
 
 .rightDiv {
