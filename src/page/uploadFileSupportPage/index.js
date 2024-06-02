@@ -56,12 +56,12 @@ export default function UploadFileSupportPage() {
       userId: userInfo?.UserID,
       deptId: userInfo?.DeptID,
       deleted: false,
-      status: userInfo.Role === 'Staff'? 'Pending' : 'Active',
+      status: userInfo.Role === 'Staff' ? 'Pending' : 'Active',
       isPrivate: false,
     };
     const response = await uploadFileSupport(fileMetadata, fileContent);
     if (response?.data?.resultCode === '00095') {
-      navigate(`/result-page`, { state: { type: 'file', status: 'success' } });
+      navigate(`/result-page`, { state: { type: 'file', status: 'success', isSupport: true } });
     } else {
       navigate(`/result-page`, { state: { type: 'file', status: 'error' } });
     }
