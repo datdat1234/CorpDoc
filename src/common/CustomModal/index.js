@@ -190,6 +190,19 @@ export default function CustomModal({
           key={index}
           text={item}
           handleClick={handleFunc}
+          isShowIcon={true}
+        />
+      );
+    });
+  };
+
+  const renderApprovalTag = (items, handleFunc = (e) => { }) => {
+    return items?.map((item, index) => {
+      return (
+        <CriteriaTag
+          key={index}
+          text={item}
+          handleClick={handleFunc}
           isShowIcon={false}
         />
       );
@@ -350,11 +363,11 @@ export default function CustomModal({
               />
             }
             <p className="textH6Bold text-nowrapm mb-2">{newValue ? 'Tiêu chí cũ' : 'Tiêu chí'}</p>
-            <div className={`${styles.checkboxCtn} mb-2`}>{renderSharedTag(criteria)}</div>
+            <div className={`${styles.checkboxCtn} mb-2`}>{renderApprovalTag(criteria)}</div>
             {newValue &&
               <>
                 <p className="textH6Bold text-nowrapm mb-2">Tiêu chí mới</p>
-                <div className={`${styles.checkboxCtn} mb-2`}>{renderSharedTag(formatCriteria([{ Criteria: newValue.criteria }], 'remove'))}</div>
+                <div className={`${styles.checkboxCtn} mb-2`}>{renderApprovalTag(formatCriteria([{ Criteria: newValue.criteria }], 'remove'))}</div>
               </>
             }
           </div>
