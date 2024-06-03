@@ -12,7 +12,7 @@ export default function ResultPage() {
   const navigate = useNavigate();
   var userInfo = useSelector((state) => state.app.userInfo);
   const { state } = useLocation();
-  const { type, status, isNew, action } = state;
+  const { type, status, isNew, action, isSupport } = state;
   const [pageType, setPageType] = useState(type || 'file');
   const [pageStatus, setPageStatus] = useState(status || 'error');
   const [newPage, setNewPage] = useState(isNew || false);
@@ -22,15 +22,15 @@ export default function ResultPage() {
 
   // #region    useEffect //////////////////////////
   //////////////////////////////////////////////////
-  useEffect(()=> {
+  useEffect(() => {
     let str = '';
     switch (action) {
-      case 'add': str = pageType === 'file'? 'Tải lên tài liệu': (isNew? 'Tạo mới miền cấu trúc' : 'Tạo mới thư mục'); break;
-      case 'edit': str = 'Chỉnh sửa' + (pageType === 'file'? ' tài liệu': ' thư mục'); break;
-      default: str='Tải lên tài liệu'
+      case 'add': str = pageType === 'file' ? 'Tải lên tài liệu' : (isNew ? 'Tạo mới miền cấu trúc' : 'Tạo mới thư mục'); break;
+      case 'edit': str = 'Chỉnh sửa' + (pageType === 'file' ? ' tài liệu' : ' thư mục'); break;
+      default: str = 'Tải lên tài liệu'
     }
     setName(str)
-  },[])
+  }, [])
   //////////////////////////////////////////////////
   // #endregion useEffect //////////////////////////
 
@@ -39,17 +39,17 @@ export default function ResultPage() {
   const handleBigText = () => {
     if (pageType === 'file') {
       if (pageStatus === 'success') {
-        return action==='edit'? 'CHỈNH SỬA THÀNH CÔNG' : 'TẢI LÊN THÀNH CÔNG';
+        return action === 'edit' ? 'CHỈNH SỬA THÀNH CÔNG' : 'TẢI LÊN THÀNH CÔNG';
       } else {
-        return action==='edit'? 'CHỈNH SỬA THẤT BẠI' : 'TẢI LÊN THẤT BẠI';
+        return action === 'edit' ? 'CHỈNH SỬA THẤT BẠI' : 'TẢI LÊN THẤT BẠI';
       }
     } else {
       if (pageStatus === 'success') {
         if (newPage === true) return 'TẠO MIỀN CẤU TRÚC MỚI THÀNH CÔNG';
-        return action==='edit'? 'CHỈNH SỬA THÀNH CÔNG' : 'TẠO THƯ MỤC THÀNH CÔNG';
+        return action === 'edit' ? 'CHỈNH SỬA THÀNH CÔNG' : 'TẠO THƯ MỤC THÀNH CÔNG';
       } else {
         if (newPage === true) return 'TẠO MIỀN CẤU TRÚC MỚI KHÔNG THÀNH CÔNG';
-        return action==='edit'? 'CHỈNH SỬA KHÔNG THÀNH CÔNG' : 'TẠO THƯ MỤC MỚI KHÔNG THÀNH CÔNG';
+        return action === 'edit' ? 'CHỈNH SỬA KHÔNG THÀNH CÔNG' : 'TẠO THƯ MỤC MỚI KHÔNG THÀNH CÔNG';
       }
     }
   };
@@ -60,16 +60,23 @@ export default function ResultPage() {
         if (userInfo.Role === 'Staff') {
           return (
             <div>
-              Yêu cầu {action==='edit'? 'chỉnh sửa' : 'tải lên'} đã được gửi đến{' '}
+              Yêu cầu {action === 'edit' ? 'chỉnh sửa' : 'tải lên'} đã được gửi đến{' '}
               <span className="text18Bold">trưởng phòng ban</span>. Vui lòng đợi
               xác nhận để có thể hiển thị và sử dụng.
             </div>
           );
         }
+        else {
+          if (isSupport) {
+            return <div>
+              Văn bản hiện đang được xử lý phân loại. Vui lòng đợi trong giây lát.
+            </div>;
+          }
+        }
       } else {
-        return <div>{action==='edit'? 'Chỉnh sửa' : 'Tải lên'} không thành công. Vui lòng thử lại.</div>;
+        return <div>{action === 'edit' ? 'Chỉnh sửa' : 'Tải lên'} không thành công. Vui lòng thử lại.</div>;
       }
-    } 
+    }
   };
 
   const renderBtnText = () => {
@@ -133,7 +140,7 @@ export default function ResultPage() {
           name={renderBtnText()}
           ctnStyles="h-56 bg-text br-8"
           btnStyles="text-center textH6Bold white bg-text"
-          onClick={() => pageStatus === 'success'? navigate('/') : navigate(-1)}
+          onClick={() => pageStatus === 'success' ? navigate('/') : navigate(-1)}
         />
       </div>
     </div>
